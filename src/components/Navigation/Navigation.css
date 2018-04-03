@@ -1,0 +1,9 @@
+p {
+    position: relative;
+    top: -1rem;
+}
+
+.dim:hover,
+.dim:focus {
+  opacity: .8 !important;
+}

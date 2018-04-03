@@ -1,9 +1,11 @@
 import React from 'react';
+import './Navigation.css';
 
-const Navigation = () => {
+const Navigation = (props) => {
     return (
-      <nav style={{display: 'flex', justifyContent: 'flex-end'}}>
-        <p className='f3 link dim black underline pa3 pointer'>Sign In</p>
+      <nav className='pl4 pt4' style={{alignItems: 'center', display: 'flex', justifyContent: 'space-between'}}>
+       {props.children}
+        <p className='f4 link bg-navy dim br2 pa3 pointer'>Sign In</p>
       </nav>
     );
 }
