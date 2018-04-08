@@ -45,10 +45,28 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
 
+  registerUser = (newUser) => {
+    this.setState({user: {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      entries: newUser.entries,
+      joined: newUser.joined
+    }})
+  }
+
+  // calculate location of the box on the face
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('input-image');
@@ -117,7 +135,7 @@ class App extends Component {
           : (
             route === 'signin'
             ?  <Signin onRouteChange={this.onRouteChange} />
-            : <Register onRouteChange={this.onRouteChange}/>
+            : <Register registerUser={this.registerUser} onRouteChange={this.onRouteChange}/>
           )
         }
       </div>
