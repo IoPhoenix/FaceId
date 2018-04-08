@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Rank = () => {
+const Rank = ({ name, entries }) => {
   return (
     <div>
-      <div className='mt5 white f3'>
-        #5
+      <div className='white f3 mb5'>
+        {`${name}, you submitted ${entries} images`}
       </div>
     </div>
-  );
+  )
 }
 
 export default Rank;
