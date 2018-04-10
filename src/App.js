@@ -11,7 +11,7 @@ import Rank from './components/Rank/Rank';
 import './App.css';
 
 const app = new Clarifai.App({
-  apiKey: 'a19866285f4b4c37a0a04fc2c7bd80f0'
+  apiKey: 'MY_API_KEY'
  });
 
 const particlesOptions = {
@@ -72,7 +72,6 @@ class App extends Component {
     const image = document.getElementById('input-image');
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
-    console.log(imageWidth, imageHeight);
 
     return {
       leftCol: clarifaiFace.left_col * imageWidth,
@@ -84,7 +83,6 @@ class App extends Component {
 
 
   displayFaceBox = (box) => {
-    console.log(box);
     this.setState({box: box});
   }
 
@@ -95,7 +93,7 @@ class App extends Component {
 
 
   onImageSubmit = () => {
-    console.log(this.state.input);
+    console.log(this.state.user.entries);
     this.setState({imageUrl: this.state.input})
     app.models
       .predict(
@@ -124,7 +122,7 @@ class App extends Component {
 
 
   onRouteChange = (route) => {
-    if (route === 'signout') {
+    if (route === 'signin') {
       this.setState({isSignedIn: false})
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
