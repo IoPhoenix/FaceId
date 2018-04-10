@@ -9,7 +9,7 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
         className='pl4 pt4' 
         style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           {props.children}
-          <p onClick={() => props.onRouteChange('signout')} className='f5 link bg-navy dim br2 pa3 pointer'>Sign Out</p>
+          <p onClick={() => props.onRouteChange('signin')} className='f5 link bg-navy dim br2 pa3 pointer'>Sign Out</p>
       </nav>
     );
   } else {
@@ -19,8 +19,8 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
         style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           {props.children}
           <div>
-            <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim br2 pa3 pointer'>Sign In</p>
-            <p onClick={() => props.onRouteChange('register')} className='f5 dib link bg-navy dim br2 pa3 pointer'>Register</p>
+            <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Sign In</p>
+            <p onClick={() => props.onRouteChange('register')} className='f5 dib link bg-navy dim pa3 pointer'>Register</p>
           </div>
       </nav>
     );

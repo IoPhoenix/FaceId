@@ -11,7 +11,7 @@ import Rank from './components/Rank/Rank';
 import './App.css';
 
 const app = new Clarifai.App({
-  apiKey: 'MY_API_KEY'
+  apiKey: 'a19866285f4b4c37a0a04fc2c7bd80f0'
  });
 
 const particlesOptions = {
@@ -112,6 +112,8 @@ class App extends Component {
           })
           .then(response => response.json())
           .then(count => {
+            // Object.assign(target, ...sources) 
+            //  overwrite user's original entries count from the sources
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
         }
