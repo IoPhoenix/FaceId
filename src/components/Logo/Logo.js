@@ -3,12 +3,19 @@ import Tilt from 'react-tilt';
 import eye from './eye.png';
 import './Logo.css';
 
-const Logo = () => {
+const Logo = ({onRouteChange, isSignedIn}) => {
   return (
-    <div className='mt0'>
+    <div
+      className='mt0 pointer'
+      // user logo as home link only if the user is logged in:
+      onClick={() => {
+        if (isSignedIn) onRouteChange('home')}}>
       <Tilt className="Tilt br2 shadow-2" options={{ max : 65 }}>
         <div className="Tilt-inner pa2">
-          <img className="logo" alt='logo' src={eye}/>
+          <img
+            className="logo"
+            alt='App logo'
+            src={eye}/>
         </div>
       </Tilt>
     </div>

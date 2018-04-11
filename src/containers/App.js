@@ -6,10 +6,14 @@ import Signin from '../components/Signin/Signin';
 import Register from '../components/Register/Register';
 import Logo from '../components/Logo/Logo';
 import Form from '../components/Form/Form';
+import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
 import './App.css';
 
+
+// set initial state to rollback user details
+// after sign out
 const particlesOptions = {
   particles: {
     number: {
@@ -22,7 +26,6 @@ const particlesOptions = {
   }
 }
 
-
 const initialState = {
   input: '',
   imageUrl: '',
@@ -34,7 +37,8 @@ const initialState = {
     name: '',
     email: '',
     entries: 0,
-    joined: ''
+    joined: '',
+    avatarurl: ''
   }
 }
 
@@ -81,7 +85,8 @@ class App extends Component {
 
 
   onImageSubmit = () => {
-    this.setState({imageUrl: this.state.input})
+    this.setState({imageUrl: this.state.input});
+    this.setState({avatarUrl: this.state.input});
       fetch('http://localhost:3000/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
@@ -124,18 +129,25 @@ class App extends Component {
 
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
-
+    const { isSignedIn, imageUrl, route, box, avatarUrl } = this.state;
+    console.log(isSignedIn);
     return (
       <div className="App">
         <Particles className='particles'
           params={particlesOptions}
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}>
-          <Logo />
+        <Navigation 
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}>
+          <Logo 
+            isSignedIn={isSignedIn}
+            onRouteChange={this.onRouteChange}/>
         </Navigation>
         { route === 'home'
           ? <div>
+              <Avatar
+                onRouteChange={this.onRouteChange}
+                avatarUrl={avatarUrl} />
               <Rank 
                 name={this.state.user.name}
                 entries={this.state.user.entries}
@@ -150,8 +162,12 @@ class App extends Component {
           :
             route === 'profile'
               ?  <Profile 
-                  onRouteChange={this.onRouteChange}
-                  user={this.state.user} />
+                    onRouteChange={this.onRouteChange}
+                    user={this.state.user} >
+                    <Avatar
+                      onRouteChange={this.onRouteChange}
+                      avatarUrl={avatarUrl} />
+                  </Profile>
               : 
                 route === 'signin'
                 ?  <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />

@@ -1,5 +1,4 @@
 import React from 'react';
-import user from './user.png';
 import './Navigation.css';
 
 const Navigation = (props, {onRouteChange, isSignedIn}) => {
@@ -11,7 +10,6 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
         style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           {props.children}
           <div>
-            <p onClick={() => props.onRouteChange('profile')} className='f5 dib link bg-navy dim br2 pointer br--left mr2'><img className="user-icon" alt='User icon' src={user}/></p>
             <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim pa3 pointer'>Sign Out</p>
           </div>
       </nav>
