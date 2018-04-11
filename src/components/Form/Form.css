@@ -20,8 +20,4 @@ button {
 
 input::placeholder {
     font-family: Consolas, monaco, monospace;
-  }
-  
-p {
-    color: #d9ecf5;
 }

@@ -7,3 +7,10 @@ p {
 .dim:focus {
   opacity: .8 !important;
 }
+
+.user-icon {
+  width: 25px;
+  height: auto;
+  vertical-align: middle;
+  padding: .78rem;
+}

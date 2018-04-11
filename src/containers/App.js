@@ -1,59 +1,47 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Navigation from './components/Navigation/Navigation';
-import Signin from './components/Signin/Signin';
-import Register from './components/Register/Register';
-import Logo from './components/Logo/Logo';
-import Form from './components/Form/Form';
-import Rank from './components/Rank/Rank';
+import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
+import Navigation from '../components/Navigation/Navigation';
+import Signin from '../components/Signin/Signin';
+import Register from '../components/Register/Register';
+import Logo from '../components/Logo/Logo';
+import Form from '../components/Form/Form';
+import Rank from '../components/Rank/Rank';
+import Profile from '../components/Profile/Profile';
 import './App.css';
-
-const app = new Clarifai.App({
-  apiKey: 'MY_API_KEY'
- });
 
 const particlesOptions = {
   particles: {
     number: {
-      value: 100,
+      value: 120,
       density: {
         enable: true,
         value_area: 700
-      },
-      "shape": {
-        "type": "circle"
-      },
-      "size": {
-        "value": 10,
-         "random": true,
-         "anim": {
-          "enable": true,
-          "speed": 80
-         }
       }
     }
+  }
+}
+
+
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
   }
 }
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -93,13 +81,16 @@ class App extends Component {
 
 
   onImageSubmit = () => {
-    console.log(this.state.user.entries);
     this.setState({imageUrl: this.state.input})
-    app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL,
-        this.state.input)
-      .then(response => {
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.input
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
         if (response) {
           fetch('http://localhost:3000/image', {
             method: 'put',
@@ -114,6 +105,7 @@ class App extends Component {
             //  overwrite user's original entries count from the sources
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
+          .catch(console.log)
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
@@ -123,7 +115,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signin') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState);
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
@@ -155,11 +147,15 @@ class App extends Component {
                 box={box} 
                 imageUrl={imageUrl}/>
             </div>
-          : (
-            route === 'signin'
-            ?  <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-            : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-          )
+          :
+            route === 'profile'
+              ?  <Profile 
+                  onRouteChange={this.onRouteChange}
+                  user={this.state.user} />
+              : 
+                route === 'signin'
+                ?  <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+                : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
         }
       </div>
     );

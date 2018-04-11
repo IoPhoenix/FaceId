@@ -1,0 +1,7 @@
+table {
+    ont-size: 16px;
+}
+
+th, td {
+    vertical-align: bottom;
+}
