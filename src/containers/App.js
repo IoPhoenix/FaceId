@@ -78,7 +78,7 @@ class App extends Component {
     this.setState({box: box});
   }
 
-
+c
   onInputChange = (e) => {
     this.setState({input: e.target.value});
   }
@@ -123,7 +123,7 @@ class App extends Component {
         this.state.user, 
           { avatarUrl: this.state.imageUrl }
       ), function() {
-        console.log('After state is changed: ', this.state.user.avatarUrl);
+        console.log('Avatar is changed: ', this.state.user.avatarUrl);
       }
     );
   }

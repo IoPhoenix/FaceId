@@ -1,9 +1,11 @@
 .App {
   text-align: center;
 }
-.center {
+
+.center-column {
+  flex-direction: column;
   display: flex;
-  justify-content: center;
+  align-items: center;
 }
 
 .particles {
