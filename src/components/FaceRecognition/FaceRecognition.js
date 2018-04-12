@@ -28,24 +28,24 @@ class FaceRecognition extends React.Component {
 
   render() {
     const {imageUrl, box} = this.props;
-    const displayState = imageUrl ? 'db' : 'dn';
+
+    // display component only when user submits the image:
+    const displayState = imageUrl ? 'flex' : 'dn';
 
     return (
-      <div className='center-column ma'>
+      <div className={displayState + ' center-column ma'}>
         <div 
-          className={displayState + ' absolute center center-column mt2'}>
+          className='relative center center-column mt2'>
           <img className='shadow-2 mb3' src={imageUrl} id='input-image' alt='' width='500' heigh='auto'/>
           <div
             className='bounding-box'
             style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}>
           </div>
-
-          <button 
-            style={{top: '-2.5rem'}}
-            onClick={this.updateAvatar}
-            className="relative code mb-3 w-30 grow f6 link ph3 pv2 dib white">Set as avatar
-          </button>
         </div>
+        <button 
+            onClick={this.updateAvatar}
+            className="code mb5 w-20 grow f6 link ph3 pv2 dib white">Set as avatar
+          </button>
       </div>
     );
   }

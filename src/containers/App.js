@@ -54,7 +54,8 @@ class App extends Component {
       name: data.name,
       email: data.email,
       entries: data.entries,
-      joined: data.joined
+      joined: data.joined,
+      avatarUrl: data.avatar
     }})
   }
 
@@ -123,7 +124,7 @@ c
         this.state.user, 
           { avatarUrl: this.state.imageUrl }
       ), function() {
-        console.log('Avatar is changed: ', this.state.user.avatarUrl);
+        console.log('Avatar is changed');
       }
     );
   }
@@ -142,6 +143,7 @@ c
   render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
+    
     return (
       <div className="App">
         <Particles className='particles'

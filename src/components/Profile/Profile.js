@@ -5,13 +5,11 @@ const Profile = (props, {user}) => {
     const { name, email, joined, entries } = props.user;
     return (
         <div 
-            className="mw5 mw6-ns center pa3 ph5-ns"
-            style={{flexDirection: "column"}}>
-
+            className="mw5 mw6-ns center pa3 ph5-ns">
             {props.children}
            
         <h2 className="white">This is your proflle details</h2>
-        <table className="collapse ba br2 b--black-10 pv2 ph3 mt4">
+        <table className="center collapse ba br2 b--black-10 pv2 ph3 mt4">
             <tbody>
                 <tr className="striped--near-white ">
                     <th className="pv2 ph3 tl f6 fw6 ttu">Name</th>
