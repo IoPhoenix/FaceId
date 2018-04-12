@@ -38,7 +38,7 @@ const initialState = {
     email: '',
     entries: 0,
     joined: '',
-    avatarurl: ''
+    avatarUrl: ''
   }
 }
 
@@ -86,7 +86,6 @@ class App extends Component {
 
   onImageSubmit = () => {
     this.setState({imageUrl: this.state.input});
-    this.setState({avatarUrl: this.state.input});
       fetch('http://localhost:3000/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
@@ -117,6 +116,18 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+  // change user avatar to currently submitted image 
+  onAvatarSubmit = () => {
+    this.setState(
+      Object.assign(
+        this.state.user, 
+          { avatarUrl: this.state.imageUrl }
+      ), function() {
+        console.log('After state is changed: ', this.state.user.avatarUrl);
+      }
+    );
+  }
+
 
   onRouteChange = (route) => {
     if (route === 'signin') {
@@ -129,8 +140,8 @@ class App extends Component {
 
 
   render() {
-    const { isSignedIn, imageUrl, route, box, avatarUrl } = this.state;
-    console.log(isSignedIn);
+    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { id, name, entries, avatarUrl} = this.state.user;
     return (
       <div className="App">
         <Particles className='particles'
@@ -149,15 +160,17 @@ class App extends Component {
                 onRouteChange={this.onRouteChange}
                 avatarUrl={avatarUrl} />
               <Rank 
-                name={this.state.user.name}
-                entries={this.state.user.entries}
+                name={name}
+                entries={entries}
               />
               <Form 
                 onInputChange={this.onInputChange}
                 onImageSubmit={this.onImageSubmit}/>
               <FaceRecognition 
+                id={id}
                 box={box} 
-                imageUrl={imageUrl}/>
+                imageUrl={imageUrl}
+                onAvatarSubmit={this.onAvatarSubmit} />
             </div>
           :
             route === 'profile'
