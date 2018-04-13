@@ -5,7 +5,8 @@ class Signin extends React.Component {
         super(props);
         this.state = {
           signInEmail: '',
-          signInPassword: ''
+          signInPassword: '',
+          signInError: ''
         }
       }
 
@@ -17,7 +18,10 @@ class Signin extends React.Component {
         this.setState({signInPassword: e.target.value})
     }
 
-    onSubmit = () => {
+    signinUser = () => {
+        // clear error messages:
+        this.setState({ error: '' });
+
         fetch('http://localhost:3000/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -32,12 +36,30 @@ class Signin extends React.Component {
             if (user.id) {
                 this.props.loadUser(user)
                 this.props.onRouteChange('home');
+            } else {
+                this.setState({signInError: 'Sign in failed'});
             }
         })
+        .catch(err => this.setState({error: err}));
     }
+
+    onSubmit = () => {
+        const { signInEmail, signInPassword } = this.state;
+
+        if (!signInEmail || !signInPassword) {
+            this.setState({ signInError: 'Invalid credentials' });
+        } else if (signInPassword.length < 8) {
+            this.setState({ signInError: 'Password must be at least 8 characters long' });
+        } else {
+            this.signinUser();  
+        }
+      }
 
     render() {
         const { onRouteChange } = this.props;
+        const { signInError } = this.state;
+        const errorDisplay = signInError ? 'db' : 'dn';
+
         return (
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
@@ -66,6 +88,7 @@ class Signin extends React.Component {
                         </div>
                     </fieldset>
                     <div className="">
+                        <p className={errorDisplay + " red mt0"}>{signInError}</p>
                         <input
                             onClick={this.onSubmit}
                             className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"

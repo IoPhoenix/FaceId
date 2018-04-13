@@ -6,7 +6,8 @@ class Register extends React.Component {
     this.state = {
       email: '',
       password: '',
-      name: ''
+      name: '',
+      error: ''
     }
   }
 
@@ -22,27 +23,46 @@ class Register extends React.Component {
     this.setState({password: e.target.value})
   }
 
-  onSubmit = () => {
-    fetch('http://localhost:3000/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-        name: this.state.name
+  registerUser = () => {
+      // clear all error messages:
+      this.setState({ error: '' });
+
+      fetch('http://localhost:3000/register', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+          name: this.state.name
+        })
       })
-    })
-    .then(response => response.json())
-    .then(user => {
-      if (user.id) {
-        this.props.loadUser(user);
-        this.props.onRouteChange('home');
-      }
-    })
+      .then(response => response.json())
+      .then(user => {
+        if (user.id) {
+          this.props.loadUser(user);
+          this.props.onRouteChange('home');
+        }
+      })
+      .catch(err => this.setState({ error: err }));
   }
+
+  onSubmit = () => {
+    const { name, email, password } = this.state;
+
+    if (!name || !email.length || !password.length) {
+      this.setState({ error: 'Invalid credentials' });
+    } else if (password.length < 8) {
+      this.setState({ error: 'Password must be at least 8 characters long' });
+    } else {
+      this.registerUser();  
+    }
+  }
+
 
   render() {
     const { onRouteChange } = this.props;
+    const { error } = this.state;
+    const errorDisplay = error ? 'db' : 'dn';
 
     return (
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -63,6 +83,7 @@ class Register extends React.Component {
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
                 <input
+                  required
                   className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="email"
                   name="email-address"
@@ -73,6 +94,7 @@ class Register extends React.Component {
               <div className="mv3">
                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
                 <input
+                  required
                   className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="password"
                   name="password"
@@ -81,7 +103,8 @@ class Register extends React.Component {
                 />
               </div>
             </fieldset>
-            <div className="">
+            <div>
+              <p className={errorDisplay + " red mt0"}>{error}</p>
               <input
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
