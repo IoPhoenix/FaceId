@@ -27,7 +27,7 @@ class Register extends React.Component {
       // clear all error messages:
       this.setState({ error: '' });
 
-      fetch('http://localhost:3000/register', {
+      fetch('https://calm-forest-65718.herokuapp.com/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -41,6 +41,8 @@ class Register extends React.Component {
         if (user.id) {
           this.props.loadUser(user);
           this.props.onRouteChange('home');
+        } else {
+          this.setState({error: 'Failed to register'});
         }
       })
       .catch(err => this.setState({ error: err }));
@@ -83,7 +85,6 @@ class Register extends React.Component {
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
                 <input
-                  required
                   className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="email"
                   name="email-address"
@@ -94,7 +95,6 @@ class Register extends React.Component {
               <div className="mv3">
                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
                 <input
-                  required
                   className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="password"
                   name="password"
@@ -104,7 +104,7 @@ class Register extends React.Component {
               </div>
             </fieldset>
             <div>
-              <p className={errorDisplay + " red mt0"}>{error}</p>
+              <p className={errorDisplay + " dark-red mt0"}>{error}</p>
               <input
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"

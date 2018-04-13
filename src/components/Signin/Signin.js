@@ -22,7 +22,7 @@ class Signin extends React.Component {
         // clear error messages:
         this.setState({ error: '' });
 
-        fetch('http://localhost:3000/signin', {
+        fetch('https://calm-forest-65718.herokuapp.com/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -88,7 +88,7 @@ class Signin extends React.Component {
                         </div>
                     </fieldset>
                     <div className="">
-                        <p className={errorDisplay + " red mt0"}>{signInError}</p>
+                        <p className={errorDisplay + " dark-red mt0"}>{signInError}</p>
                         <input
                             onClick={this.onSubmit}
                             className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"

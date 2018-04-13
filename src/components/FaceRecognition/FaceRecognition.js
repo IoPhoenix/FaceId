@@ -10,7 +10,7 @@ class FaceRecognition extends React.Component {
   }
 
   updateAvatar = () => {
-    fetch('http://localhost:3000/avatar', {
+    fetch('https://calm-forest-65718.herokuapp.com/avatar', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
