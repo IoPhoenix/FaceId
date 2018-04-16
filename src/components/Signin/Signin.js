@@ -46,10 +46,10 @@ class Signin extends React.Component {
     onSubmit = () => {
         const { signInEmail, signInPassword } = this.state;
 
-        if (!signInEmail || !signInPassword) {
+        if (!signInEmail || !signInPassword || signInPassword.length < 8) {
             this.setState({ signInError: 'Invalid credentials' });
-        } else if (signInPassword.length < 8) {
-            this.setState({ signInError: 'Password must be at least 8 characters long' });
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signInEmail)) {
+            this.setState({ signInError: 'Invalid email format' });
         } else {
             this.signinUser();  
         }

@@ -51,8 +51,10 @@ class Register extends React.Component {
   onSubmit = () => {
     const { name, email, password } = this.state;
 
-    if (!name || !email.length || !password.length) {
+    if (!name || !email || !password) {
       this.setState({ error: 'Invalid credentials' });
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.setState({ error: 'Invalid email format' });
     } else if (password.length < 8) {
       this.setState({ error: 'Password must be at least 8 characters long' });
     } else {
