@@ -117,7 +117,7 @@ class Register extends React.Component {
             <div className="lh-copy mt3">
                 <p
                     onClick={() => onRouteChange('signin')}
-                    className="mt4 f6 link dim black db pointer">
+                    className="mt4 f6 link dim db pointer near-white">
                      Already have an account? Sign In
                 </p>
             </div>

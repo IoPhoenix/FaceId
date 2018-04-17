@@ -27,13 +27,16 @@ class FaceRecognition extends React.Component {
   }
 
   render() {
-    const {imageUrl, box} = this.props;
+    const {imageUrl, box, imageDetectionError} = this.props;
 
     // display component only when user submits the image:
-    const displayState = imageUrl ? 'flex' : 'dn';
+    const componentDisplayState = imageUrl ? 'flex' : 'dn';
+    // display error only when error occurs:
+    const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
     return (
-      <div className={displayState + ' center-column ma'}>
+      <div className={componentDisplayState + ' center-column ma'}>
+        <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
         <div 
           className='relative center center-column mt2'>
           <img className='shadow-2 mb3' src={imageUrl} id='input-image' alt='' width='500' heigh='auto'/>
@@ -44,7 +47,7 @@ class FaceRecognition extends React.Component {
         </div>
         <button 
             onClick={this.updateAvatar}
-            className="code mb5 w-20 grow f6 link ph3 pv2 dib white">Set as avatar
+            className="code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 dib white">Set as avatar
           </button>
       </div>
     );

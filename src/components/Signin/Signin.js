@@ -99,7 +99,7 @@ class Signin extends React.Component {
                     <div className="lh-copy mt3">
                         <p
                             onClick={() => onRouteChange('register')}
-                            className="mt4 f6 link dim black db pointer">
+                            className="mt4 f6 link dim db pointer near-white">
                             Register
                         </p>
                     </div>

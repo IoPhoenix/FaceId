@@ -5,7 +5,7 @@ const Profile = (props, {user}) => {
     const { name, email, joined, entries } = props.user;
     return (
         <div 
-            className="mw5 mw6-ns center pa3 ph5-ns">
+            className="mw6-ns center pa3 ph5-ns">
             {props.children}
            
         <h2 className="white">This is your proflle details</h2>

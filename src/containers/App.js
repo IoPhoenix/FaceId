@@ -29,6 +29,7 @@ const particlesOptions = {
 const initialState = {
   input: '',
   imageUrl: '',
+  imageDetectionError: '',
   box: {},
   route: 'signin',
   isSignedIn: false,
@@ -61,6 +62,12 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
+    console.log(data);
+    data.outputs[0].data.regions === undefined ? 
+      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect a face!'}))
+      :
+      this.setState(Object.assign(this.state.user, { imageDetectionError: ''}));
+
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('input-image');
     const imageWidth = Number(image.width);
@@ -141,7 +148,7 @@ c
 
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, imageDetectionError, route, box } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
     
     return (
@@ -169,6 +176,7 @@ c
                 onInputChange={this.onInputChange}
                 onImageSubmit={this.onImageSubmit}/>
               <FaceRecognition 
+                imageDetectionError={imageDetectionError}
                 id={id}
                 box={box} 
                 imageUrl={imageUrl}
