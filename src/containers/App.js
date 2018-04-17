@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {isBrowser} from 'react-device-detect';
+import {MobileView, isMobileOnly} from 'react-device-detect';
 import Particles from 'react-particles-js';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
@@ -13,8 +13,7 @@ import Profile from '../components/Profile/Profile';
 import './App.css';
 
 
-// set initial state to rollback user details
-// after sign out
+
 const particlesOptions = {
   particles: {
     number: {
@@ -27,6 +26,8 @@ const particlesOptions = {
   }
 }
 
+// set initial state to rollback user details
+// after sign out
 const initialState = {
   input: '',
   imageUrl: '',
@@ -151,17 +152,12 @@ c
   render() {
     const { isSignedIn, imageUrl, imageDetectionError, route, box } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
-    const renderIfBrowser = () => {
-      if (isBrowser)
-        console.log('browser screen!');
-        return ( 
-          <Particles className='particles' params={particlesOptions} />
-        )
-    }
 
     return (
       <div className="app">
-        { renderIfBrowser() }
+        <MobileView device={!isMobileOnly}>
+          <Particles className='particles' params={particlesOptions} />
+        </MobileView>
 
         <Navigation 
           isSignedIn={isSignedIn}

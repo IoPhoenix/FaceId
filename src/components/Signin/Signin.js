@@ -61,7 +61,7 @@ class Signin extends React.Component {
         const errorDisplay = signInError ? 'db' : 'dn';
 
         return (
-            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white-50">
                 <main className="pa4 black-80">
                     <div className="measure">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -99,7 +99,7 @@ class Signin extends React.Component {
                     <div className="lh-copy mt3">
                         <p
                             onClick={() => onRouteChange('register')}
-                            className="mt4 f6 link dim db pointer near-white">
+                            className="mt4 f6 link dim db pointer black">
                             Register
                         </p>
                     </div>
