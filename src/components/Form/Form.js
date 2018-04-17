@@ -10,12 +10,13 @@ const Form = ({onInputChange, onImageSubmit}) => {
       <div className='center'>
         <div className='form center pa4 br3 shadow-5'>
           <input 
-            className='f4 pa2 w-70 center'
+            className='f4 pa2 w-100 w-70-ns center code'
             type='text'
-            placeholder='Enter image url..'
+            placeholder='Enter image url...'
             onChange={onInputChange}/>
           <button
-            className='code w-30 grow f5 link ph3 pv2 dib white'
+            style={{ padding: '.6rem', verticalAlign: 'top'}}
+            className='code w-100 w-30-ns grow link dib white'
             onClick={onImageSubmit}
           >Detect</button>
         </div>

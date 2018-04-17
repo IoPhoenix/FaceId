@@ -6,7 +6,7 @@ import './Logo.css';
 const Logo = ({onRouteChange, isSignedIn}) => {
   return (
     <div
-      className='mt0 pointer'
+      className='pointer'
       // user logo as home link only if the user is logged in:
       onClick={() => {
         if (isSignedIn) onRouteChange('home')}}>

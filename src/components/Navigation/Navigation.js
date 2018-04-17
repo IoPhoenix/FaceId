@@ -6,8 +6,8 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
   if (props.isSignedIn) {
     return (
       <nav 
-        className='pl4 pt4' 
-        style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        className='pl4' 
+        style={{paddingTop: '3%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           {props.children}
           <div>
             <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim pa3 pointer'>Sign Out</p>
@@ -17,8 +17,8 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
   } else {
     return (
       <nav 
-        className='pl4 pt4' 
-        style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        className='pl4' 
+        style={{ paddingTop: '3%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           {props.children}
           <div>
             <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Sign In</p>
