@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {isBrowser} from 'react-device-detect';
 import Particles from 'react-particles-js';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
@@ -150,12 +151,18 @@ c
   render() {
     const { isSignedIn, imageUrl, imageDetectionError, route, box } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
-    
+    const renderIfBrowser = () => {
+      if (isBrowser)
+        console.log('browser screen!');
+        return ( 
+          <Particles className='particles' params={particlesOptions} />
+        )
+    }
+
     return (
-      <div className="App">
-        <Particles className='particles'
-          params={particlesOptions}
-        />
+      <div className="app">
+        { renderIfBrowser() }
+
         <Navigation 
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}>
