@@ -64,22 +64,23 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
-    console.log(data);
-    data.outputs[0].data.regions === undefined ? 
+
+    // do not calculate face location if no face was detected:
+    if (data.outputs[0].data.regions === undefined) {
       this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect a face!'}))
-      :
-      this.setState(Object.assign(this.state.user, { imageDetectionError: ''}));
-
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('input-image');
-    const imageWidth = Number(image.width);
-    const imageHeight = Number(image.height);
-
-    return {
-      leftCol: clarifaiFace.left_col * imageWidth,
-      topRow: clarifaiFace.top_row * imageHeight,
-      rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
-      bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight)
+      return {};
+    } else {
+      const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+      const image = document.getElementById('input-image');
+      const imageWidth = Number(image.width);
+      const imageHeight = Number(image.height);
+  
+      return { 
+        leftCol: clarifaiFace.left_col * imageWidth,
+        topRow: clarifaiFace.top_row * imageHeight,
+        rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
+        bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight)
+      }
     }
   }
 
@@ -88,13 +89,20 @@ class App extends Component {
     this.setState({box: box});
   }
 
-c
+
   onInputChange = (e) => {
     this.setState({input: e.target.value});
   }
 
 
   onImageSubmit = () => {
+     // clear previous face recognition result:
+    this.setState(Object.assign({ box: {}}));
+
+     // clear previous face recognition errors:
+    this.setState(Object.assign(this.state.user, { imageDetectionError: ''}));
+
+    // send link to server to face recgnition api
     this.setState({imageUrl: this.state.input});
       fetch('https://calm-forest-65718.herokuapp.com/imageurl', {
         method: 'post',
