@@ -27,8 +27,7 @@ class FaceRecognition extends React.Component {
   }
 
   render() {
-    const {imageUrl, box, imageDetectionError} = this.props;
-
+    const {imageUrl, faceBoxes, imageDetectionError} = this.props;
     // display component only when user submits the image:
     const componentDisplayState = imageUrl ? 'flex' : 'dn';
     // display error only when error occurs:
@@ -40,10 +39,22 @@ class FaceRecognition extends React.Component {
         <div 
           className='relative center center-column mt2'>
           <img className='shadow-2 mb3' src={imageUrl} id='input-image' alt='' width='500' heigh='auto'/>
-          <div
-            className='bounding-box'
-            style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}>
-          </div>
+          {
+            faceBoxes.map((box, i) => {
+            return (
+                <div 
+                  className='bounding-box' 
+                  key={i}
+                  style={{
+                    top: box.topRow, 
+                    left:box.leftCol, 
+                    bottom: box.bottomRow, 
+                    right:box.rightCol
+                  }}>
+                </div>
+              );
+            })
+        }
         </div>
         <button 
             onClick={this.updateAvatar}

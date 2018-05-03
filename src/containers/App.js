@@ -32,7 +32,7 @@ const initialState = {
   input: '',
   imageUrl: '',
   imageDetectionError: '',
-  box: {},
+  faceBoxes: [],
   route: 'signin',
   isSignedIn: false,
   user: {
@@ -67,26 +67,32 @@ class App extends Component {
 
     // do not calculate face location if no face was detected:
     if (data.outputs[0].data.regions === undefined) {
-      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect a face!'}))
-      return {};
+      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect any faces!'}))
+      return [];
     } else {
-      const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+
+      // calculate coordinates for each face box
       const image = document.getElementById('input-image');
       const imageWidth = Number(image.width);
       const imageHeight = Number(image.height);
-  
-      return { 
-        leftCol: clarifaiFace.left_col * imageWidth,
-        topRow: clarifaiFace.top_row * imageHeight,
-        rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
-        bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight)
-      }
+      
+      const boxes = data.outputs[0].data.regions.map(region => {
+        const clarifaiFace = region.region_info.bounding_box;
+        return { 
+          leftCol: clarifaiFace.left_col * imageWidth,
+          topRow: clarifaiFace.top_row * imageHeight,
+          rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
+          bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight)
+        }
+      });
+     
+      return boxes; // return array of objects
     }
   }
 
 
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+  displayFaceBoxes = (boxes) => {
+    this.setState({faceBoxes: boxes});
   }
 
 
@@ -97,12 +103,12 @@ class App extends Component {
 
   onImageSubmit = () => {
      // clear previous face recognition result:
-    this.setState(Object.assign({ box: {}}));
+    this.setState(Object.assign({ faceBoxes: [] }));
 
      // clear previous face recognition errors:
     this.setState(Object.assign(this.state.user, { imageDetectionError: ''}));
 
-    // send link to server to face recgnition api
+    // send image link to server to begin face recognition
     this.setState({imageUrl: this.state.input});
       fetch('https://calm-forest-65718.herokuapp.com/imageurl', {
         method: 'post',
@@ -114,6 +120,8 @@ class App extends Component {
     .then(response => response.json())
     .then(response => {
         if (response) {
+          console.log('response: ', response);
+          // change # of sumbitted entries in database
           fetch('https://calm-forest-65718.herokuapp.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
@@ -124,15 +132,16 @@ class App extends Component {
           .then(response => response.json())
           .then(count => {
             // Object.assign(target, ...sources) 
-            //  overwrite user's original entries count from the sources
+            // overwrite user's original entries count from the sources
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
           .catch(console.log)
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        this.displayFaceBoxes(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
   }
+
 
   // change user avatar to currently submitted image 
   onAvatarSubmit = () => {
@@ -140,9 +149,7 @@ class App extends Component {
       Object.assign(
         this.state.user, 
           { avatarUrl: this.state.imageUrl }
-      ), function() {
-        console.log('Avatar is changed');
-      }
+      )
     );
   }
 
@@ -158,7 +165,7 @@ class App extends Component {
 
 
   render() {
-    const { isSignedIn, imageUrl, imageDetectionError, route, box } = this.state;
+    const { isSignedIn, imageUrl, imageDetectionError, route, faceBoxes } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
 
     return (
@@ -189,7 +196,7 @@ class App extends Component {
               <FaceRecognition 
                 imageDetectionError={imageDetectionError}
                 id={id}
-                box={box} 
+                faceBoxes={faceBoxes} 
                 imageUrl={imageUrl}
                 onAvatarSubmit={this.onAvatarSubmit} />
             </div>
