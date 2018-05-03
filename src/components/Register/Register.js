@@ -1,32 +1,45 @@
 import React from 'react';
+import Form from '../Form/Form';
+import Legend from '../Legend/Legend';
+import NameInput from '../NameInput/NameInput';
+import EmailInput from '../EmailInput/EmailInput';
+import PasswordInput from '../PasswordInput/PasswordInput';
+import SubmitInput from '../SubmitInput/SubmitInput';
+import FormLink from '../FormLink/FormLink';
+
 
 class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      name: '',
-      error: ''
+      registerName: '',
+      registerEmail: '',
+      registerPassword: '',
+      registerError: ''
     }
+
+  console.log('props: ', props);
+    
   }
 
   onNameChange = (e) => {
-    this.setState({name: e.target.value})
-    console.log(this.state);
+    this.setState({registerName: e.target.value});
+    console.log('this.state for name: ', this.state);
   }
 
   onEmailChange = (e) => {
-    this.setState({email: e.target.value})
+    this.setState({registerEmail: e.target.value});
+    console.log('this.state for email: ', this.state);
   }
 
   onPasswordChange = (e) => {
-    this.setState({password: e.target.value})
+    this.setState({registerPassword: e.target.value});
+    console.log('this.state for password: ', this.state);
   }
 
   registerUser = () => {
       // clear all error messages:
-      this.setState({ error: '' });
+      this.setState({ registerError: '' });
 
       fetch('https://calm-forest-65718.herokuapp.com/register', {
         method: 'post',
@@ -43,21 +56,22 @@ class Register extends React.Component {
           this.props.loadUser(user);
           this.props.onRouteChange('home');
         } else {
-          this.setState({error: 'Failed to register'});
+          this.setState({registerError: 'Failed to register'});
         }
       })
-      .catch(err => this.setState({ error: err }));
+      .catch(err => this.setState({ registerError: err }));
   }
 
   onSubmit = () => {
-    const { name, email, password } = this.state;
+    console.log('Submit button was clicked!');
+    const { registerName, registerEmail, registerPassword } = this.state;
 
-    if (!name || !email || !password) {
-      this.setState({ error: 'Invalid credentials' });
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      this.setState({ error: 'Invalid email format' });
-    } else if (password.length < 8) {
-      this.setState({ error: 'Password must be at least 8 characters long' });
+    if (!registerName || !registerEmail || !registerPassword) {
+      this.setState({ registerError: 'Invalid credentials' });
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerEmail)) {
+      this.setState({ registerError: 'Invalid email format' });
+    } else if (registerPassword.length < 8) {
+      this.setState({ registerError: 'Password must be at least 8 characters long' });
     } else {
       this.registerUser();  
     }
@@ -65,66 +79,21 @@ class Register extends React.Component {
 
 
   render() {
-    const { onRouteChange } = this.props;
-    const { error } = this.state;
-    const errorDisplay = error ? 'db' : 'dn';
-
     return (
-      <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white-50">
-        <main className="pa4 black-80">
-          <div className="measure">
-            <fieldset className="ba b--transparent ph0 mh0">
-              <legend className="f2 fw6 ph0 mh0">Register</legend>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="text"
-                  name="name"
-                  id="name"
-                  onChange={this.onNameChange}
-                />
-              </div>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="email"
-                  name="email-address"
-                  id="email-address"
-                  onChange={this.onEmailChange}
-                />
-              </div>
-              <div className="mv3">
-                <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={this.onPasswordChange}
-                />
-              </div>
-            </fieldset>
-            <div>
-              <p className={errorDisplay + " dark-red mt0"}>{error}</p>
-              <input
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                type="submit"
-                value="Register"
-                onClick={this.onSubmit}
-              />
-            </div>
-            <div className="signin-link lh-copy mt3">
-                <p
-                    onClick={() => onRouteChange('signin')}
-                    className="mt4 f6 link dim db pointer black">
-                     Already have an account? Sign In
-                </p>
-            </div>
-          </div>
-        </main>
-      </article>
+      <Form>
+          <Legend value={'Register'} />
+          <NameInput onNameChange={this.onNameChange} />
+          <EmailInput onEmailChange={this.onEmailChange} />
+          <PasswordInput onPasswordChange={this.onPasswordChange} />
+          <SubmitInput 
+              onSubmit={this.onSubmit}
+              error={this.state.registerError}
+              value='Register' />
+          <FormLink
+            onRouteChange={this.props.onRouteChange} 
+            value='Already have an account? Sign In' 
+            route='signin' />
+      </Form> 
     )
   }
 }

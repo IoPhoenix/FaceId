@@ -1,11 +1,11 @@
 import React from 'react';
 
-const FormLink = ({onRouteChange, value}) => {
+const FormLink = ({onRouteChange, value, route}) => {
     return (
-        <div className="register-link lh-copy mt3">
+        <div className="lh-copy mt3">
             <p
-                onClick={() => onRouteChange('register')}
-                className="mt4 f6 link dim db pointer black">
+                onClick={() => onRouteChange({ route })}
+                className="f6 link dim db pointer black">
                 { value }
             </p>
         </div>

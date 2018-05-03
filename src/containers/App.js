@@ -162,6 +162,7 @@ class App extends Component {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
+    console.log('route is ', route)
   }
 
 

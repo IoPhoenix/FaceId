@@ -7,7 +7,6 @@ import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
 
 
-
 class Signin extends React.Component {
     constructor(props) {
         super(props);
@@ -25,6 +24,7 @@ class Signin extends React.Component {
     onPasswordChange = (e) => {
         this.setState({signInPassword: e.target.value})
     }
+
 
     signinUser = () => {
         // clear error messages:
@@ -48,12 +48,11 @@ class Signin extends React.Component {
                 this.setState({signInError: 'Sign in failed'});
             }
         })
-        .catch(err => this.setState({error: err}));
+        .catch(err => this.setState({signInError: err}));
     }
 
 
     onSubmit = () => {
-        
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
@@ -73,11 +72,14 @@ class Signin extends React.Component {
                 <PasswordInput onPasswordChange={this.onPasswordChange} />
                 <SubmitInput 
                     onSubmit={this.onSubmit}
-                    signInError={this.state.signInError}
+                    error={this.state.signInError}
                     value='Sign in' />
-                <FormLink onRouteChange={this.props.onRouteChange} value='Register'/>
+                <FormLink 
+                    onRouteChange={this.props.onRouteChange}
+                    value='Register'
+                    route='register' />
             </Form> 
-        );
+        )
     }
 }
 
