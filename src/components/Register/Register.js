@@ -45,9 +45,9 @@ class Register extends React.Component {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password,
-          name: this.state.name
+          name: this.state.registerName,
+          email: this.state.registerEmail,
+          password: this.state.registerPassword
         })
       })
       .then(response => response.json())
@@ -79,6 +79,7 @@ class Register extends React.Component {
 
 
   render() {
+    console.log('This is REGISTER component');
     return (
       <Form>
           <Legend value={'Register'} />
@@ -92,7 +93,7 @@ class Register extends React.Component {
           <FormLink
             onRouteChange={this.props.onRouteChange} 
             value='Already have an account? Sign In' 
-            route='signin' />
+            path='signin' />
       </Form> 
     )
   }

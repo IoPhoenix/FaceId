@@ -162,7 +162,7 @@ class App extends Component {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
-    console.log('route is ', route)
+    console.log('this.state.route is now set to: ', this.state.route);
   }
 
 
@@ -211,10 +211,11 @@ class App extends Component {
                       onRouteChange={this.onRouteChange}
                       avatarUrl={avatarUrl} />
                   </Profile>
-              : 
-                route === 'signin'
-                ?  <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-                : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+                : 
+                    (route === 'signin')
+                    ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+                    : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+                   
         }
       </div>
     );

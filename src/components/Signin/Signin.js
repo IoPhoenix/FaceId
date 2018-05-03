@@ -65,6 +65,7 @@ class Signin extends React.Component {
       }
 
     render() {
+        console.log('This is SIGNIN component');
         return (
             <Form>
                 <Legend value={'Sign In'} />
@@ -77,7 +78,7 @@ class Signin extends React.Component {
                 <FormLink 
                     onRouteChange={this.props.onRouteChange}
                     value='Register'
-                    route='register' />
+                    path='register' />
             </Form> 
         )
     }

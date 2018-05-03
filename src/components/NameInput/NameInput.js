@@ -9,7 +9,7 @@ const NameInput = ({onNameChange}) => {
                 type="text"
                 name="name"
                 id="name"
-                onChange={this.onNameChange}
+                onChange={onNameChange}
             />
         </div>
     )
