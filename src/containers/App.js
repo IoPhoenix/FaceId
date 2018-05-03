@@ -59,8 +59,8 @@ class App extends Component {
       entries: data.entries,
       joined: data.joined,
       avatarUrl: data.avatar
-    }})
-    console.log('loadUser: ',  this.state);
+    }});
+    console.log('User data is loaded!');
   }
 
   // calculate location of the box on the face

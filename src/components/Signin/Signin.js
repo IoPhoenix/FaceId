@@ -20,12 +20,10 @@ class Signin extends React.Component {
 
     onEmailChange = (e) => {
         this.setState({signInEmail: e.target.value})
-        console.log(this.state);
     }    
 
     onPasswordChange = (e) => {
         this.setState({signInPassword: e.target.value})
-        console.log(this.state);
     }
 
     signinUser = () => {
@@ -55,7 +53,7 @@ class Signin extends React.Component {
 
 
     onSubmit = () => {
-        console.log('Sumbit button clicked!');
+        
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
