@@ -13,6 +13,7 @@ class Register extends React.Component {
 
   onNameChange = (e) => {
     this.setState({name: e.target.value})
+    console.log(this.state);
   }
 
   onEmailChange = (e) => {
@@ -72,7 +73,7 @@ class Register extends React.Component {
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white-50">
         <main className="pa4 black-80">
           <div className="measure">
-            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+            <fieldset className="ba b--transparent ph0 mh0">
               <legend className="f2 fw6 ph0 mh0">Register</legend>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
@@ -114,7 +115,7 @@ class Register extends React.Component {
                 onClick={this.onSubmit}
               />
             </div>
-            <div className="lh-copy mt3">
+            <div className="signin-link lh-copy mt3">
                 <p
                     onClick={() => onRouteChange('signin')}
                     className="mt4 f6 link dim db pointer black">

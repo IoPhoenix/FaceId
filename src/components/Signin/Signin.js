@@ -1,4 +1,12 @@
 import React from 'react';
+import Form from '../Form/Form';
+import Legend from '../Legend/Legend';
+import EmailInput from '../EmailInput/EmailInput';
+import PasswordInput from '../PasswordInput/PasswordInput';
+import SubmitInput from '../SubmitInput/SubmitInput';
+import FormLink from '../FormLink/FormLink';
+
+
 
 class Signin extends React.Component {
     constructor(props) {
@@ -12,10 +20,12 @@ class Signin extends React.Component {
 
     onEmailChange = (e) => {
         this.setState({signInEmail: e.target.value})
+        console.log(this.state);
     }    
 
     onPasswordChange = (e) => {
         this.setState({signInPassword: e.target.value})
+        console.log(this.state);
     }
 
     signinUser = () => {
@@ -43,7 +53,9 @@ class Signin extends React.Component {
         .catch(err => this.setState({error: err}));
     }
 
+
     onSubmit = () => {
+        console.log('Sumbit button clicked!');
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
@@ -56,56 +68,17 @@ class Signin extends React.Component {
       }
 
     render() {
-        const { onRouteChange } = this.props;
-        const { signInError } = this.state;
-        const errorDisplay = signInError ? 'db' : 'dn';
-
         return (
-            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white-50">
-                <main className="pa4 black-80">
-                    <div className="measure">
-                    <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f2 fw6 ph0 mh0">Sign In</legend>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                            <input
-                                className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                                type="email"
-                                name="email-address"
-                                id="email-address"
-                                onChange={this.onEmailChange}
-                            />
-                        </div>
-                        <div className="mv3">
-                            <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                            <input
-                                className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                                type="password"
-                                name="password"
-                                id="password"
-                                onChange={this.onPasswordChange}
-                            />
-                        </div>
-                    </fieldset>
-                    <div className="">
-                        <p className={errorDisplay + " dark-red mt0"}>{signInError}</p>
-                        <input
-                            onClick={this.onSubmit}
-                            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                            type="submit"
-                            value="Sign in"
-                        />
-                    </div>
-                    <div className="lh-copy mt3">
-                        <p
-                            onClick={() => onRouteChange('register')}
-                            className="mt4 f6 link dim db pointer black">
-                            Register
-                        </p>
-                    </div>
-                    </div>
-                </main>
-            </article>
+            <Form>
+                <Legend value={'Sign In'} />
+                <EmailInput onEmailChange={this.onEmailChange} />
+                <PasswordInput onPasswordChange={this.onPasswordChange} />
+                <SubmitInput 
+                    onSubmit={this.onSubmit}
+                    signInError={this.state.signInError}
+                    value='Sign in' />
+                <FormLink onRouteChange={this.props.onRouteChange} value='Register'/>
+            </Form> 
         );
     }
 }

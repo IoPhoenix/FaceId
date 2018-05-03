@@ -6,7 +6,7 @@ import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
 import Register from '../components/Register/Register';
 import Logo from '../components/Logo/Logo';
-import Form from '../components/Form/Form';
+import ImageSubmit from '../components/ImageSubmit/ImageSubmit';
 import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
@@ -60,6 +60,7 @@ class App extends Component {
       joined: data.joined,
       avatarUrl: data.avatar
     }})
+    console.log('loadUser: ',  this.state);
   }
 
   // calculate location of the box on the face
@@ -190,7 +191,7 @@ class App extends Component {
                 name={name}
                 entries={entries}
               />
-              <Form 
+              <ImageSubmit 
                 onInputChange={this.onInputChange}
                 onImageSubmit={this.onImageSubmit}/>
               <FaceRecognition 
