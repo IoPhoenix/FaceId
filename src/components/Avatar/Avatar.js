@@ -10,7 +10,9 @@ const Avatar = ({onRouteChange, avatarUrl}) => {
         src={avatarUrl ? avatarUrl : user}
         width="100"
         height="100"
-        alt="User avatar" />
+        alt="User avatar"
+        title="Click to see your profile" 
+        />
   )
 }
 
