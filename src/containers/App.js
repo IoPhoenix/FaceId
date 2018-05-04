@@ -63,6 +63,17 @@ class App extends Component {
     }});
   }
 
+
+  updateUserDetails = (data) => {
+    console.log('data recieved in updateUserDetails is ', data);
+    // this.setState(
+    //   Object.assign(
+    //     this.state.user, 
+    //       { data: this.state.data }
+    //   )
+    // );
+  }
+
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
 

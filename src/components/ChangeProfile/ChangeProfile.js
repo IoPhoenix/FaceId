@@ -10,19 +10,20 @@ class ChangeProfile extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        changeName: '',
-        changeEmail: '',
+        newName: '',
+        newEmail: '',
         error: ''
       }
-      console.log('Change profile props: ', props);
+      console.log('change profile props: ', props);
     }
 
     onNameChange = (e) => {
-        this.setState({changeName: e.target.value});
+        this.setState({newName: e.target.value});
+        console.log(this.state);
     }
 
     onEmailChange = (e) => {
-        this.setState({changeEmail: e.target.value});
+        this.setState({newEmail: e.target.value});
     }
 
     updateUserInfo = () => {
@@ -30,6 +31,20 @@ class ChangeProfile extends React.Component {
         // update name/email of user through this.props.loadUser(userData);
         // if success: show success message & sign user out if email changed?
         // if fail: show error message
+        fetch('https://calm-forest-65718.herokuapp.com/changeProfile', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: this.props.user.id,
+                newName: this.state.newName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Name was successfully changed: ', data);
+            this.props.updateUserDetails(data);
+        })
+        .catch(console.log);
     }
 
     onSubmit = () => {
@@ -38,6 +53,9 @@ class ChangeProfile extends React.Component {
     }
 
     render() {
+        const { name, email } = this.props.user;
+        console.log('Change profile: ', name, email);
+
         return (
             <div 
                 className="w-100 center pa3 ph5-ns">
@@ -45,16 +63,22 @@ class ChangeProfile extends React.Component {
 
                 <Form>
                     <Legend value={'Change Credentials'} />
-                    <NameInput onNameChange={this.onNameChange} />
-                    <EmailInput onEmailChange={this.onEmailChange} />
+                    <NameInput 
+                        onNameChange={this.onNameChange} 
+                        name={name}
+                        labelValue={'Enter new name'} />
+                    <EmailInput 
+                        onEmailChange={this.onEmailChange} 
+                        email={email}
+                        labelValue={'Enter new email'} /> />
                     <SubmitInput 
                         onSubmit={this.onSubmit}
                         error={this.state.error}
                         value='Sumbit' />
                     <FormLink
-                    onRouteChange={this.props.onRouteChange} 
-                    value='Return to profile' 
-                    path='profile' />
+                        onRouteChange={this.props.onRouteChange} 
+                        value='Return to profile' 
+                        path='profile' />
                 </Form> 
             </div>
         )

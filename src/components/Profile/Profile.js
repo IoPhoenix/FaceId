@@ -1,14 +1,18 @@
 import React from 'react';
 import './Profile.css';
 
-const Profile = (props, {user}) => {
+const capitalize = (str) => {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
+}
+
+const Profile = (props) => {
     const { name, email, joined, entries } = props.user;
     return (
         <div 
             className="mw7-ns center pa3 ph5-ns">
             {props.children}
            
-        <h2 className="white">This is your proflle details</h2>
+        <h2 className="white">{capitalize(name)}'s Profile</h2>
             <p 
                 onClick={() => props.onRouteChange('changeProfile')}
                 className="pointer center f6 link grow ph4 pv2 dib white bg-black">

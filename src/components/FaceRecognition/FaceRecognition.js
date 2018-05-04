@@ -1,39 +1,32 @@
 import React from 'react';
 import './FaceRecognition.css';
 
-class FaceRecognition extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      avatarurl: ''
-    }
-  }
+const FaceRecognition = (props) => {
+  const {imageUrl, faceBoxes, imageDetectionError} = props;
 
-  updateAvatar = () => {
+  const updateAvatar = () => {
     fetch('https://calm-forest-65718.herokuapp.com/avatar', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: this.props.id,
-        avatarUrl: this.props.imageUrl
+        id: props.id,
+        avatarUrl: props.imageUrl
       })
     })
     .then(response => response.json())
     .then(data => {
         console.log('Avatar link was saved in database: ', data);
-        this.props.onAvatarSubmit();
+        props.onAvatarSubmit();
     })
     .catch(console.log);
   }
 
-  render() {
-    const {imageUrl, faceBoxes, imageDetectionError} = this.props;
-    // display component only when user submits the image:
-    const componentDisplayState = imageUrl ? 'flex' : 'dn';
-    // display error only when error occurs:
-    const errorDisplayState = imageDetectionError ? 'db' : 'dn';
+  // display component only when user submits the image:
+  const componentDisplayState = imageUrl ? 'flex' : 'dn';
+  // display error only when error occurs:
+  const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
-    return (
+  return (
       <div className={componentDisplayState + ' center-column ma'}>
         <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
         <div 
@@ -47,9 +40,9 @@ class FaceRecognition extends React.Component {
                   key={i}
                   style={{
                     top: box.topRow, 
-                    left:box.leftCol, 
+                    left: box.leftCol, 
                     bottom: box.bottomRow, 
-                    right:box.rightCol
+                    right: box.rightCol
                   }}>
                 </div>
               );
@@ -57,12 +50,11 @@ class FaceRecognition extends React.Component {
         }
         </div>
         <button 
-            onClick={this.updateAvatar}
+            onClick={updateAvatar}
             className="code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 dib white">Set as avatar
           </button>
       </div>
     );
-  }
 }
 
 export default FaceRecognition;
