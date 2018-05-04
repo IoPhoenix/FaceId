@@ -65,7 +65,6 @@ class Signin extends React.Component {
       }
 
     render() {
-        console.log('This is SIGNIN component');
         return (
             <Form>
                 <Legend value={'Sign In'} />

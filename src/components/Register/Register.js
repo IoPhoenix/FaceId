@@ -16,25 +16,19 @@ class Register extends React.Component {
       registerEmail: '',
       registerPassword: '',
       registerError: ''
-    }
-
-  console.log('props: ', props);
-    
+    }    
   }
 
   onNameChange = (e) => {
     this.setState({registerName: e.target.value});
-    console.log('this.state for name: ', this.state);
   }
 
   onEmailChange = (e) => {
     this.setState({registerEmail: e.target.value});
-    console.log('this.state for email: ', this.state);
   }
 
   onPasswordChange = (e) => {
     this.setState({registerPassword: e.target.value});
-    console.log('this.state for password: ', this.state);
   }
 
   registerUser = () => {
@@ -63,7 +57,6 @@ class Register extends React.Component {
   }
 
   onSubmit = () => {
-    console.log('Submit button was clicked!');
     const { registerName, registerEmail, registerPassword } = this.state;
 
     if (!registerName || !registerEmail || !registerPassword) {
@@ -79,7 +72,6 @@ class Register extends React.Component {
 
 
   render() {
-    console.log('This is REGISTER component');
     return (
       <Form>
           <Legend value={'Register'} />

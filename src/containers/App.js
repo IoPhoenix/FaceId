@@ -10,6 +10,7 @@ import ImageSubmit from '../components/ImageSubmit/ImageSubmit';
 import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
+import ChangeProfile from '../components/ChangeProfile/ChangeProfile';
 import './App.css';
 
 
@@ -60,7 +61,6 @@ class App extends Component {
       joined: data.joined,
       avatarUrl: data.avatar
     }});
-    console.log('User data is loaded!');
   }
 
   // calculate location of the box on the face
@@ -162,13 +162,62 @@ class App extends Component {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
-    console.log('this.state.route is now set to: ', this.state.route);
   }
 
 
   render() {
     const { isSignedIn, imageUrl, imageDetectionError, route, faceBoxes } = this.state;
     const { id, name, entries, avatarUrl} = this.state.user;
+
+    const homeSection = (
+      <div>
+        <Avatar
+          onRouteChange={this.onRouteChange}
+          avatarUrl={avatarUrl} />
+        <Rank 
+          name={name}
+          entries={entries}
+        />
+        <ImageSubmit 
+          onInputChange={this.onInputChange}
+          onImageSubmit={this.onImageSubmit}/>
+        <FaceRecognition 
+          imageDetectionError={imageDetectionError}
+          id={id}
+          faceBoxes={faceBoxes} 
+          imageUrl={imageUrl}
+          onAvatarSubmit={this.onAvatarSubmit} />
+      </div>
+    );
+
+    const profileSection = (
+      <Profile 
+        onRouteChange={this.onRouteChange}
+        user={this.state.user} >
+        <Avatar
+          onRouteChange={this.onRouteChange}
+          avatarUrl={avatarUrl} />
+      </Profile>
+    );
+
+    const changeProfileSection = (
+      <ChangeProfile 
+          onRouteChange={this.onRouteChange}
+          user={this.state.user} >
+         <Avatar
+            onRouteChange={this.onRouteChange}
+            avatarUrl={avatarUrl} />
+        </ChangeProfile>
+    );
+
+    const signinSection = (
+      <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+    );
+
+    const registerSection = (
+      <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+    );
+
 
     return (
       <div className="app">
@@ -183,39 +232,12 @@ class App extends Component {
             isSignedIn={isSignedIn}
             onRouteChange={this.onRouteChange}/>
         </Navigation>
-        { route === 'home'
-          ? <div>
-              <Avatar
-                onRouteChange={this.onRouteChange}
-                avatarUrl={avatarUrl} />
-              <Rank 
-                name={name}
-                entries={entries}
-              />
-              <ImageSubmit 
-                onInputChange={this.onInputChange}
-                onImageSubmit={this.onImageSubmit}/>
-              <FaceRecognition 
-                imageDetectionError={imageDetectionError}
-                id={id}
-                faceBoxes={faceBoxes} 
-                imageUrl={imageUrl}
-                onAvatarSubmit={this.onAvatarSubmit} />
-            </div>
-          :
-            route === 'profile'
-              ?  <Profile 
-                    onRouteChange={this.onRouteChange}
-                    user={this.state.user} >
-                    <Avatar
-                      onRouteChange={this.onRouteChange}
-                      avatarUrl={avatarUrl} />
-                  </Profile>
-                : 
-                    (route === 'signin')
-                    ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-                    : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-                   
+
+        { route === 'home' ? homeSection
+            : route === 'profile' ?  profileSection
+                :  route === 'changeProfile' ? changeProfileSection
+                  : (route === 'signin') ? signinSection
+                    : registerSection
         }
       </div>
     );
