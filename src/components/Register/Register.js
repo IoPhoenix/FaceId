@@ -15,7 +15,7 @@ class Register extends React.Component {
       registerName: '',
       registerEmail: '',
       registerPassword: '',
-      registerError: ''
+      message: ''
     }    
   }
 
@@ -33,7 +33,7 @@ class Register extends React.Component {
 
   registerUser = () => {
       // clear all error messages:
-      this.setState({ registerError: '' });
+      this.setState({ message: '' });
 
       fetch('https://calm-forest-65718.herokuapp.com/register', {
         method: 'post',
@@ -50,21 +50,21 @@ class Register extends React.Component {
           this.props.loadUser(user);
           this.props.onRouteChange('home');
         } else {
-          this.setState({registerError: 'Failed to register'});
+          this.setState({message: 'Failed to register'});
         }
       })
-      .catch(err => this.setState({ registerError: err }));
+      .catch(err => this.setState({ message: err }));
   }
 
   onSubmit = () => {
     const { registerName, registerEmail, registerPassword } = this.state;
 
     if (!registerName || !registerEmail || !registerPassword) {
-      this.setState({ registerError: 'Invalid credentials' });
+      this.setState({ message: 'Invalid credentials' });
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerEmail)) {
-      this.setState({ registerError: 'Invalid email format' });
+      this.setState({ message: 'Invalid email format' });
     } else if (registerPassword.length < 8) {
-      this.setState({ registerError: 'Password must be at least 8 characters long' });
+      this.setState({ message: 'Password must be at least 8 characters long' });
     } else {
       this.registerUser();  
     }
@@ -80,7 +80,7 @@ class Register extends React.Component {
           <PasswordInput onPasswordChange={this.onPasswordChange} />
           <SubmitInput 
               onSubmit={this.onSubmit}
-              error={this.state.registerError}
+              message={this.state.message}
               value='Register' />
           <FormLink
             onRouteChange={this.props.onRouteChange} 

@@ -65,13 +65,14 @@ class App extends Component {
 
 
   updateUserDetails = (data) => {
-    console.log('data recieved in updateUserDetails is ', data);
-    // this.setState(
-    //   Object.assign(
-    //     this.state.user, 
-    //       { data: this.state.data }
-    //   )
-    // );
+    console.log('Data received: ', data);
+    this.setState(
+       Object.assign(
+         this.state.user, 
+           { name: data[0] }
+       )
+    );
+    console.log('Name in app.js is ', this.state.user.name);
   }
 
   // calculate location of the box on the face
@@ -213,6 +214,7 @@ class App extends Component {
 
     const changeProfileSection = (
       <ChangeProfile 
+          updateUserDetails={this.updateUserDetails}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
          <Avatar

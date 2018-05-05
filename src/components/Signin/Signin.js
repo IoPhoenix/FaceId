@@ -13,7 +13,7 @@ class Signin extends React.Component {
         this.state = {
           signInEmail: '',
           signInPassword: '',
-          signInError: ''
+          message: ''
         }
       }
 
@@ -45,10 +45,10 @@ class Signin extends React.Component {
                 this.props.loadUser(user)
                 this.props.onRouteChange('home');
             } else {
-                this.setState({signInError: 'Sign in failed'});
+                this.setState({message: 'Sign in failed'});
             }
         })
-        .catch(err => this.setState({signInError: err}));
+        .catch(err => this.setState({message: err}));
     }
 
 
@@ -56,9 +56,9 @@ class Signin extends React.Component {
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
-            this.setState({ signInError: 'Invalid credentials' });
+            this.setState({ message: 'Invalid credentials' });
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signInEmail)) {
-            this.setState({ signInError: 'Invalid email format' });
+            this.setState({ message: 'Invalid email format' });
         } else {
             this.signinUser();  
         }
@@ -72,7 +72,7 @@ class Signin extends React.Component {
                 <PasswordInput onPasswordChange={this.onPasswordChange} />
                 <SubmitInput 
                     onSubmit={this.onSubmit}
-                    error={this.state.signInError}
+                    message={this.state.message}
                     value='Sign in' />
                 <FormLink 
                     onRouteChange={this.props.onRouteChange}

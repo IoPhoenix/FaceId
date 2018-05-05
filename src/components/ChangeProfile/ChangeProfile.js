@@ -12,14 +12,12 @@ class ChangeProfile extends React.Component {
       this.state = {
         newName: '',
         newEmail: '',
-        error: ''
+        message: ''
       }
-      console.log('change profile props: ', props);
     }
 
     onNameChange = (e) => {
         this.setState({newName: e.target.value});
-        console.log(this.state);
     }
 
     onEmailChange = (e) => {
@@ -27,11 +25,11 @@ class ChangeProfile extends React.Component {
     }
 
     updateUserInfo = () => {
-        // send post request to database
-        // update name/email of user through this.props.loadUser(userData);
-        // if success: show success message & sign user out if email changed?
-        // if fail: show error message
-        fetch('https://calm-forest-65718.herokuapp.com/changeProfile', {
+        // clear previous error messages:
+        this.setState({ message: '' });
+
+        // send new user info to database
+        fetch('https://calm-forest-65718.herokuapp.com/updateProfile', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -41,20 +39,28 @@ class ChangeProfile extends React.Component {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Name was successfully changed: ', data);
+            // update new user info in the app
             this.props.updateUserDetails(data);
+            this.setState({ message: 'Your name was updated!' });
         })
-        .catch(console.log);
+        .catch(err => {
+            console.log(err);
+            this.setState({ message: 'Unable to update information' });
+        });
     }
 
     onSubmit = () => {
-        // check user input for correctness
-        this.updateUserInfo(); 
+        if (!this.state.newName) {
+            this.setState({ message: 'Please enter a new name' });
+        } else if (this.state.newName === this.props.user.name) {
+            this.setState({ message: 'The name remained the same' });
+        } else {
+            this.updateUserInfo(); 
+        }
     }
 
     render() {
         const { name, email } = this.props.user;
-        console.log('Change profile: ', name, email);
 
         return (
             <div 
@@ -70,10 +76,10 @@ class ChangeProfile extends React.Component {
                     <EmailInput 
                         onEmailChange={this.onEmailChange} 
                         email={email}
-                        labelValue={'Enter new email'} /> />
+                        labelValue={'Enter new email'} />
                     <SubmitInput 
                         onSubmit={this.onSubmit}
-                        error={this.state.error}
+                        message={this.state.message}
                         value='Sumbit' />
                     <FormLink
                         onRouteChange={this.props.onRouteChange} 
