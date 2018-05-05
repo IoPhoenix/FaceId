@@ -63,8 +63,7 @@ class ChangeProfile extends React.Component {
         const { name, email } = this.props.user;
 
         return (
-            <div 
-                className="w-100 center pa3 ph5-ns">
+            <div>
                 { this.props.children }
 
                 <Form>
@@ -80,7 +79,7 @@ class ChangeProfile extends React.Component {
                     <SubmitInput 
                         onSubmit={this.onSubmit}
                         message={this.state.message}
-                        value='Sumbit' />
+                        value='Submit' />
                     <FormLink
                         onRouteChange={this.props.onRouteChange} 
                         value='Return to profile' 
