@@ -32,6 +32,10 @@ class Register extends React.Component {
   }
 
   registerUser = () => {
+     // show loading icon while processing request
+     const loader = document.getElementById('loader');
+     loader.style.visibility = 'visible';
+
       // clear all error messages:
       this.setState({ message: '' });
 
@@ -53,7 +57,9 @@ class Register extends React.Component {
           this.setState({message: 'Failed to register'});
         }
       })
-      .catch(err => this.setState({ message: err }));
+      .catch(err => this.setState({ message: err }))
+      // hide loading icon, whether promise fulfilled or rejected
+      .finally(() => loader.style.visibility = 'hidden');
   }
 
   onSubmit = () => {

@@ -4,7 +4,7 @@ const SumbitInput = ({onSubmit, message, value}) => {
     const messageDisplay = message ? 'db' : 'dn';
 
     return (
-        <div className="submit">
+        <div className="submit relative">
             <p className={messageDisplay + " dark-red mt3"}>{message}</p>
             <input
                 onClick={onSubmit}
@@ -12,6 +12,7 @@ const SumbitInput = ({onSubmit, message, value}) => {
                 type="submit"
                 value={value}
             />
+            <div id="loader" className="ml3"><div></div><div></div><div></div><div></div></div>
         </div>
     )
 }

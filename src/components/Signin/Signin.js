@@ -27,6 +27,10 @@ class Signin extends React.Component {
 
 
     signinUser = () => {
+        // show loading icon while processing request
+        const loader = document.getElementById('loader');
+        loader.style.visibility = 'visible';
+
         // clear error messages:
         this.setState({ error: '' });
 
@@ -48,7 +52,8 @@ class Signin extends React.Component {
                 this.setState({message: 'Sign in failed'});
             }
         })
-        .catch(err => this.setState({message: err}));
+        .catch(err => this.setState({message: err}))
+        .finally(() => loader.style.visibility = 'hidden');
     }
 
 
