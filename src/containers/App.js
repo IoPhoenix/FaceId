@@ -239,11 +239,10 @@ class App extends Component {
         </MobileView>
 
         <Navigation 
+          route={route}
           isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}>
-          <Logo 
-            isSignedIn={isSignedIn}
-            onRouteChange={this.onRouteChange}/>
+          <Logo />
         </Navigation>
 
         { route === 'home' ? homeSection

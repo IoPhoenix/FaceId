@@ -2,23 +2,32 @@ import React from 'react';
 import './Navigation.css';
 
 const Navigation = (props, {onRouteChange, isSignedIn}) => {
+  let changingLink;
 
   if (props.isSignedIn) {
+    changingLink = props.route === 'profile' ? 
+        <p onClick={() => props.onRouteChange('home')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Home</p>
+        : 
+        <p onClick={() => props.onRouteChange('profile')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Profile</p>;
+    
+
     return (
       <nav 
-        className='pl3 pl4-ns' 
-        style={{paddingTop: '3%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        className='pl3 pl4-ns center-row' 
+        style={{paddingTop: '3%', justifyContent: 'space-between'}}>
           {props.children}
+
           <div className='mt3 mt0-ns'>
-            <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim pa3 pointer'>Sign Out</p>
-          </div>
+            {changingLink}
+            <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim pa3 pointer'>Signout</p>
+          </div> 
       </nav>
     );
   } else {
     return (
       <nav 
-        className='pl3 pl4-ns' 
-        style={{ paddingTop: '3%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        className='pl3 pl4-ns center-row' 
+        style={{ paddingTop: '3%', justifyContent: 'space-between'}}>
           {props.children}
           <div className='mt3 mt0-ns'>
             <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Sign In</p>
