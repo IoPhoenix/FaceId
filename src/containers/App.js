@@ -65,14 +65,14 @@ class App extends Component {
 
 
   updateUserDetails = (data) => {
-    console.log('Data received: ', data);
-    this.setState(
-       Object.assign(
-         this.state.user, 
-           { name: data[0] }
-       )
-    );
-    console.log('Name in app.js is ', this.state.user.name);
+    console.log('data received from database: ', data);
+
+    // if (data.hasOwnProperty('newName')) {
+    //   this.setState(Object.assign(this.state.user, { name: data.newName }));
+    // }
+    // if (data.hasOwnProperty('newEmail')) {
+    //   this.setState(Object.assign(this.state.user, { email: data.newEmail }));
+    // }
   }
 
   // calculate location of the box on the face

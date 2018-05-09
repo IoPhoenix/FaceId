@@ -22,6 +22,7 @@ const Navigation = (props, {onRouteChange, isSignedIn}) => {
             <p onClick={() => props.onRouteChange('signin')} className='f5 dib link bg-navy dim pa3 pointer'>Signout</p>
           </div> 
       </nav>
+  
     );
   } else {
     return (
