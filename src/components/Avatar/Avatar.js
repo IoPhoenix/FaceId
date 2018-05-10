@@ -12,7 +12,7 @@ const Avatar = ({onRouteChange, avatarUrl}) => {
         height="100"
         alt="User avatar"
         title="Click to see your profile" 
-        />
+      />
   )
 }
 

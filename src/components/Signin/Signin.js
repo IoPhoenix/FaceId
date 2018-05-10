@@ -34,7 +34,9 @@ class Signin extends React.Component {
         // clear error messages:
         this.setState({ error: '' });
 
-        fetch('https://calm-forest-65718.herokuapp.com/signin', {
+        // fetch('https://calm-forest-65718.herokuapp.com/signin', {
+
+        fetch('http://localhost:3000/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
