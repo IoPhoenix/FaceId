@@ -26,7 +26,7 @@ class ChangeName extends React.Component {
         const { newName } = this.state;
 
         // send new user name to database
-        fetch('http://localhost:3000/updateName', {
+        fetch('https://calm-forest-65718.herokuapp.com/updateName', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
