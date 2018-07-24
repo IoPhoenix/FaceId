@@ -5,7 +5,7 @@ const SumbitInput = ({onSubmit, message, value}) => {
 
     return (
         <div className="submit relative">
-            <p className={messageDisplay + " dark-red mt3"}>{message}</p>
+            <p className={messageDisplay + " error dark-red mt3"}>{message}</p>
             <input
                 onClick={onSubmit}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"

@@ -23,6 +23,7 @@
   z-index: -1;
 }
 
+/* loading icon */
 #loader {
   visibility: hidden;
   display: inline-block;
