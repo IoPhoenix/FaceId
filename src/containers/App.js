@@ -10,7 +10,7 @@ import ImageSubmit from '../components/ImageSubmit/ImageSubmit';
 import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
-import ChangeProfile from '../components/ChangeProfile/ChangeProfile';
+import ChangeName from '../components/ChangeName/ChangeName';
 import './App.css';
 
 
@@ -64,15 +64,8 @@ class App extends Component {
   }
 
 
-  updateUserDetails = (data) => {
-    console.log('data received from database: ', data);
-
-    // if (data.hasOwnProperty('newName')) {
-    //   this.setState(Object.assign(this.state.user, { name: data.newName }));
-    // }
-    // if (data.hasOwnProperty('newEmail')) {
-    //   this.setState(Object.assign(this.state.user, { email: data.newEmail }));
-    // }
+  updateUserName = (newName) => {
+    this.setState(Object.assign(this.state.user, { name: newName }));
   }
 
   // calculate location of the box on the face
@@ -212,15 +205,15 @@ class App extends Component {
       </Profile>
     );
 
-    const changeProfileSection = (
-      <ChangeProfile 
-          updateUserDetails={this.updateUserDetails}
+    const changeNameSection = (
+      <ChangeName 
+          updateUserName={this.updateUserName}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
          <Avatar
             onRouteChange={this.onRouteChange}
             avatarUrl={avatarUrl} />
-        </ChangeProfile>
+        </ChangeName>
     );
 
     const signinSection = (
@@ -247,8 +240,8 @@ class App extends Component {
 
         { route === 'home' ? homeSection
             : route === 'profile' ?  profileSection
-                :  route === 'changeProfile' ? changeProfileSection
-                  : (route === 'signin') ? signinSection
+                :  route === 'changeName' ? changeNameSection
+                  : route === 'signin' ? signinSection
                     : registerSection
         }
       </div>
