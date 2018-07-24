@@ -67,6 +67,8 @@ class Signin extends React.Component {
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signInEmail)) {
             this.setState({ message: 'Invalid email format' });
         } else {
+            // clear previous error messages
+            this.setState({ message: '' });
             this.signinUser();  
         }
       }

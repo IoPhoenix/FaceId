@@ -72,6 +72,8 @@ class Register extends React.Component {
     } else if (registerPassword.length < 8) {
       this.setState({ message: 'Password must be at least 8 characters long' });
     } else {
+      // clear previous error messages
+      this.setState({ message: '' });
       this.registerUser();  
     }
   }
