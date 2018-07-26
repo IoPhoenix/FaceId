@@ -66,13 +66,11 @@ class App extends Component {
 
 
   updateUserName = (newName) => {
-    console.log('From app.js updateUserName: ', newName);
     this.setState(Object.assign(this.state.user, { name: newName }));
   }
 
   updateUserEmail = (newEmail) => {
-    console.log('From updateUserEmail: ', newEmail);
-    // this.setState(Object.assign(this.state.user, { email: newEmail }));
+    this.setState(Object.assign(this.state.user, { email: newEmail }));
   }
 
   // calculate location of the box on the face

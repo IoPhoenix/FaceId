@@ -9,7 +9,7 @@ class ChangeName extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        newName: this.props.user.name,
+        newName: '',
         message: ''
       }
     }
@@ -51,8 +51,11 @@ class ChangeName extends React.Component {
 
 
     onNameSubmit = () => {
+        const oldName = this.props.user.name;
+        const { newName } = this.state;
+
         // if user name remains the same, do not send request to database
-        if (this.state.newName === this.props.user.name) {
+        if (newName.toLowerCase() === oldName.toLowerCase() || !newName) {
             this.setState({ message: 'Please provide new name' });
             return;
         } else {

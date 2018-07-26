@@ -12,12 +12,10 @@ class ChangeEmail extends React.Component {
         newEmail: '',
         message: ''
       }
-      console.log('this.props.user.email: ', this.props.user.email);
     }
 
 
     onEmailChange = (e) => {
-        console.log(this.state.newEmail);
         this.setState({ newEmail: e.target.value.trim() });
     }
 
@@ -34,6 +32,7 @@ class ChangeEmail extends React.Component {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 id: this.props.user.id,
+                oldEmail: this.props.user.email,
                 newEmail: newEmail
             })
         })
@@ -44,7 +43,7 @@ class ChangeEmail extends React.Component {
                 this.props.updateUserEmail(newEmail);     
                 this.setState({ message: 'Your information was updated!' });
             } else {
-                this.setState({ message: 'Failed to update email' });
+                this.setState({ message: 'Unable to update email' });
             }
         })
         .catch(err => {
@@ -56,8 +55,6 @@ class ChangeEmail extends React.Component {
     onEmailSubmit = () => {
         const oldEmail = this.props.user.email;
         const { newEmail } = this.state;
-        console.log('From onEmailSubmit: newEmail is  ', newEmail);
-        console.log('From onEmailSubmit: oldEmail is  ', oldEmail);
 
         // if user email remains the same, do not send request to database
         if (newEmail === oldEmail || !newEmail) {
