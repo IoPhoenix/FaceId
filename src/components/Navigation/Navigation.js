@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navigation.css';
 
-const Navigation = (props, {onRouteChange, isSignedIn}) => {
+const Navigation = (props) => {
   let changingLink;
 
   if (props.isSignedIn) {

@@ -6,7 +6,7 @@ import EmailInput from '../EmailInput/EmailInput';
 import PasswordInput from '../PasswordInput/PasswordInput';
 import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
-
+import { capitalize } from '../../helpers';
 
 class Register extends React.Component {
   constructor(props) {
@@ -20,15 +20,15 @@ class Register extends React.Component {
   }
 
   onNameChange = (e) => {
-    this.setState({registerName: e.target.value});
+    this.setState({registerName: capitalize(e.target.value.trim()) });
   }
 
   onEmailChange = (e) => {
-    this.setState({registerEmail: e.target.value});
+    this.setState({registerEmail: e.target.value.trim() });
   }
 
   onPasswordChange = (e) => {
-    this.setState({registerPassword: e.target.value});
+    this.setState({registerPassword: e.target.value.trim() });
   }
 
   registerUser = () => {

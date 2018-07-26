@@ -131,7 +131,6 @@ class App extends Component {
     .then(response => response.json())
     .then(response => {
         if (response) {
-          console.log('response: ', response);
           // change # of sumbitted entries in database
           fetch('https://calm-forest-65718.herokuapp.com/image', {
             method: 'put',
@@ -177,8 +176,10 @@ class App extends Component {
 
   render() {
     const { isSignedIn, imageUrl, imageDetectionError, route, faceBoxes } = this.state;
-    const { id, name, entries, avatarUrl} = this.state.user;
+    const { id, name, entries, avatarUrl } = this.state.user;
 
+    const avatarSection = (<Avatar onRouteChange={this.onRouteChange} avatarUrl={avatarUrl} />);
+    
     const homeSection = (
       <div>
         <Avatar
@@ -205,9 +206,7 @@ class App extends Component {
       <Profile 
         onRouteChange={this.onRouteChange}
         user={this.state.user} >
-        <Avatar
-          onRouteChange={this.onRouteChange}
-          avatarUrl={avatarUrl} />
+        { avatarSection }
       </Profile>
     );
 
@@ -216,10 +215,8 @@ class App extends Component {
           updateUserName={this.updateUserName}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-         <Avatar
-            onRouteChange={this.onRouteChange}
-            avatarUrl={avatarUrl} />
-        </ChangeName>
+         { avatarSection }
+      </ChangeName>
     );
 
 
@@ -228,9 +225,7 @@ class App extends Component {
           updateUserEmail={this.updateUserEmail}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-         <Avatar
-            onRouteChange={this.onRouteChange}
-            avatarUrl={avatarUrl} />
+         { avatarSection }
         </ChangeEmail>
     );
 

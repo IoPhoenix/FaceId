@@ -1,10 +1,6 @@
 import React from 'react';
 import './Profile.css';
 
-const capitalize = (str) => {
-    return str.replace(/\b\w/g, l => l.toUpperCase());
-}
-
 const Profile = (props) => {
     const { name, email, joined, entries } = props.user;
     return (
@@ -12,7 +8,7 @@ const Profile = (props) => {
             className="mw7-ns center pa3 ph5-ns">
             {props.children}
            
-        <h2 className="white">{capitalize(name)}'s Profile</h2>
+        <h2 className="white">{name}'s Profile</h2>
 
 
         <table className="center collapse ba br2 b--black-10 pv2 ph3 mt4">
