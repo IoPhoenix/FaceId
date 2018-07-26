@@ -11,6 +11,7 @@ import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
 import ChangeName from '../components/ChangeName/ChangeName';
+import ChangeEmail from '../components/ChangeEmail/ChangeEmail';
 import './App.css';
 
 
@@ -65,7 +66,13 @@ class App extends Component {
 
 
   updateUserName = (newName) => {
+    console.log('From app.js updateUserName: ', newName);
     this.setState(Object.assign(this.state.user, { name: newName }));
+  }
+
+  updateUserEmail = (newEmail) => {
+    console.log('From updateUserEmail: ', newEmail);
+    // this.setState(Object.assign(this.state.user, { email: newEmail }));
   }
 
   // calculate location of the box on the face
@@ -195,6 +202,7 @@ class App extends Component {
       </div>
     );
 
+
     const profileSection = (
       <Profile 
         onRouteChange={this.onRouteChange}
@@ -215,6 +223,19 @@ class App extends Component {
             avatarUrl={avatarUrl} />
         </ChangeName>
     );
+
+
+    const changeEmailSection = (
+      <ChangeEmail 
+          updateUserEmail={this.updateUserEmail}
+          onRouteChange={this.onRouteChange}
+          user={this.state.user} >
+         <Avatar
+            onRouteChange={this.onRouteChange}
+            avatarUrl={avatarUrl} />
+        </ChangeEmail>
+    );
+
 
     const signinSection = (
       <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
@@ -241,8 +262,9 @@ class App extends Component {
         { route === 'home' ? homeSection
             : route === 'profile' ?  profileSection
                 :  route === 'changeName' ? changeNameSection
-                  : route === 'signin' ? signinSection
-                    : registerSection
+                  :  route === 'changeEmail' ? changeEmailSection
+                    : route === 'signin' ? signinSection
+                      : registerSection
         }
       </div>
     );

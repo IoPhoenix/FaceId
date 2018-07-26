@@ -5,7 +5,7 @@ const FaceRecognition = (props) => {
   const {imageUrl, faceBoxes, imageDetectionError} = props;
 
   const updateAvatar = () => {
-    fetch('https://calm-forest-65718.herokuapp.com/avatar', {
+    fetch('http://localhost:3000/avatar', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

@@ -39,7 +39,7 @@ class Register extends React.Component {
       // clear all error messages:
       this.setState({ message: '' });
 
-      fetch('https://calm-forest-65718.herokuapp.com/register', {
+      fetch('http://localhost:3000/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
