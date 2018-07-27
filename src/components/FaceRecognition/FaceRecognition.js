@@ -37,7 +37,7 @@ const FaceRecognition = (props) => {
         <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
         <div 
           className='relative center center-column mt2'>
-          <img className='shadow-2 mb3' src={imageUrl} id='input-image' alt='' width='500' heigh='auto'/>
+          <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt=''/>
           {
             faceBoxes.map((box, i) => {
             return (

@@ -4,4 +4,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-  }
+}
+
+.face-img {
+  max-width: 500px;
+  height: auto;
+}
