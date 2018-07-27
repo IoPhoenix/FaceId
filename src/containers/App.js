@@ -108,11 +108,14 @@ class App extends Component {
 
 
   onInputChange = (e) => {
-    this.setState({input: e.target.value});
+    this.setState({input: e.target.value.trim() });
   }
 
 
   onImageSubmit = () => {
+    // do not proceed if user input is empty:
+    if (!this.state.input) return;
+
      // clear previous face recognition result:
     this.setState(Object.assign({ faceBoxes: [] }));
 
@@ -197,6 +200,7 @@ class App extends Component {
           id={id}
           faceBoxes={faceBoxes} 
           imageUrl={imageUrl}
+          avatarUrl={avatarUrl}
           onAvatarSubmit={this.onAvatarSubmit} />
       </div>
     );
@@ -215,8 +219,8 @@ class App extends Component {
           updateUserName={this.updateUserName}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-         { avatarSection }
-      </ChangeName>
+          { avatarSection }
+        </ChangeName>
     );
 
 
@@ -225,8 +229,8 @@ class App extends Component {
           updateUserEmail={this.updateUserEmail}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-         { avatarSection }
-        </ChangeEmail>
+          { avatarSection }
+      </ChangeEmail>
     );
 
 

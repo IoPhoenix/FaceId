@@ -2,9 +2,14 @@ import React from 'react';
 import './FaceRecognition.css';
 
 const FaceRecognition = (props) => {
-  const {imageUrl, faceBoxes, imageDetectionError} = props;
+  const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
+
 
   const updateAvatar = () => {
+    // if submitted image link and current avatar link are the same, do no proceed:
+    if (imageUrl === avatarUrl) return;
+
+    // else set and save new avatar in database
     fetch('http://localhost:3000/avatar', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
@@ -23,6 +28,7 @@ const FaceRecognition = (props) => {
 
   // display component only when user submits the image:
   const componentDisplayState = imageUrl ? 'flex' : 'dn';
+  
   // display error only when error occurs:
   const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
