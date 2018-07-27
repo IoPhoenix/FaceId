@@ -181,7 +181,6 @@ class App extends Component {
     const { isSignedIn, imageUrl, imageDetectionError, route, faceBoxes } = this.state;
     const { id, name, entries, avatarUrl } = this.state.user;
 
-    const avatarSection = (<Avatar onRouteChange={this.onRouteChange} avatarUrl={avatarUrl} />);
     
     const homeSection = (
       <div>
@@ -210,7 +209,9 @@ class App extends Component {
       <Profile 
         onRouteChange={this.onRouteChange}
         user={this.state.user} >
-        { avatarSection }
+        <Avatar 
+	        onRouteChange={this.onRouteChange}
+	        avatarUrl={avatarUrl} />
       </Profile>
     );
 
@@ -219,7 +220,9 @@ class App extends Component {
           updateUserName={this.updateUserName}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-          { avatarSection }
+          <Avatar 
+	          onRouteChange={this.onRouteChange}
+	          avatarUrl={avatarUrl} />
         </ChangeName>
     );
 
@@ -229,7 +232,9 @@ class App extends Component {
           updateUserEmail={this.updateUserEmail}
           onRouteChange={this.onRouteChange}
           user={this.state.user} >
-          { avatarSection }
+          <Avatar 
+	          onRouteChange={this.onRouteChange}
+	          avatarUrl={avatarUrl} />
       </ChangeEmail>
     );
 
