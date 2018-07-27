@@ -3,6 +3,7 @@ import './Profile.css';
 
 const Profile = (props) => {
     const { name, email, joined, entries } = props.user;
+    
     return (
         <div 
             className="mw7-ns center pa3 ph5-ns">

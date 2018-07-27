@@ -10,7 +10,7 @@ const FaceRecognition = (props) => {
     if (imageUrl === avatarUrl) return;
 
     // else set and save new avatar in database
-    fetch('http://localhost:3000/avatar', {
+    fetch('https://calm-forest-65718.herokuapp.com/avatar', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

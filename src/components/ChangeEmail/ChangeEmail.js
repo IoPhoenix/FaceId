@@ -27,7 +27,7 @@ class ChangeEmail extends React.Component {
         const { newEmail } = this.state;
 
         // send new user email to database
-        fetch('http://localhost:3000/updateEmail', {
+        fetch('https://calm-forest-65718.herokuapp.com/updateEmail', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
