@@ -34,7 +34,7 @@ class Signin extends React.Component {
         // clear error messages:
         this.setState({ error: '' });
 
-        fetch('https://calm-forest-65718.herokuapp.com/signin', {
+        fetch('http://localhost:3000/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -46,7 +46,7 @@ class Signin extends React.Component {
         .then(user => {
             // if user exists, proceed
             if (user.id) {
-                this.props.loadUser(user)
+                this.props.loadUser(user);
                 this.props.onRouteChange('home');
             } else {
                 this.setState({message: 'Sign in failed'});

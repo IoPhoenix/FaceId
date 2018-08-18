@@ -53,6 +53,20 @@ class App extends Component {
     this.state = initialState;
   }
 
+
+  componentDidMount = () => {
+    // check local storage in case user was previously signed in
+    const cachedUser = localStorage.getItem('user');
+
+    if (cachedUser) {
+      // load user data without accessing database:
+      this.loadUser(JSON.parse(cachedUser));
+      this.onRouteChange('home');
+      this.setState({isSignedIn: true});
+      return;
+    }
+  }
+
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
@@ -62,6 +76,12 @@ class App extends Component {
       joined: data.joined,
       avatarUrl: data.avatar
     }});
+    // save user data in local storage:
+    this.storeUserData('user', data);
+  }
+
+  storeUserData = (key, data) => {
+    localStorage.setItem(key, JSON.stringify(data));
   }
 
 
@@ -170,6 +190,10 @@ class App extends Component {
   onRouteChange = (route) => {
     if (route === 'signin') {
       this.setState(initialState);
+
+      // clear user data from local storage
+      // so that user stays logged out after return:
+      localStorage.removeItem('user');
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
