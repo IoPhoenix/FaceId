@@ -10,7 +10,7 @@ const ImageSubmit = ({onInputChange, onImageSubmit, onImageReset}) => {
       <div className='center'>
         <form className='form center pa4 br3 shadow-5'>
           <input 
-            className='f4 pa2 w-100 w-70-ns center code'
+            className='f4 pa2 w-100 w-80-ns w-70-l center code'
             type='text'
             placeholder='Enter image url...'
             onChange={onInputChange}/>
@@ -18,13 +18,13 @@ const ImageSubmit = ({onInputChange, onImageSubmit, onImageReset}) => {
           <button
             type="submit"
             style={{ padding: '0.57rem 1.3rem', verticalAlign: 'top'}}
-            className='code w-100 w-auto-ns grow link dib white'
+            className='code w-100 w-40-ns w-auto-l grow link dib white'
             onClick={onImageSubmit}
           >Detect</button>
           <button
             type="reset"
             style={{ padding: '0.57rem 1.3rem', verticalAlign: 'top'}}
-            className='code w-100 w-auto-ns grow link dib white'
+            className='code w-100 w-40-ns w-auto-l grow link dib white'
             onClick={onImageReset}
           >Reset</button>
           </div>

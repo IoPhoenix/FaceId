@@ -7,7 +7,7 @@ const Profile = (props) => {
     
     return (
         <div 
-            className="mw7-ns center pa3 ph5-ns">
+            className="mw7-ns center pa3-ns ph5-ns">
             {props.children}
            
         <h2 className="white">{name}'s Profile</h2>
