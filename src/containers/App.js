@@ -114,7 +114,7 @@ class App extends Component {
 
     // do not calculate face location if no face was detected:
     if (data.outputs[0].data.regions === undefined) {
-      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect any faces'}))
+      this.setState(Object.assign(this.state, { imageDetectionError: 'Unable to detect any faces'}))
       return [];
     } else {
 
@@ -144,6 +144,7 @@ class App extends Component {
 
 
   onInputChange = (e) => {
+    console.log(e.target.value);
     this.setState({input: e.target.value.trim() });
   }
 
@@ -152,14 +153,17 @@ class App extends Component {
     return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
   }
 
-  onImageSubmit = () => {
+
+  onImageSubmit = (e) => {
+    e.preventDefault();
+
     // do not proceed if user input is empty:
     if (!this.state.input) return;
 
 
     // do not proceed if user submitted invalid link:
     if (!this.isValidLink(this.state.input)) {
-      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Invalid link'}));
+      this.setState(Object.assign(this.state, { imageDetectionError: 'Invalid link'}));
       return;
     }
 
@@ -167,8 +171,9 @@ class App extends Component {
     this.setState(Object.assign({ faceBoxes: [] }));
 
      // clear previous face recognition errors:
-    this.setState(Object.assign(this.state.user, { imageDetectionError: ''}));
+    this.setState(Object.assign(this.state, { imageDetectionError: ''}));
 
+    
     // send image link to server to begin face recognition
     this.setState({imageUrl: this.state.input});
       fetch(`${DATABASE_LINK}/imageurl`, {
@@ -204,6 +209,15 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+  onImageReset =() => {
+    console.log('reset button was clicked');
+    this.setState(Object.assign({ faceBoxes: [] }));
+    this.setState(Object.assign({ input: '' }));
+    this.setState(Object.assign({ imageUrl: '' }));
+    this.setState(Object.assign({ imageDetectionError: ''}));
+
+    console.log('From onImageReset state: ', this.state);
+  }
 
   // change user avatar to currently submitted image 
   onAvatarSubmit = () => {
@@ -247,7 +261,9 @@ class App extends Component {
         />
         <ImageSubmit 
           onInputChange={this.onInputChange}
-          onImageSubmit={this.onImageSubmit}/>
+          onImageSubmit={this.onImageSubmit}
+          onImageReset={this.onImageReset}
+        />
         <FaceRecognition 
           imageDetectionError={imageDetectionError}
           id={id}

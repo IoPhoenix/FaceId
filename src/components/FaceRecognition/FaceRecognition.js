@@ -5,7 +5,9 @@ import {DATABASE_LINK} from '../../constants.js';
 const FaceRecognition = (props) => {
   const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
 
+  
   const updateAvatar = () => {
+
     // if submitted image link and current avatar link are the same, do not proceed:
     if (imageUrl === avatarUrl) return;
 
@@ -31,6 +33,7 @@ const FaceRecognition = (props) => {
   
   // display error only when error occurs:
   const errorDisplayState = imageDetectionError ? 'db' : 'dn';
+
 
   return (
       <div className='flex center-column ma'>
