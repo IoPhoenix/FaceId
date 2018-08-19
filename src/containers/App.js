@@ -110,10 +110,11 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
+    console.log('From calculateFaceLocation: data is ', data);
 
     // do not calculate face location if no face was detected:
     if (data.outputs[0].data.regions === undefined) {
-      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect any faces!'}))
+      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Unable to detect any faces'}))
       return [];
     } else {
 
@@ -147,9 +148,20 @@ class App extends Component {
   }
 
 
+  isValidLink = (url) => {
+    return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
+  }
+
   onImageSubmit = () => {
     // do not proceed if user input is empty:
     if (!this.state.input) return;
+
+
+    // do not proceed if user submitted invalid link:
+    if (!this.isValidLink(this.state.input)) {
+      this.setState(Object.assign(this.state.user, { imageDetectionError: 'Invalid link'}));
+      return;
+    }
 
      // clear previous face recognition result:
     this.setState(Object.assign({ faceBoxes: [] }));

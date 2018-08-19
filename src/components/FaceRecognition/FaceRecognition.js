@@ -5,9 +5,8 @@ import {DATABASE_LINK} from '../../constants.js';
 const FaceRecognition = (props) => {
   const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
 
-
   const updateAvatar = () => {
-    // if submitted image link and current avatar link are the same, do no proceed:
+    // if submitted image link and current avatar link are the same, do not proceed:
     if (imageUrl === avatarUrl) return;
 
     // else set and save new avatar in database
@@ -27,14 +26,14 @@ const FaceRecognition = (props) => {
     .catch(console.log);
   }
 
-  // display component only when user submits the image:
-  const componentDisplayState = imageUrl ? 'flex' : 'dn';
+  // display avatar button only if correct image was submitted:
+  const buttonDisplayState = faceBoxes.length ? 'db' : 'dn';
   
   // display error only when error occurs:
   const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
   return (
-      <div className={componentDisplayState + ' center-column ma'}>
+      <div className='flex center-column ma'>
         <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
         <div 
           className='relative center center-column mt2'>
@@ -58,7 +57,7 @@ const FaceRecognition = (props) => {
         </div>
         <button 
             onClick={updateAvatar}
-            className="code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 dib white">Set as avatar
+            className={buttonDisplayState + ' code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 white'}>Set as avatar
           </button>
       </div>
     );
