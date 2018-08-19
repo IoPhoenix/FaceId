@@ -98,10 +98,14 @@ class App extends Component {
 
   updateUserName = (newName) => {
     this.setState(Object.assign(this.state.user, { name: newName }));
+
+    // update user info in local storage for further session:
+    this.updateUserData('name', newName);
   }
 
   updateUserEmail = (newEmail) => {
     this.setState(Object.assign(this.state.user, { email: newEmail }));
+    this.updateUserData('email', newEmail);
   }
 
   // calculate location of the box on the face
@@ -178,6 +182,8 @@ class App extends Component {
             // Object.assign(target, ...sources) 
             // overwrite user's original entries count from the sources
             this.setState(Object.assign(this.state.user, { entries: count}))
+
+            this.updateUserData('entries', count);
           })
           .catch(console.log)
         }
