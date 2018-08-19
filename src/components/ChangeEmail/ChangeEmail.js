@@ -1,4 +1,5 @@
 import React from 'react';
+import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import EmailInput from '../EmailInput/EmailInput';
@@ -27,7 +28,7 @@ class ChangeEmail extends React.Component {
         const { newEmail } = this.state;
 
         // send new user email to database
-        fetch('https://calm-forest-65718.herokuapp.com/updateEmail', {
+        fetch(`${DATABASE_LINK}/updateEmail`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

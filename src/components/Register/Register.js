@@ -1,4 +1,5 @@
 import React from 'react';
+import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import NameInput from '../NameInput/NameInput';
@@ -39,7 +40,7 @@ class Register extends React.Component {
       // clear all error messages:
       this.setState({ message: '' });
 
-      fetch('http://localhost:3000/register', {
+      fetch(`${DATABASE_LINK}/register`, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

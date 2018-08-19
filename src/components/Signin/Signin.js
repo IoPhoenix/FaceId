@@ -1,4 +1,5 @@
 import React from 'react';
+import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import EmailInput from '../EmailInput/EmailInput';
@@ -34,7 +35,7 @@ class Signin extends React.Component {
         // clear error messages:
         this.setState({ error: '' });
 
-        fetch('http://localhost:3000/signin', {
+        fetch(`${DATABASE_LINK}/signin`, {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

@@ -1,5 +1,6 @@
 import React from 'react';
 import './FaceRecognition.css';
+import {DATABASE_LINK} from '../../constants.js';
 
 const FaceRecognition = (props) => {
   const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
@@ -10,7 +11,7 @@ const FaceRecognition = (props) => {
     if (imageUrl === avatarUrl) return;
 
     // else set and save new avatar in database
-    fetch('https://calm-forest-65718.herokuapp.com/avatar', {
+    fetch(`${DATABASE_LINK}/avatar`, {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

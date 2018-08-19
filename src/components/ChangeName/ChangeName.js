@@ -1,4 +1,5 @@
 import React from 'react';
+import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import NameInput from '../NameInput/NameInput';
@@ -26,7 +27,7 @@ class ChangeName extends React.Component {
         const { newName } = this.state;
 
         // send new user name to database
-        fetch('https://calm-forest-65718.herokuapp.com/updateName', {
+        fetch(`${DATABASE_LINK}/updateName`, {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

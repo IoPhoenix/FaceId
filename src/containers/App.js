@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {MobileView, isMobileOnly} from 'react-device-detect';
 import Particles from 'react-particles-js';
+import {DATABASE_LINK} from '../constants.js';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
@@ -84,6 +85,16 @@ class App extends Component {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
+  updateUserData = (target, newValue) => {
+    let userData = localStorage.getItem('user');
+
+    if (userData) {
+      userData = JSON.parse(userData);
+      userData[target] = newValue;
+      localStorage.setItem('user', JSON.stringify(userData));
+    } 
+  }
+
 
   updateUserName = (newName) => {
     this.setState(Object.assign(this.state.user, { name: newName }));
@@ -144,7 +155,7 @@ class App extends Component {
 
     // send image link to server to begin face recognition
     this.setState({imageUrl: this.state.input});
-      fetch('https://calm-forest-65718.herokuapp.com/imageurl', {
+      fetch(`${DATABASE_LINK}/imageurl`, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -155,7 +166,7 @@ class App extends Component {
     .then(response => {
         if (response) {
           // change # of sumbitted entries in database
-          fetch('https://calm-forest-65718.herokuapp.com/image', {
+          fetch(`${DATABASE_LINK}/image`, {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -184,6 +195,7 @@ class App extends Component {
           { avatarUrl: this.state.imageUrl }
       )
     );
+    this.updateUserData('avatar', this.state.imageUrl);
   }
 
 
