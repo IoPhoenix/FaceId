@@ -2,12 +2,12 @@ import React from 'react';
 import './FaceRecognition.css';
 import {DATABASE_LINK} from '../../constants.js';
 
+
 const FaceRecognition = (props) => {
   const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
 
   
   const updateAvatar = () => {
-
     // if submitted image link and current avatar link are the same, do not proceed:
     if (imageUrl === avatarUrl) return;
 
@@ -28,6 +28,9 @@ const FaceRecognition = (props) => {
     .catch(console.log);
   }
 
+  // display image container only if image link was submitted:
+  const containerDisplayState = imageUrl ? 'flex' : 'dn';
+
   // display avatar button only if correct image was submitted:
   const buttonDisplayState = faceBoxes.length ? 'db' : 'dn';
   
@@ -35,12 +38,13 @@ const FaceRecognition = (props) => {
   const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
 
+
   return (
-      <div className='flex center-column ma'>
+      <div className={containerDisplayState + ' center-column ma'}>
         <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
         <div 
           className='relative center center-column mt2'>
-          <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt=''/>
+          <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt='User link'/>
           {
             faceBoxes.map((box, i) => {
             return (

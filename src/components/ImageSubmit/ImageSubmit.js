@@ -3,7 +3,7 @@ import './ImageSubmit.css';
 
 const ImageSubmit = ({onInputChange, onImageSubmit, onImageReset}) => {
   return (
-    <div>
+    <div className='mb3'>
       <p className='f5s'>
         {'This FaceId app will detect faces in your pictures. Give it a try.'}
       </p>
