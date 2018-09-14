@@ -110,8 +110,6 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
-    console.log('From calculateFaceLocation: data is ', data);
-
     // do not calculate face location if no face was detected:
     if (data.outputs[0].data.regions === undefined) {
       this.setState(Object.assign(this.state, { imageDetectionError: 'Unable to detect any faces'}))
@@ -144,7 +142,6 @@ class App extends Component {
 
 
   onInputChange = (e) => {
-    console.log(e.target.value);
     this.setState({input: e.target.value.trim() });
   }
 
@@ -210,13 +207,9 @@ class App extends Component {
   }
 
   onImageReset =() => {
-    console.log('reset button was clicked');
-    this.setState(Object.assign({ faceBoxes: [] }));
-    this.setState(Object.assign({ input: '' }));
-    this.setState(Object.assign({ imageUrl: '' }));
-    this.setState(Object.assign({ imageDetectionError: ''}));
-
-    console.log('From onImageReset state: ', this.state);
+    this.setState(Object.assign(this.state, { faceBoxes: []}));
+    this.setState(Object.assign(this.state, { imageUrl: '' }));
+    this.setState(Object.assign(this.state, { imageDetectionError: ''}));
   }
 
   // change user avatar to currently submitted image 
