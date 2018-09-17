@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {MobileView, isMobileOnly} from 'react-device-detect';
 import Particles from 'react-particles-js';
-import {DATABASE_LINK} from '../constants.js';
+import { DATABASE_LINK } from '../constants.js';
+import {ImageCapture} from 'image-capture';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
@@ -110,8 +111,11 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
+    console.log('From calculateFaceLocation, data: ', data);
+
+    const regions = data.outputs[0].data.regions;
     // do not calculate face location if no face was detected:
-    if (data.outputs[0].data.regions === undefined) {
+    if (regions === undefined) {
       this.setState(Object.assign(this.state, { imageDetectionError: 'Unable to detect any faces'}))
       return [];
     } else {
@@ -121,7 +125,7 @@ class App extends Component {
       const imageWidth = Number(image.width);
       const imageHeight = Number(image.height);
       
-      const boxes = data.outputs[0].data.regions.map(region => {
+      const boxes = regions.map(region => {
         const clarifaiFace = region.region_info.bounding_box;
         return { 
           leftCol: clarifaiFace.left_col * imageWidth,
@@ -153,16 +157,18 @@ class App extends Component {
 
   onImageSubmit = (e) => {
     e.preventDefault();
+    console.log('Detect button was clicked!');
+    console.log('this.state.input: ', this.state.input);
 
     // do not proceed if user input is empty:
     if (!this.state.input) return;
 
 
     // do not proceed if user submitted invalid link:
-    if (!this.isValidLink(this.state.input)) {
-      this.setState(Object.assign(this.state, { imageDetectionError: 'Invalid link'}));
-      return;
-    }
+    // if (!this.isValidLink(this.state.input)) {
+    //   this.setState(Object.assign(this.state, { imageDetectionError: 'Invalid link'}));
+    //   return;
+    // }
 
      // clear previous face recognition result:
     this.setState(Object.assign({ faceBoxes: [] }));
@@ -173,14 +179,18 @@ class App extends Component {
     
     // send image link to server to begin face recognition
     this.setState({imageUrl: this.state.input});
-      fetch(`${DATABASE_LINK}/imageurl`, {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input: this.state.input
+    fetch(`${DATABASE_LINK}/imageurl`, {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: this.state.input
       })
     })
     .then(response => response.json())
+    .then(response => {
+      console.log('response from onImageSubmit: ', response);
+      this.displayFaceBoxes(this.calculateFaceLocation(response));
+    })
     .then(response => {
         if (response) {
           // change # of sumbitted entries in database
@@ -201,9 +211,61 @@ class App extends Component {
           })
           .catch(console.log)
         }
-        this.displayFaceBoxes(this.calculateFaceLocation(response))
+        // this.displayFaceBoxes(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
+  }
+
+  onSelfieSubmit = (e) => {
+    e.preventDefault();
+    console.log('Camera icon clicked!');
+
+    let videoDevice;
+
+    const failedToGetMedia = (error => console.log(error));
+
+    const gotMedia = (mediaStream) => {
+      // extract video track:
+      videoDevice = mediaStream.getVideoTracks()[0];
+      // check if this device supports a picture mode:
+      let captureDevice = new ImageCapture(videoDevice);
+      if (captureDevice) {
+        captureDevice.takePhoto().then(processPhoto).catch(stopCamera);
+      }
+    }
+     
+    const processPhoto = (blob) => {
+      this.setState(Object.assign(this.state, { imageUrl:  window.URL.createObjectURL(blob)}), function() {
+        console.log('Image url is set! imageUrl is: ', this.state.imageUrl);
+
+        fetch(`${DATABASE_LINK}/imageurl`, {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            input: this.state.imageUrl
+          })
+        })
+        .then(response => response.json())
+        .then(response => {
+          console.log('response from onSelfieSubmit: ', response);
+          this.displayFaceBoxes(this.calculateFaceLocation(response));
+        })
+        .catch(error => console.log(error));
+      });
+    }
+     
+    const stopCamera = (error) => {
+      console.error(error);
+      if (videoDevice) videoDevice.stop();  // turn off the camera
+    }
+     
+    navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
+ 
+    // document.querySelector('.face-img').addEventListener('load', function () {
+    //   // after the image loads, discard the image object to release the memory:
+    //   window.URL.revokeObjectURL(this.src);
+    //   console.log('Image is discarded!');
+    // });
   }
 
   onImageReset =() => {
@@ -256,6 +318,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onImageSubmit={this.onImageSubmit}
           onImageReset={this.onImageReset}
+          onSelfieSubmit={this.onSelfieSubmit}
         />
         <FaceRecognition 
           imageDetectionError={imageDetectionError}
