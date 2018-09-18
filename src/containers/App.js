@@ -235,14 +235,19 @@ class App extends Component {
     }
      
     const processPhoto = (blob) => {
-      this.setState(Object.assign(this.state, { imageUrl:  window.URL.createObjectURL(blob)}), function() {
+      console.log('from processPhoto blob is: ', blob);
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // how to send blob url to server??
+
+      this.setState(Object.assign(this.state, { imageUrl:  blobUrl}), function() {
         console.log('Image url is set! imageUrl is: ', this.state.imageUrl);
 
         fetch(`${DATABASE_LINK}/imageurl`, {
           method: 'post',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            input: this.state.imageUrl
+            input: blobUrl
           })
         })
         .then(response => response.json())

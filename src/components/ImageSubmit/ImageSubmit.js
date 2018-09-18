@@ -14,7 +14,7 @@ const ImageSubmit = ({onInputChange, onSelfieSubmit, onImageSubmit, onImageReset
             type='text'
             placeholder='Enter image url or take a selfie...'
             onChange={onInputChange}/>
-            
+          
           <div className='di buttons'>
             <button 
               type="submit"
