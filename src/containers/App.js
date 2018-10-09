@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {MobileView, isMobileOnly} from 'react-device-detect';
 import Particles from 'react-particles-js';
-import {DATABASE_LINK} from '../constants.js';
+import { DATABASE_LINK } from '../constants.js';
+import {ImageCapture} from 'image-capture';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
@@ -110,8 +111,9 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
+    const regions = data.outputs[0].data.regions;
     // do not calculate face location if no face was detected:
-    if (data.outputs[0].data.regions === undefined) {
+    if (regions === undefined) {
       this.setState(Object.assign(this.state, { imageDetectionError: 'Unable to detect any faces'}))
       return [];
     } else {
@@ -121,7 +123,7 @@ class App extends Component {
       const imageWidth = Number(image.width);
       const imageHeight = Number(image.height);
       
-      const boxes = data.outputs[0].data.regions.map(region => {
+      const boxes = regions.map(region => {
         const clarifaiFace = region.region_info.bounding_box;
         return { 
           leftCol: clarifaiFace.left_col * imageWidth,
@@ -150,6 +152,46 @@ class App extends Component {
     return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
   }
 
+  sendImageToServer = (url) => {
+    // display image on the page:
+    this.setState(Object.assign(this.state, {imageUrl:  url}));
+
+    fetch(`${DATABASE_LINK}/imageurl`, {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: url
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      // detect faces:
+      this.displayFaceBoxes(this.calculateFaceLocation(response));
+    })
+    .then(response => {
+      // change # of sumbitted entries in database
+      fetch(`${DATABASE_LINK}/image`, {
+        method: 'put',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: this.state.user.id
+        })
+      })
+      .then(response => response.json())
+      .then(count => {
+        // Object.assign(target, ...sources) 
+        // overwrite user's original entries count from the sources
+        this.setState(Object.assign(this.state.user, { entries: count}))
+        this.updateUserData('entries', count);
+      })
+      .catch(console.log);
+      })
+    .catch(err => {
+      this.setState(Object.assign(this.state, { imageDetectionError: 'Cannot process this image'}))
+      console.log(err);
+    });
+  }
+
 
   onImageSubmit = (e) => {
     e.preventDefault();
@@ -157,53 +199,61 @@ class App extends Component {
     // do not proceed if user input is empty:
     if (!this.state.input) return;
 
-
-    // do not proceed if user submitted invalid link:
-    if (!this.isValidLink(this.state.input)) {
-      this.setState(Object.assign(this.state, { imageDetectionError: 'Invalid link'}));
-      return;
-    }
-
      // clear previous face recognition result:
     this.setState(Object.assign({ faceBoxes: [] }));
 
      // clear previous face recognition errors:
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
 
-    
     // send image link to server to begin face recognition
-    this.setState({imageUrl: this.state.input});
-      fetch(`${DATABASE_LINK}/imageurl`, {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input: this.state.input
-      })
-    })
-    .then(response => response.json())
-    .then(response => {
-        if (response) {
-          // change # of sumbitted entries in database
-          fetch(`${DATABASE_LINK}/image`, {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-          .then(response => response.json())
-          .then(count => {
-            // Object.assign(target, ...sources) 
-            // overwrite user's original entries count from the sources
-            this.setState(Object.assign(this.state.user, { entries: count}))
+    this.sendImageToServer(this.state.input);
+  }
 
-            this.updateUserData('entries', count);
-          })
-          .catch(console.log)
-        }
-        this.displayFaceBoxes(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
+  
+
+  onSelfieSubmit = (e) => {
+    e.preventDefault();
+    
+    let videoDevice;
+
+    const failedToGetMedia = (error => console.log(error));
+
+    const gotMedia = (mediaStream) => {
+      // extract video track:
+      videoDevice = mediaStream.getVideoTracks()[0];
+
+      // check if this device supports a picture mode:
+      let captureDevice = new ImageCapture(videoDevice);
+      if (captureDevice) {
+        captureDevice.takePhoto().then(processPhoto).catch(stopCamera);
+      }
+    }
+
+    const convertBlobToBase64 = (blob, callback) => {
+
+      const reader = new FileReader();
+      reader.readAsDataURL(blob); 
+      reader.onloadend = () => callback(reader.result);
+    };
+     
+    const processPhoto = (blob) => {
+      convertBlobToBase64(blob, this.sendImageToServer);
+    }
+     
+    const stopCamera = (error) => {
+      console.error(error);
+      if (videoDevice) videoDevice.stop();  // turn off the camera
+    }
+     
+    navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
+ 
+    document.querySelector('.face-img').addEventListener('load', function () {
+
+      // after the image loads, discard the image object to release the memory:
+      window.URL.revokeObjectURL(this.src);
+      console.log('Image is discarded!');
+      stopCamera();
+    });
   }
 
   onImageReset =() => {
@@ -256,6 +306,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onImageSubmit={this.onImageSubmit}
           onImageReset={this.onImageReset}
+          onSelfieSubmit={this.onSelfieSubmit}
         />
         <FaceRecognition 
           imageDetectionError={imageDetectionError}
