@@ -111,8 +111,6 @@ class App extends Component {
 
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
-    console.log('From calculateFaceLocation, data: ', data);
-
     const regions = data.outputs[0].data.regions;
     // do not calculate face location if no face was detected:
     if (regions === undefined) {
@@ -154,21 +152,52 @@ class App extends Component {
     return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
   }
 
+  sendImageToServer = (url) => {
+    // display image on the page:
+    this.setState(Object.assign(this.state, {imageUrl:  url}));
+
+    fetch(`${DATABASE_LINK}/imageurl`, {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: url
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      // detect faces:
+      this.displayFaceBoxes(this.calculateFaceLocation(response));
+    })
+    .then(response => {
+      // change # of sumbitted entries in database
+      fetch(`${DATABASE_LINK}/image`, {
+        method: 'put',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: this.state.user.id
+        })
+      })
+      .then(response => response.json())
+      .then(count => {
+        // Object.assign(target, ...sources) 
+        // overwrite user's original entries count from the sources
+        this.setState(Object.assign(this.state.user, { entries: count}))
+        this.updateUserData('entries', count);
+      })
+      .catch(console.log);
+      })
+    .catch(err => {
+      this.setState(Object.assign(this.state, { imageDetectionError: 'Cannot process this image'}))
+      console.log(err);
+    });
+  }
+
 
   onImageSubmit = (e) => {
     e.preventDefault();
-    console.log('Detect button was clicked!');
-    console.log('this.state.input: ', this.state.input);
 
     // do not proceed if user input is empty:
     if (!this.state.input) return;
-
-
-    // do not proceed if user submitted invalid link:
-    // if (!this.isValidLink(this.state.input)) {
-    //   this.setState(Object.assign(this.state, { imageDetectionError: 'Invalid link'}));
-    //   return;
-    // }
 
      // clear previous face recognition result:
     this.setState(Object.assign({ faceBoxes: [] }));
@@ -176,50 +205,15 @@ class App extends Component {
      // clear previous face recognition errors:
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
 
-    
     // send image link to server to begin face recognition
-    this.setState({imageUrl: this.state.input});
-    fetch(`${DATABASE_LINK}/imageurl`, {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        input: this.state.input
-      })
-    })
-    .then(response => response.json())
-    .then(response => {
-      console.log('response from onImageSubmit: ', response);
-      this.displayFaceBoxes(this.calculateFaceLocation(response));
-    })
-    .then(response => {
-        if (response) {
-          // change # of sumbitted entries in database
-          fetch(`${DATABASE_LINK}/image`, {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-          .then(response => response.json())
-          .then(count => {
-            // Object.assign(target, ...sources) 
-            // overwrite user's original entries count from the sources
-            this.setState(Object.assign(this.state.user, { entries: count}))
-
-            this.updateUserData('entries', count);
-          })
-          .catch(console.log)
-        }
-        // this.displayFaceBoxes(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
+    this.sendImageToServer(this.state.input);
   }
+
+  
 
   onSelfieSubmit = (e) => {
     e.preventDefault();
-    console.log('Camera icon clicked!');
-
+    
     let videoDevice;
 
     const failedToGetMedia = (error => console.log(error));
@@ -227,36 +221,23 @@ class App extends Component {
     const gotMedia = (mediaStream) => {
       // extract video track:
       videoDevice = mediaStream.getVideoTracks()[0];
+
       // check if this device supports a picture mode:
       let captureDevice = new ImageCapture(videoDevice);
       if (captureDevice) {
         captureDevice.takePhoto().then(processPhoto).catch(stopCamera);
       }
     }
+
+    const convertBlobToBase64 = (blob, callback) => {
+
+      const reader = new FileReader();
+      reader.readAsDataURL(blob); 
+      reader.onloadend = () => callback(reader.result);
+    };
      
     const processPhoto = (blob) => {
-      console.log('from processPhoto blob is: ', blob);
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      // how to send blob url to server??
-
-      this.setState(Object.assign(this.state, { imageUrl:  blobUrl}), function() {
-        console.log('Image url is set! imageUrl is: ', this.state.imageUrl);
-
-        fetch(`${DATABASE_LINK}/imageurl`, {
-          method: 'post',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            input: blobUrl
-          })
-        })
-        .then(response => response.json())
-        .then(response => {
-          console.log('response from onSelfieSubmit: ', response);
-          this.displayFaceBoxes(this.calculateFaceLocation(response));
-        })
-        .catch(error => console.log(error));
-      });
+      convertBlobToBase64(blob, this.sendImageToServer);
     }
      
     const stopCamera = (error) => {
@@ -266,11 +247,13 @@ class App extends Component {
      
     navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
  
-    // document.querySelector('.face-img').addEventListener('load', function () {
-    //   // after the image loads, discard the image object to release the memory:
-    //   window.URL.revokeObjectURL(this.src);
-    //   console.log('Image is discarded!');
-    // });
+    document.querySelector('.face-img').addEventListener('load', function () {
+
+      // after the image loads, discard the image object to release the memory:
+      window.URL.revokeObjectURL(this.src);
+      console.log('Image is discarded!');
+      stopCamera();
+    });
   }
 
   onImageReset =() => {
