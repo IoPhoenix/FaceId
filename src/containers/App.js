@@ -153,8 +153,6 @@ class App extends Component {
   }
 
   sendImageForFaceRecognition = (url) => {
-    console.log('Sending url to server, url is: ', url);
-
     // display submitted image on the page:
      this.setState(Object.assign(this.state, {imageUrl:  url}));
 
@@ -226,6 +224,10 @@ class App extends Component {
 
   onSelfieSubmit = (e) => {
     e.preventDefault();
+
+    this.onImageReset();
+
+    console.log('this.state.input: ', this.state.input);
     
     let videoDevice;
 
@@ -269,13 +271,19 @@ class App extends Component {
     });
   }
 
+
+
   onImageReset =() => {
     // clear all previous results:
+    document.querySelector('.form').reset();
+    this.setState(Object.assign(this.state, { input: ''}));
     this.setState(Object.assign(this.state, { faceBoxes: []}));
     this.setState(Object.assign(this.state, { imageUrl: '' }));
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
   }
 
+
+  
   // change user avatar to currently submitted image 
   onAvatarSubmit = () => {
     this.setState(
