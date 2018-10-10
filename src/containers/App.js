@@ -152,9 +152,11 @@ class App extends Component {
     return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
   }
 
-  sendImageToServer = (url) => {
-    // display image on the page:
-    this.setState(Object.assign(this.state, {imageUrl:  url}));
+  sendImageForFaceRecognition = (url) => {
+    console.log('Sending url to server, url is: ', url);
+
+    // display submitted image on the page:
+     this.setState(Object.assign(this.state, {imageUrl:  url}));
 
     fetch(`${DATABASE_LINK}/imageurl`, {
       method: 'post',
@@ -165,35 +167,46 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(response => {
-      // detect faces:
+      // do not proceed if image link was invalid:
+      if (response === 'error') {
+        this.setState(Object.assign(this.state, { imageDetectionError: 'Cannot process this image'}))
+        // pass error response to next then() method:
+        return response;
+      }
+
+      // else try anddetect faces:
       this.displayFaceBoxes(this.calculateFaceLocation(response));
     })
     .then(response => {
-      // change # of sumbitted entries in database
-      fetch(`${DATABASE_LINK}/image`, {
-        method: 'put',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          id: this.state.user.id
+
+      // if image url was valid, change # of sumbitted entries in the database:
+      if (response !== 'error') {
+        fetch(`${DATABASE_LINK}/image`, {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: this.state.user.id
+          })
         })
-      })
-      .then(response => response.json())
-      .then(count => {
-        // Object.assign(target, ...sources) 
-        // overwrite user's original entries count from the sources
-        this.setState(Object.assign(this.state.user, { entries: count}))
-        this.updateUserData('entries', count);
-      })
-      .catch(console.log);
-      })
+        .then(response => response.json())
+        .then(count => {
+          // Object.assign(target, ...sources) 
+          // overwrite user's original entries count from the sources
+          this.setState(Object.assign(this.state.user, { entries: count}))
+          this.updateUserData('entries', count);
+        })
+        .catch(console.log);
+      }
+    })
     .catch(err => {
       this.setState(Object.assign(this.state, { imageDetectionError: 'Cannot process this image'}))
-      console.log(err);
+      console.log('Error from server: ', err);
     });
   }
 
 
   onImageSubmit = (e) => {
+    console.log('Detect button was clicked!');
     e.preventDefault();
 
     // do not proceed if user input is empty:
@@ -206,7 +219,7 @@ class App extends Component {
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
 
     // send image link to server to begin face recognition
-    this.sendImageToServer(this.state.input);
+    this.sendImageForFaceRecognition(this.state.input);
   }
 
   
@@ -230,14 +243,13 @@ class App extends Component {
     }
 
     const convertBlobToBase64 = (blob, callback) => {
-
       const reader = new FileReader();
       reader.readAsDataURL(blob); 
       reader.onloadend = () => callback(reader.result);
     };
      
     const processPhoto = (blob) => {
-      convertBlobToBase64(blob, this.sendImageToServer);
+      convertBlobToBase64(blob, this.sendImageForFaceRecognition);
     }
      
     const stopCamera = (error) => {
@@ -245,6 +257,7 @@ class App extends Component {
       if (videoDevice) videoDevice.stop();  // turn off the camera
     }
      
+    // ask user to permit camera recording:
     navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
  
     document.querySelector('.face-img').addEventListener('load', function () {
@@ -257,6 +270,7 @@ class App extends Component {
   }
 
   onImageReset =() => {
+    // clear all previous results:
     this.setState(Object.assign(this.state, { faceBoxes: []}));
     this.setState(Object.assign(this.state, { imageUrl: '' }));
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
