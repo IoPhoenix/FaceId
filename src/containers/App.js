@@ -213,7 +213,7 @@ class App extends Component {
     if (!this.state.input) return;
 
      // clear previous face recognition result:
-    this.setState(Object.assign({ faceBoxes: [] }));
+    this.setState(Object.assign(this.state, { faceBoxes: [] }));
 
      // clear previous face recognition errors:
     this.setState(Object.assign(this.state, { imageDetectionError: ''}));
