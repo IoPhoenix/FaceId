@@ -1,15 +1,11 @@
 {
-  "main.css": "/FaceId/static/css/main.badda588.chunk.css",
-  "main.js": "/FaceId/static/js/main.46b132ff.chunk.js",
-  "main.js.map": "/FaceId/static/js/main.46b132ff.chunk.js.map",
-  "static/css/1.f34923fa.chunk.css": "/FaceId/static/css/1.f34923fa.chunk.css",
-  "static/js/1.2f75cfa1.chunk.js": "/FaceId/static/js/1.2f75cfa1.chunk.js",
-  "static/js/1.2f75cfa1.chunk.js.map": "/FaceId/static/js/1.2f75cfa1.chunk.js.map",
-  "runtime~main.js": "/FaceId/static/js/runtime~main.4f41ac7d.js",
-  "runtime~main.js.map": "/FaceId/static/js/runtime~main.4f41ac7d.js.map",
-  "static/css/1.f34923fa.chunk.css.map": "/FaceId/static/css/1.f34923fa.chunk.css.map",
-  "static/css/main.badda588.chunk.css.map": "/FaceId/static/css/main.badda588.chunk.css.map",
-  "index.html": "/FaceId/index.html",
-  "precache-manifest.e39cb411ae6d06bfce07123804109f69.js": "/FaceId/precache-manifest.e39cb411ae6d06bfce07123804109f69.js",
-  "service-worker.js": "/FaceId/service-worker.js"
+  "runtime~main.js": "/FaceId/static/js/runtime~main.d1ddb672.js",
+  "runtime~main.js.map": "/FaceId/static/js/runtime~main.d1ddb672.js.map",
+  "vendors.css": "/FaceId/static/css/vendors.dfdf8bc7.chunk.css",
+  "vendors.js": "/FaceId/static/js/vendors.8d4a9c63.chunk.js",
+  "vendors.js.map": "/FaceId/static/js/vendors.8d4a9c63.chunk.js.map",
+  "main.css": "/FaceId/static/css/main.f9c268c7.chunk.css",
+  "main.js": "/FaceId/static/js/main.229752dc.chunk.js",
+  "main.js.map": "/FaceId/static/js/main.229752dc.chunk.js.map",
+  "index.html": "/FaceId/index.html"
 }
