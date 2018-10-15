@@ -28,6 +28,7 @@ class Signin extends React.Component {
 
 
     signinUser = () => {
+        console.log('DATABASE LINK: ', `${DATABASE_LINK}/signin`);
         // show loading icon while processing request
         const loader = document.getElementById('loader');
         loader.style.visibility = 'visible';
