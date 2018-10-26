@@ -227,8 +227,6 @@ class App extends Component {
 
     this.onImageReset();
 
-    console.log('this.state.input: ', this.state.input);
-    
     let videoDevice;
 
     const failedToGetMedia = (error => console.log(error));

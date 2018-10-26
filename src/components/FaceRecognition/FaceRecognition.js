@@ -37,12 +37,14 @@ const FaceRecognition = (props) => {
   const errorDisplayState = imageDetectionError ? 'db' : 'dn';
 
 
-
   return (
+    <div>
+      <div>
+          <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
+      </div>
+
       <div className={containerDisplayState + ' center-column ma'}>
-        <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
-        <div 
-          className='relative center center-column mt2'>
+        <div className='relative center center-column mt2'>
           <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt='User link'/>
           {
             faceBoxes.map((box, i) => {
@@ -66,7 +68,8 @@ const FaceRecognition = (props) => {
             className={buttonDisplayState + ' code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 white'}>Set as avatar
           </button>
       </div>
-    );
+    </div>
+  );
 }
 
 export default FaceRecognition;
