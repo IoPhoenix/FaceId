@@ -247,7 +247,7 @@ class App extends Component {
     const convertBlobToBase64 = (blob, callback) => {
       const reader = new FileReader();
       reader.readAsDataURL(blob); 
-      reader.onloadend = () => callback(reader.result);
+      reader.onloadend = () => callback(reader.rgesult);
     };
      
     const processPhoto = (blob) => {
