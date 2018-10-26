@@ -172,7 +172,7 @@ class App extends Component {
         return response;
       }
 
-      // else try anddetect faces:
+      // else try and detect faces:
       this.displayFaceBoxes(this.calculateFaceLocation(response));
     })
     .then(response => {
@@ -227,11 +227,28 @@ class App extends Component {
 
     this.onImageReset();
 
-    console.log('this.state.input: ', this.state.input);
-    
     let videoDevice;
 
-    const failedToGetMedia = (error => console.log(error));
+    const failedToGetMedia = (err) => {
+      console.log('From failedToGetMedia: ', err.name + ': ' + err.message);
+      let errorMessage = '';
+
+      // handle the error
+      if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          // required track is missing
+          errorMessage = 'Camera not found';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          // webcam or mic are already in use
+          errorMessage = 'Camera already in use';
+      } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          // permission denied in browser
+          errorMessage = 'Access denied';
+      } else {
+          // other errors
+          errorMessage = 'Something went wrong. Please try again later or provide image url';
+      }
+      this.setState(Object.assign(this.state, { imageDetectionError: errorMessage}))
+    };
 
     const gotMedia = (mediaStream) => {
       // extract video track:
@@ -247,7 +264,7 @@ class App extends Component {
     const convertBlobToBase64 = (blob, callback) => {
       const reader = new FileReader();
       reader.readAsDataURL(blob); 
-      reader.onloadend = () => callback(reader.rgesult);
+      reader.onloadend = () => callback(reader.result);
     };
      
     const processPhoto = (blob) => {
@@ -263,7 +280,6 @@ class App extends Component {
     navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
  
     document.querySelector('.face-img').addEventListener('load', function () {
-
       // after the image loads, discard the image object to release the memory:
       window.URL.revokeObjectURL(this.src);
       console.log('Image is discarded!');
