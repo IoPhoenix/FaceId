@@ -172,7 +172,7 @@ class App extends Component {
         return response;
       }
 
-      // else try anddetect faces:
+      // else try and detect faces:
       this.displayFaceBoxes(this.calculateFaceLocation(response));
     })
     .then(response => {
@@ -264,7 +264,7 @@ class App extends Component {
     const convertBlobToBase64 = (blob, callback) => {
       const reader = new FileReader();
       reader.readAsDataURL(blob); 
-      reader.onloadend = () => callback(reader.rgesult);
+      reader.onloadend = () => callback(reader.result);
     };
      
     const processPhoto = (blob) => {
