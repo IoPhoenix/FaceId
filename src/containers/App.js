@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {MobileView, isMobileOnly} from 'react-device-detect';
+import {BrowserView, isBrowser} from 'react-device-detect';
 import Particles from 'react-particles-js';
 import { DATABASE_LINK } from '../constants.js';
 import {ImageCapture} from 'image-capture';
@@ -21,11 +21,16 @@ import './App.css';
 const particlesOptions = {
   particles: {
     number: {
-      value: 120,
-      density: {
-        enable: true,
-        value_area: 700
-      }
+      value: 100
+    },
+    size: {
+      value: 4
+    }
+  },
+  interactivity: {
+    onhover: {
+      enable: true,
+      mode: 'bubble'
     }
   }
 }
@@ -402,9 +407,9 @@ class App extends Component {
 
     return (
       <div className="app">
-        <MobileView device={!isMobileOnly}>
+        <BrowserView device={isBrowser}>
           <Particles className='particles' params={particlesOptions} />
-        </MobileView>
+        </BrowserView>
 
         <Navigation 
           route={route}
