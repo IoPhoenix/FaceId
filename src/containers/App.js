@@ -83,6 +83,11 @@ class App extends Component {
     this.state = initialState;
   }
 
+  
+  componentWillMount() {
+    // store the initial state so that it can be used to reset the state later
+    this.initialState = this.state;
+  }
 
   componentDidMount = () => {
     // check local storage in case user was previously signed in
@@ -138,7 +143,11 @@ class App extends Component {
   }
 
   deleteAllUserData = () => {
-    this.state = initialState;
+    // reset state completely
+    this.setState(this.initialState);
+
+    // remove user data from local storage:
+    localStorage.removeItem('user');
   }
 
   // calculate location of the box on the face

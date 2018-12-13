@@ -2,40 +2,44 @@ import React from 'react';
 import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
-import NameInput from '../NameInput/NameInput';
 import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
 
 class DeleteProfile extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        message: ''
+      }
     }
 
     deleteProfile = () => {
-        console.log('This button is working');
+         // clear previous error messages:
+         this.setState({ message: '' });
+
+        const { id, email } = this.props.user;
 
         // send request to the server
-        fetch(`${DATABASE_LINK}/delete/`, {
-        //     method: 'delete',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({
-        //         id: this.props.user.id,
-        //         email: email
-        //     })
-        // })
-        // .then(response => response.json())
-        // .then((response) => {
-        //     if (response === 'success') {
-        //         // update new user info in the whole app 
-        //         this.props.updateUserName(newName);     
-        //         this.setState({ message: 'Your information was updated!' });
-        //     } else {
-        //         this.setState({ message: 'Failed to update name' });
-        //     }
-        // })
-        // .catch(err => {
-        //     console.log('error in updateUserName: ', err);
-        // });
+        fetch(`${DATABASE_LINK}/profile/delete`, {
+            method: 'delete',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: id,
+                email: email
+            })
+        })
+        .then(response => response.json())
+        .then((response) => {
+            if (response === 'success') {
+                // remove user data in the whole app
+                this.props.deleteAllUserData();     
+            } else {
+                this.setState({ message: 'Failed to delete profile' });
+            }
+        })
+        .catch(err => {
+            console.log('error in deleteProfile: ', err);
+        });
     }
 
     render() {

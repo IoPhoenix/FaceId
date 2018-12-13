@@ -28,7 +28,6 @@ class Signin extends React.Component {
 
 
     signinUser = () => {
-        console.log('DATABASE LINK: ', `${DATABASE_LINK}/signin`);
         // show loading icon while processing request
         const loader = document.getElementById('loader');
         loader.style.visibility = 'visible';
@@ -54,7 +53,10 @@ class Signin extends React.Component {
                 this.setState({message: 'Sign in failed'});
             }
         })
-        .catch(err => this.setState({message: err}))
+        .catch(err => {
+            console.log('Error is: ', err);
+            this.setState({message: 'Error signing in. Please try again later.'})
+        })
         .finally(() => loader.style.visibility = 'hidden');
     }
 
