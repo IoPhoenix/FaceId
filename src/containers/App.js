@@ -14,6 +14,7 @@ import Rank from '../components/Rank/Rank';
 import Profile from '../components/Profile/Profile';
 import ChangeName from '../components/ChangeName/ChangeName';
 import ChangeEmail from '../components/ChangeEmail/ChangeEmail';
+import DeleteProfile from '../components/DeleteProfile/DeleteProfile';
 import './App.css';
 
 
@@ -134,6 +135,10 @@ class App extends Component {
   updateUserEmail = (newEmail) => {
     this.setState(Object.assign(this.state.user, { email: newEmail }));
     this.updateUserData('email', newEmail);
+  }
+
+  deleteAllUserData = () => {
+    this.state = initialState;
   }
 
   // calculate location of the box on the face
@@ -417,6 +422,16 @@ class App extends Component {
       </ChangeEmail>
     );
 
+    const deleteProfileSection = (
+      <DeleteProfile 
+          deleteAllUserData={this.deleteAllUserData}
+          onRouteChange={this.onRouteChange}
+          user={this.state.user} >
+          <Avatar 
+	          onRouteChange={this.onRouteChange}
+	          avatarUrl={avatarUrl} />
+      </DeleteProfile>
+    );
 
     const signinSection = (
       <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
@@ -452,6 +467,7 @@ class App extends Component {
             : route === 'profile' ?  profileSection
                 :  route === 'changeName' ? changeNameSection
                   :  route === 'changeEmail' ? changeEmailSection
+                   :  route === 'deleteProfile' ? deleteProfileSection
                     : route === 'signin' ? signinSection
                       : registerSection
         }
