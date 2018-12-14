@@ -30,6 +30,7 @@ class DeleteProfile extends React.Component {
         })
         .then(response => response.json())
         .then((response) => {
+            console.log('From deleteProfile response is: ', response);
             if (response === 'success') {
                 // remove user data in the whole app
                 this.props.deleteAllUserData();     
@@ -49,7 +50,7 @@ class DeleteProfile extends React.Component {
 
                 <Form>
                     <Legend value={'Delete Profile'} />
-                    <p className='black'>Are you sure you want to delete your profile?</p>
+                    <p className='black'>Are you sure you want to delete your profile? All data will be lost.</p>
                     <SubmitInput 
                         onSubmit={this.deleteProfile}
                         value='YES'
