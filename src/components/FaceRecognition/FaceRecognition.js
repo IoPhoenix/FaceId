@@ -27,47 +27,40 @@ const FaceRecognition = (props) => {
     .catch(console.log);
   }
 
-  // display image container only if image link was submitted:
-  const containerDisplayState = imageUrl ? 'center-column' : 'dn';
-
-  // display avatar button only if correct image was submitted:
-  const buttonDisplayState = faceBoxes.length ? 'db' : 'dn';
-  
-  // display error only when error occurs:
-  const errorDisplayState = imageDetectionError ? 'db' : 'dn';
-
 
   return (
     <div>
-      <div>
-          <p className={errorDisplayState + ' center f4 dark-red'}>{imageDetectionError}</p>
-      </div>
+      {imageDetectionError && <p className='db center f4 dark-red'>{imageDetectionError}</p>}
 
-      <div className={containerDisplayState + ' ma'}>
-        <div className='relative center center-column mt2'>
-          <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt='User link'/>
-          {
-            faceBoxes.map((box, i) => {
-            return (
-                <div 
-                  className='bounding-box' 
-                  key={i}
-                  style={{
-                    top: box.topRow, 
-                    left: box.leftCol, 
-                    bottom: box.bottomRow, 
-                    right: box.rightCol
-                  }}>
-                </div>
-              );
-            })
-        }
-        </div>
-        <button 
-            onClick={updateAvatar}
-            className={buttonDisplayState + ' code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 white'}>Set as avatar
-          </button>
-      </div>
+      {imageUrl && 
+        <div className='center-column ma'>
+          <div className='relative center center-column mt2'>
+            <img className='face-img shadow-2 mb3' src={imageUrl} id='input-image' alt='User link'/>
+            {
+              faceBoxes.map((box, i) => {
+              return (
+                  <div 
+                    className='bounding-box' 
+                    key={i}
+                    style={{
+                      top: box.topRow, 
+                      left: box.leftCol, 
+                      bottom: box.bottomRow, 
+                      right: box.rightCol
+                    }}>
+                  </div>
+                );
+              })
+          }
+          </div>
+
+          {faceBoxes.length > 0 && 
+            <button 
+              onClick={updateAvatar}
+              className='db code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 white'>Set as avatar
+            </button>}
+
+        </div>}
     </div>
   );
 }
