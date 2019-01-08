@@ -245,7 +245,6 @@ class App extends Component {
 
 
   onImageSubmit = (e) => {
-    console.log('Detect button was clicked!');
     e.preventDefault();
 
     // do not proceed if user input is empty:
@@ -313,7 +312,6 @@ class App extends Component {
     }
      
     const stopCamera = (error) => {
-      console.error(error);
       if (videoDevice) videoDevice.stop();  // turn off the camera
     }
      

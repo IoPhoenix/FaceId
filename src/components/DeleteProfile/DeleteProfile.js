@@ -30,7 +30,6 @@ class DeleteProfile extends React.Component {
         })
         .then(response => response.json())
         .then((response) => {
-            console.log('From deleteProfile response is: ', response);
             if (response === 'success') {
                 // remove user data in the whole app
                 this.props.deleteAllUserData();     
