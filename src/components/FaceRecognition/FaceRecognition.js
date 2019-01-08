@@ -16,7 +16,7 @@ const FaceRecognition = (props) => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         id: props.id,
-        avatarUrl: props.imageUrl
+        avatarUrl: imageUrl
       })
     })
     .then(response => response.json())
