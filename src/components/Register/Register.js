@@ -21,18 +21,24 @@ class Register extends React.Component {
   }
 
   onNameChange = (e) => {
+    console.log(e.target.value);
     this.setState({registerName: capitalize(e.target.value.trim()) });
   }
 
   onEmailChange = (e) => {
+    console.log(e.target.value);
+
     this.setState({registerEmail: e.target.value.trim() });
   }
 
   onPasswordChange = (e) => {
+    console.log(e.target.value);
     this.setState({registerPassword: e.target.value.trim() });
   }
 
   registerUser = () => {
+    console.log('Register button was clicked');
+
      // show loading icon while processing request
      const loader = document.getElementById('loader');
      loader.style.visibility = 'visible';
@@ -52,13 +58,17 @@ class Register extends React.Component {
       .then(response => response.json())
       .then(user => {
         if (user.id) {
-          this.props.loadUser(user);
+          console.log('User registered! Id is: ', user.id);
+          this.props.loadUserData(user);
           this.props.onRouteChange('home');
         } else {
           this.setState({message: 'Failed to register'});
         }
       })
-      .catch(err => this.setState({ message: err }))
+      .catch(err => {
+        console.log('Error regisgtering user: ' + err);
+        // this.setState({ message: err })
+      })
       // hide loading icon, whether promise fulfilled or rejected
       .finally(() => loader.style.visibility = 'hidden');
   }

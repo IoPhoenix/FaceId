@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Rank = ({ name, entries }) => {
+const Rank = (props) => {
   return (
     <div>
       <div className='white f3 mb5'>
-        {`${name}, your # of entries is ${entries}`} 
+        {`${props.name}, your # of entries is 0`} 
       </div>
     </div>
   )

@@ -47,7 +47,7 @@ class Signin extends React.Component {
         .then(user => {
             // if user exists, proceed
             if (user.id) {
-                this.props.loadUser(user);
+                this.props.loadUserData(user);
                 this.props.onRouteChange('home');
             } else {
                 this.setState({message: 'Sign in failed'});

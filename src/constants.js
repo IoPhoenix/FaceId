@@ -4,5 +4,6 @@ export const DATABASE_LINK = 'https://calm-forest-65718.herokuapp.com';
 // production: https://calm-forest-65718.herokuapp.com
 
 
-export const REQUEST_ENTRIES_SUCCESS = 'REQUEST_ENTRIES_SUCCESS';
-export const REQUEST_ENTRIES_FAILED = 'REQUEST_ENTRIES_FAILED';
+export const LOAD_USER_DATA = 'LOAD_USER_DATA';
+export const ON_ROUTE_CHANGE = 'ON_ROUTE_CHANGE';
+
