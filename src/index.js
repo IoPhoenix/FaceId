@@ -1,10 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import {createLogger} from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 import './index.css';
 import App from './containers/App';
+import {entriesReducer} from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
 
+// use middleware between action and reducer:
+const logger = createLogger();
+const store = createStore(entriesReducer, applyMiddleware(thunkMiddleware, logger));
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>, document.getElementById('root'));
+   
+
 registerServiceWorker();

@@ -41,7 +41,8 @@ class ChangeEmail extends React.Component {
         .then((response) => {
             if (response === 'success') {
                 // update new user info in the whole app 
-                this.props.updateUserEmail(newEmail);     
+                this.props.updateUserEmail(newEmail);  
+                   
                 this.setState({ message: 'Your information was updated!' });
             } else {
                 this.setState({ message: 'Unable to update email' });

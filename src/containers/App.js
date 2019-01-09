@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import {changeNumberOfEntries} from '../actions';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
 import { DATABASE_LINK } from '../constants.js';
@@ -77,9 +79,25 @@ const initialState = {
   }
 }
 
+
+// declare what pieces of state you want to have access to:
+const mapStateToProps = (state) => {
+  return {
+      entries: state.entriesReducer.entries,
+      imageDetectionError: state.entriesReducer.imageDetectionError,
+  }
+}
+
+// declare which action creators you need to be able to dispatch:
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeNumberOfEntries: (userId) => dispatch(changeNumberOfEntries(userId))
+  }
+}
+
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = initialState;
   }
 
@@ -153,6 +171,7 @@ class App extends Component {
   // calculate location of the box on the face
   calculateFaceLocation = (data) => {
     const regions = data.outputs[0].data.regions;
+    
     // do not calculate face location if no face was detected:
     if (regions === undefined) {
       this.setState(Object.assign(this.state, { imageDetectionError: 'Unable to detect any faces'}))
@@ -189,10 +208,6 @@ class App extends Component {
   }
 
 
-  isValidLink = (url) => {
-    return /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/.test(url);
-  }
-
   sendImageForFaceRecognition = (url) => {
     // display submitted image on the page:
      this.setState(Object.assign(this.state, {imageUrl:  url}));
@@ -206,9 +221,11 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(response => {
+
       // do not proceed if image link was invalid:
       if (response === 'error') {
         this.setState(Object.assign(this.state, { imageDetectionError: 'Cannot process this image'}))
+
         // pass error response to next then() method:
         return response;
       }
@@ -220,21 +237,21 @@ class App extends Component {
 
       // if image url was valid, change # of sumbitted entries in the database:
       if (response !== 'error') {
-        fetch(`${DATABASE_LINK}/image`, {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            id: this.state.user.id
-          })
-        })
-        .then(response => response.json())
-        .then(count => {
-          // Object.assign(target, ...sources) 
-          // overwrite user's original entries count from the sources
-          this.setState(Object.assign(this.state.user, { entries: count}))
-          this.updateUserData('entries', count);
-        })
-        .catch(console.log);
+        this.props.changeNumberOfEntries(this.props.user.id);
+        // fetch(`${DATABASE_LINK}/image`, {
+        //   method: 'put',
+        //   headers: {'Content-Type': 'application/json'},
+        //   body: JSON.stringify({
+        //     id: this.state.user.id
+        //   })
+        // })
+        // .then(response => response.json())
+        // .then(count => {
+        //   // overwrite user's original entries count from the sources
+        //   this.setState(Object.assign(this.state.user, { entries: count}))
+        //   this.updateUserData('entries', count);
+        // })
+        // .catch(console.log);
       }
     })
     .catch(err => {
@@ -483,4 +500,7 @@ class App extends Component {
   }
 }
 
-export default App;
+// export default App;
+// use connect to connect React to Redux:
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
