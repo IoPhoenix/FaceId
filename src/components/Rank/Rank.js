@@ -4,7 +4,7 @@ const Rank = (props) => {
   return (
     <div>
       <div className='white f3 mb5'>
-        {`${props.name}, your # of entries is 0`} 
+        {`${props.name}, your # of entries is ${props.entries}`} 
       </div>
     </div>
   )

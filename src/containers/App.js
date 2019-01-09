@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
 import Register from '../components/Register/Register';
 import Logo from '../components/Logo/Logo';
+import Profile from '../components/Profile/Profile';
 import ImageSubmit from '../components/ImageSubmit/ImageSubmit';
 import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
@@ -16,12 +17,7 @@ const mapStateToProps = (state) => {
   return {
     route: state.routeReducer.route,
     isSignedIn: state.routeReducer.isSignedIn,
-    id: state.registerReducer.id,
-    name: state.registerReducer.name,
-    email: state.registerReducer.email,
-    entries: state.registerReducer.entries,
-    joined: state.registerReducer.joined,
-    avatarUrl: state.registerReducer.avatar
+    user: state.registerReducer.user
   }
 }
 
@@ -35,14 +31,30 @@ const mapDispatchToProps = (dispatch) => {
 
 class App extends Component {
 
+  componentDidMount = () => {
+    // check local storage in case user was previously signed in
+    const cachedUser = localStorage.getItem('user');
+
+    if (cachedUser) {
+      // load user data without accessing database:
+      this.props.loadUserData(JSON.parse(cachedUser));
+      this.props.onRouteChange('home');
+      return;
+    }
+  }
 
   render() {
-    const { route, name, onRouteChange, loadUserData } = this.props;
+    const { route, onRouteChange, loadUserData, isSignedIn } = this.props;
+    const { name, email, entries, joined, avatarUrl } = this.props.user;
     
     const homeSection = (
       <div>
-        <Avatar />
-        <Rank name={name}/>
+        <Avatar 
+          onRouteChange={onRouteChange}
+          avatarUrl={avatarUrl}/>
+        <Rank 
+          name={name} 
+          entries={entries}/>
         <ImageSubmit />
       </div>
     );
@@ -56,15 +68,28 @@ class App extends Component {
       <Register loadUserData={loadUserData} onRouteChange={onRouteChange}/>
     );
 
+    const profileSection = (
+      <Profile 
+        onRouteChange={this.onRouteChange}
+        user={this.props.user} >
+        <Avatar 
+	        onRouteChange={this.onRouteChange} />
+      </Profile>
+    );
+
 
     return (
       <div className="app">
 
-        <Navigation>
+        <Navigation 
+          onRouteChange={onRouteChange}
+          route={route}
+          isSignedIn={isSignedIn} >
           <Logo />
         </Navigation>
 
         { route === 'home' ? homeSection
+          : route === 'profile' ?  profileSection
             : route === 'signin' ? signinSection
               : registerSection
         }

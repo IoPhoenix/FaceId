@@ -21,18 +21,14 @@ class Register extends React.Component {
   }
 
   onNameChange = (e) => {
-    console.log(e.target.value);
     this.setState({registerName: capitalize(e.target.value.trim()) });
   }
 
   onEmailChange = (e) => {
-    console.log(e.target.value);
-
     this.setState({registerEmail: e.target.value.trim() });
   }
 
   onPasswordChange = (e) => {
-    console.log(e.target.value);
     this.setState({registerPassword: e.target.value.trim() });
   }
 
@@ -67,7 +63,7 @@ class Register extends React.Component {
       })
       .catch(err => {
         console.log('Error regisgtering user: ' + err);
-        // this.setState({ message: err })
+        this.setState({ message: 'Error regisgtering user. Please try again later' })
       })
       // hide loading icon, whether promise fulfilled or rejected
       .finally(() => loader.style.visibility = 'hidden');
