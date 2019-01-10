@@ -26,7 +26,7 @@ const userInitialState = {
     email: '',
     entries: 0,
     joined: '',
-    avatarUrl: ''
+    avatar: ''
 }
 
 
@@ -60,13 +60,13 @@ const userInitialState = {
                     email: action.data.email,
                     entries: action.data.entries,
                     joined: action.data.joined,
-                    avatarUrl: action.data.avatarUrl
+                    avatar: action.data.avatar
                 });
             case UPDATE_AVATAR_URL:
                 // update avatar url in local storage:
-                updateUserData('user', 'avatarUrl', action.url);
+                updateUserData('user', 'avatar', action.url);
     
-                return Object.assign({}, state, { avatarUrl: action.url });
+                return Object.assign({}, state, { avatar: action.url });
             default: 
                 return state;
     }

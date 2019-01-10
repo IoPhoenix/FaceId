@@ -112,13 +112,13 @@ class App extends Component {
 
   render() {
     const { route, input, imageUrl, onRouteChange, loadUserData, isSignedIn, faceBoxes } = this.props;
-    const { name, id, entries, avatarUrl } = this.props.user;
+    const { name, id, entries, avatar } = this.props.user;
     
     const homeSection = (
       <div>
         <Avatar 
           onRouteChange={onRouteChange}
-          avatarUrl={avatarUrl}/>
+          avatar={avatar}/>
         <Rank 
           name={name} 
           entries={entries}/>
@@ -154,7 +154,7 @@ class App extends Component {
         onRouteChange={onRouteChange}
         user={this.props.user} >
         <Avatar 
-          avatarUrl={avatarUrl}
+          avatar={avatar}
 	        onRouteChange={onRouteChange} />
       </Profile>
     );
