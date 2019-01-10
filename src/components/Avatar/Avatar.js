@@ -2,6 +2,9 @@ import React from 'react';
 import user from './user.png';
 
 const Avatar = (props) => {
+  console.log('From Avatar component, props.avatarUrl: ' + props.avatarUrl);
+  
+
   return (
       <img 
         onClick={() => props.onRouteChange('profile')}

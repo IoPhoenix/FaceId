@@ -10,6 +10,70 @@ const ImageSubmit = (props) => {
     props.onImageReset();
   }
 
+  const onSelfieSubmit = (e) => {
+    e.preventDefault();
+
+    props.onImageReset();
+
+    let videoDevice;
+
+    const failedToGetMedia = (err) => {
+      console.log('From failedToGetMedia: ', err.name + ': ' + err.message);
+      let errorMessage = '';
+
+      // handle the error
+      if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          // required track is missing
+          errorMessage = 'Camera not found';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          // webcam or mic are already in use
+          errorMessage = 'Camera already in use';
+      } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          // permission denied in browser
+          errorMessage = 'Access denied';
+      } else {
+          // other errors
+          errorMessage = 'Something went wrong. Please try again later or provide image url';
+      }
+      props.changeErrorMessage(errorMessage);
+    };
+
+    const gotMedia = (mediaStream) => {
+      // extract video track:
+      videoDevice = mediaStream.getVideoTracks()[0];
+
+      // check if this device supports a picture mode:
+      let captureDevice = new ImageCapture(videoDevice);
+      if (captureDevice) {
+        captureDevice.takePhoto().then(processPhoto).catch(stopCamera);
+      }
+    }
+
+    const convertBlobToBase64 = (blob, callback) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob); 
+      reader.onloadend = () => callback(reader.result);
+    };
+     
+    const processPhoto = (blob) => {
+      convertBlobToBase64(blob, sendImageForFaceRecognition);
+    }
+     
+    const stopCamera = (error) => {
+      if (videoDevice) videoDevice.stop();  // turn off the camera
+    }
+     
+    // ask user to permit camera recording:
+    navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
+ 
+    document.querySelector('.face-img').addEventListener('load', function () {
+      // after the image loads, discard the image object to release the memory:
+      window.URL.revokeObjectURL(this.src);
+      console.log('Image is discarded!');
+      stopCamera();
+    });
+  }
+
 
    // calculate location of the box on the face
    const calculateFaceLocation = (data) => {
@@ -100,7 +164,8 @@ const ImageSubmit = (props) => {
           <div className='di buttons'>
             <button 
               type="submit"
-              className='user-camera near-white code w-100 w-30-ns w-auto-l grow link'>
+              className='user-camera near-white code w-100 w-30-ns w-auto-l grow link'
+              onClick={onSelfieSubmit}>
               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fillRule="evenodd" clipRule="evenodd" strokeLinejoin="round" strokeMiterlimit="1.414">
                 <path d="M 12 3.5 L 11.5 2.41528547 C 11.5 2.41528547 11.0826911 1.5 10.5 1.5 L 5.5 1.5 C 4.91636759 1.5 4.5 2.41528544 4.5 2.41528544 L 4 3.5 L 2.38174379 3.5 C 2.38174379 3.5 0.5 3.65837937 0.5 5.5 L 0.5 12.5 C 0.5 14.3416206 2.38174379 14.5 2.38174379 14.5 L 13.5 14.5 C 13.5 14.5 15.5 14.3416206 15.5 12.5 L 15.5 5.5 C 15.5 3.65837937 13.5 3.5 13.5 3.5 L 12 3.5 Z" fill="none" stroke="currentColor"/>
                 <path d="M 8 12.5 C 10.209139 12.5 12 10.709139 12 8.5 C 12 6.290861 10.209139 4.5 8 4.5 C 5.790861 4.5 4 6.290861 4 8.5 C 4 10.709139 5.790861 12.5 8 12.5 Z" fill="none" stroke="currentColor"/>

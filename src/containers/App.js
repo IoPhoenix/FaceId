@@ -7,7 +7,8 @@ import {
   updateImageUrl,
   changeErrorMessage,
   displayFaceBoxes,
-  onImageReset
+  onImageReset,
+  onAvatarSubmit
 } from '../actions';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
@@ -71,13 +72,14 @@ const mapStateToProps = (state) => {
     input: state.imageReducer.input,
     route: state.routeReducer.route,
     isSignedIn: state.routeReducer.isSignedIn,
-    user: state.registerReducer.user
+    user: state.changeUserData
   }
 }
 
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
+    onAvatarSubmit: (url) => dispatch(onAvatarSubmit(url)),
     onImageReset: () => dispatch(onImageReset()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
     changeErrorMessage: (message) => dispatch(changeErrorMessage(message)),
@@ -87,6 +89,8 @@ const mapDispatchToProps = (dispatch) => {
     handleChange: (event) => dispatch(onInputChange(event)),
   }
 }
+
+
 
 class App extends Component {
 
@@ -100,6 +104,10 @@ class App extends Component {
       this.props.onRouteChange('home');
       return;
     }
+  }
+
+  componentDidUpdate() {
+    console.log('App component was updated!');
   }
 
   render() {
@@ -124,6 +132,8 @@ class App extends Component {
           onImageReset={this.props.onImageReset}
           onSelfieSubmit={this.props.onSelfieSubmit}/>
          <FaceRecognition 
+          id={id}
+          onAvatarSubmit={this.props.onAvatarSubmit}
           faceBoxes={faceBoxes}
           imageDetectionError={this.props.imageDetectionError}
           imageUrl={imageUrl} />
@@ -144,6 +154,7 @@ class App extends Component {
         onRouteChange={onRouteChange}
         user={this.props.user} >
         <Avatar 
+          avatarUrl={avatarUrl}
 	        onRouteChange={onRouteChange} />
       </Profile>
     );

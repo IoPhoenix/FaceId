@@ -4,9 +4,9 @@ import {
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     ON_IMAGE_RESET,
-    ON_SELFIE_SUBMIT,
     CHANGE_ERROR_MESSAGE,
-    DISPLAY_FACE_BOXES
+    DISPLAY_FACE_BOXES,
+    UPDATE_AVATAR_URL
  } from './constants.js';
 
 
@@ -59,9 +59,9 @@ export const onImageReset = () => {
     }
 }
 
-export const onSelfieSubmit = (input) => {
+export const onAvatarSubmit = (url) => {
     return {
-        type: ON_SELFIE_SUBMIT,
-        input: input
+        type: UPDATE_AVATAR_URL,
+        url
     }
 }

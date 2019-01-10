@@ -5,10 +5,11 @@ import {
     UPDATE_IMAGE_URL,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
-    ON_IMAGE_RESET
+    ON_IMAGE_RESET,
+    UPDATE_AVATAR_URL
 } from './constants.js';
 
-import { storeUserData, removeUserData } from './helpers';
+import { storeUserData, updateUserData, removeUserData } from './helpers';
 
 const initialState = {
     input: '',
@@ -17,15 +18,16 @@ const initialState = {
     faceBoxes: [],
     route: 'signin',
     isSignedIn: false,
-    user: {
-      id: '',
-      name: '',
-      email: '',
-      entries: 0,
-      joined: '',
-      avatarUrl: ''
-    }
-  }
+}
+
+const userInitialState = {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: '',
+    avatarUrl: ''
+}
 
 
   export const imageReducer = (state=initialState, action={}) => {
@@ -45,22 +47,26 @@ const initialState = {
         }
 }
 
-  export const registerReducer = (state=initialState, action={}) => {
+  export const changeUserData = (state=userInitialState, action={}) => {
         switch (action.type) {
             case LOAD_USER_DATA:
                 // save user data in local storage:
                 storeUserData('user', action.data);
 
                 // return new state with user details:
-                return Object.assign({}, state, {
-                    user: {
-                        id: action.data.id,
-                        name: action.data.name,
-                        email: action.data.email,
-                        entries: action.data.entries,
-                        joined: action.data.joined,
-                        avatarUrl: action.data.avatar
-                    }});
+                return Object.assign(state, {
+                    id: action.data.id,
+                    name: action.data.name,
+                    email: action.data.email,
+                    entries: action.data.entries,
+                    joined: action.data.joined,
+                    avatarUrl: action.data.avatarUrl
+                });
+            case UPDATE_AVATAR_URL:
+                // update avatar url in local storage:
+                updateUserData('user', 'avatarUrl', action.url);
+    
+                return Object.assign({}, state, { avatarUrl: action.url });
             default: 
                 return state;
     }
