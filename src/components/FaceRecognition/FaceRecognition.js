@@ -1,31 +1,32 @@
 import React from 'react';
 import './FaceRecognition.css';
-import {DATABASE_LINK} from '../../constants.js';
+// import {DATABASE_LINK} from '../../constants.js';
 
 
 const FaceRecognition = (props) => {
-  const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
+  // const { imageUrl, avatarUrl, faceBoxes, imageDetectionError } = props;
+  const { imageUrl, imageDetectionError, faceBoxes } = props;
   
-  const updateAvatar = () => {
-    // if submitted image link and current avatar link are the same, do not proceed:
-    if (imageUrl === avatarUrl) return;
+  // const updateAvatar = () => {
+  //   // if submitted image link and current avatar link are the same, do not proceed:
+  //   if (imageUrl === avatarUrl) return;
 
-    // else set and save new avatar in database
-    fetch(`${DATABASE_LINK}/avatar`, {
-      method: 'put',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: props.id,
-        avatarUrl: imageUrl
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Avatar link was saved in database: ', data);
-        props.onAvatarSubmit();
-    })
-    .catch(console.log);
-  }
+  //   // else set and save new avatar in database
+  //   fetch(`${DATABASE_LINK}/avatar`, {
+  //     method: 'put',
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: JSON.stringify({
+  //       id: props.id,
+  //       avatarUrl: imageUrl
+  //     })
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //       console.log('Avatar link was saved in database: ', data);
+  //       props.onAvatarSubmit();
+  //   })
+  //   .catch(console.log);
+  // }
 
 
   return (
@@ -53,13 +54,10 @@ const FaceRecognition = (props) => {
               })
           }
           </div>
-
           {faceBoxes.length > 0 && 
             <button 
-              onClick={updateAvatar}
               className='db code mb5 w-80 w-20-ns w-30-m grow f6 link ph3 pv2 white'>Set as avatar
             </button>}
-
         </div>}
     </div>
   );

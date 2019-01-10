@@ -1,7 +1,89 @@
 import React from 'react';
+import { DATABASE_LINK } from '../../constants.js';
 import './ImageSubmit.css';
 
 const ImageSubmit = (props) => {
+
+  const onImageReset =() => {
+    // clear all previous results:
+    document.querySelector('.form').reset();
+    props.onImageReset();
+  }
+
+
+   // calculate location of the box on the face
+   const calculateFaceLocation = (data) => {
+    const regions = data.outputs[0].data.regions;
+    
+    // do not calculate face location if no face was detected:
+    if (regions === undefined) {
+      props.changeErrorMessage('Unable to detect any faces');
+      return [];
+    } else {
+
+      // calculate coordinates for each face box
+      const image = document.getElementById('input-image');
+      const imageWidth = Number(image.width);
+      const imageHeight = Number(image.height);
+      
+      const boxes = regions.map(region => {
+        const clarifaiFace = region.region_info.bounding_box;
+        return { 
+          leftCol: clarifaiFace.left_col * imageWidth,
+          topRow: clarifaiFace.top_row * imageHeight,
+          rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
+          bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight)
+        }
+      });
+     
+      return boxes; // return array of objects
+    }
+  }
+
+  const sendImageForFaceRecognition = (url) => {
+    // display submitted image on the page:
+     props.updateImageUrl(url);
+
+    fetch(`${DATABASE_LINK}/imageurl`, {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: url
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      // do not proceed if image link was invalid:
+      if (response === 'error') {
+        props.changeErrorMessage('Cannot process this image');
+
+        // pass error response to next then() method:
+        return response;
+      }
+
+      // else try and detect faces:
+      props.displayFaceBoxes(calculateFaceLocation(response));
+    })
+    .catch(err => {
+      props.changeErrorMessage('Cannot process this image');
+      console.log('Error from server: ', err);
+    });
+  }
+
+
+  const onImageSubmit = (e) => {
+    e.preventDefault();
+
+    console.log('From onImageSubmit, props.input: ' , props.input);
+
+    // do not proceed if user input is empty:
+    if (!props.input) return;
+
+    // send image link to server to begin face recognition
+    sendImageForFaceRecognition(props.input);
+  }
+
+
   return (
     <div className='mb3'>
       <p className='f5s'>
@@ -12,8 +94,9 @@ const ImageSubmit = (props) => {
           <input
             className='user-input f4 pa2 w-100 w-90-ns w-100-l center code mb2'
             type='text'
-            placeholder='Enter image url or take a selfie...'/>
-          
+            placeholder='Enter image url or take a selfie...'
+            onChange={props.handleChange} />
+
           <div className='di buttons'>
             <button 
               type="submit"
@@ -27,11 +110,15 @@ const ImageSubmit = (props) => {
             <button
               type="submit"
               style={{ padding: '0.57rem 1.3rem', verticalAlign: 'top'}}
-              className='code w-100 w-30-ns w-auto-l grow link dib white'>Detect</button>
+              className='code w-100 w-30-ns w-auto-l grow link dib white'
+              onClick={onImageSubmit}>
+                Detect</button>
             <button
               type="reset"
               style={{ padding: '0.57rem 1.3rem', verticalAlign: 'top'}}
-              className='code w-100 w-30-ns w-auto-l grow link dib white'>Reset</button>
+              className='code w-100 w-30-ns w-auto-l grow link dib white'
+              onClick={onImageReset}>
+                Reset</button>
           </div>
         </form>
       </div>
