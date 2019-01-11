@@ -138,8 +138,6 @@ const ImageSubmit = (props) => {
   const onImageSubmit = (e) => {
     e.preventDefault();
 
-    console.log('From onImageSubmit, props.input: ' , props.input);
-
     // do not proceed if user input is empty:
     if (!props.input) return;
 

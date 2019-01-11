@@ -8,7 +8,8 @@ import {
   changeErrorMessage,
   displayFaceBoxes,
   onImageReset,
-  updateUserInfo
+  updateUserInfo,
+  deleteUserInfo
 } from '../actions';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
@@ -23,7 +24,7 @@ import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
 import ChangeName from '../components/ChangeName/ChangeName';
 import ChangeEmail from '../components/ChangeEmail/ChangeEmail';
-// import DeleteProfile from '../components/DeleteProfile/DeleteProfile';
+import DeleteProfile from '../components/DeleteProfile/DeleteProfile';
 import './App.css';
 
 
@@ -82,6 +83,7 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
+    deleteUserInfo: () => dispatch(deleteUserInfo()),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     onImageReset: () => dispatch(onImageReset()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
@@ -109,12 +111,8 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log('App component was updated!');
-  }
-
   render() {
-    const { route, input, imageUrl, onRouteChange, loadUserData, isSignedIn, faceBoxes } = this.props;
+    const { route, input, imageUrl, onRouteChange, isSignedIn, faceBoxes } = this.props;
     const { name, id, entries, avatar } = this.props.user;
     
     const homeSection = (
@@ -145,11 +143,11 @@ class App extends Component {
 
   
     const signinSection = (
-      <Signin loadUserData={loadUserData} onRouteChange={onRouteChange}/>
+      <Signin loadUserData={this.props.loadUserData} onRouteChange={onRouteChange}/>
     );
 
     const registerSection = (
-      <Register loadUserData={loadUserData} onRouteChange={onRouteChange}/>
+      <Register loadUserData={this.props.loadUserData} onRouteChange={onRouteChange}/>
     );
 
     const profileSection = (
@@ -186,6 +184,16 @@ class App extends Component {
     );
 
 
+    const deleteProfileSection = (
+      <DeleteProfile 
+          deleteUserInfo={this.props.deleteUserInfo}
+          onRouteChange={onRouteChange}
+          user={this.props.user} >
+          <Avatar 
+	          onRouteChange={onRouteChange}
+	          avatar={avatar} />
+      </DeleteProfile>
+    );
 
     return (
       <div className="app">
@@ -212,8 +220,9 @@ class App extends Component {
           : route === 'profile' ?  profileSection
             :  route === 'changeName' ? changeNameSection
               :  route === 'changeEmail' ? changeEmailSection
-              : route === 'signin' ? signinSection
-                : registerSection
+                :  route === 'deleteProfile' ? deleteProfileSection
+                  : route === 'signin' ? signinSection
+                    : registerSection
         }
       </div>
     );

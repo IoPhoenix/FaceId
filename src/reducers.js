@@ -6,7 +6,8 @@ import {
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     ON_IMAGE_RESET,
-    UPDATE_USER_DATA
+    UPDATE_USER_DATA,
+    DELETE_USER_DATA
 } from './constants.js';
 
 import { storeUserData, updateUserData, removeUserData } from './helpers';
@@ -69,6 +70,12 @@ const routeAndAuthState = {
                 updateUserData('user', action.propToUpdate, action.newData);
 
                 return Object.assign({}, state, { [action.propToUpdate]: action.newData });
+            case DELETE_USER_DATA:
+                // remove user data from local storage:
+                removeUserData('user');
+                
+                // reset user state completely:
+                return Object.assign({}, state, { id: '', name: '', email: '', entries: 0, joined: '', avatar: '' });
             default: 
                 return state;
     }

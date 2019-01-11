@@ -5,6 +5,7 @@ import Legend from '../Legend/Legend';
 import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
 
+
 class DeleteProfile extends React.Component {
     constructor(props) {
       super(props);
@@ -32,12 +33,15 @@ class DeleteProfile extends React.Component {
         .then((response) => {
             if (response === 'success') {
                 // remove user data in the whole app
-                this.props.deleteAllUserData();     
+                this.props.deleteUserInfo();   
+                this.props.onRouteChange('signin'); 
+                console.log('User data was removed from database!') ;
             } else {
                 this.setState({ message: 'Failed to delete profile' });
             }
         })
         .catch(err => {
+            this.setState({ message: 'Something went wrong. Please try again later' });
             console.log('error in deleteProfile: ', err);
         });
     }

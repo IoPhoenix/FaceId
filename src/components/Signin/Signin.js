@@ -54,7 +54,7 @@ class Signin extends React.Component {
             }
         })
         .catch(err => {
-            console.log('Error is: ', err);
+            console.log('Error in signinUser is: ', err);
             this.setState({message: 'Error signing in. Please try again later.'})
         })
         .finally(() => loader.style.visibility = 'hidden');

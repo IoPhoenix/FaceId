@@ -7,9 +7,7 @@ const FaceRecognition = (props) => {
   const { id, imageUrl, imageDetectionError, faceBoxes } = props;
   
   const updateAvatar = () => {
-    console.log('Update avatar button was clicked');
-    console.log('From updateAvatar, imageUrl: ' , imageUrl);
-
+    
     // set and save new avatar in database
     fetch(`${DATABASE_LINK}/avatar`, {
       method: 'put',

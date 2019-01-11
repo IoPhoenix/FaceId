@@ -6,7 +6,8 @@ import {
     ON_IMAGE_RESET,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
-    UPDATE_USER_DATA
+    UPDATE_USER_DATA,
+    DELETE_USER_DATA
  } from './constants.js';
 
 
@@ -65,5 +66,11 @@ export const updateUserInfo = (propToUpdate, newData) => {
         type: UPDATE_USER_DATA,
         propToUpdate, 
         newData
+    }
+}
+
+export const deleteUserInfo = () => {
+    return {
+        type: DELETE_USER_DATA
     }
 }
