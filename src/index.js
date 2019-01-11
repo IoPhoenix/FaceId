@@ -8,7 +8,7 @@ import './index.css';
 import App from './containers/App';
 import {
     routeReducer, 
-    changeUserData, 
+    userReducer, 
     imageReducer,
 } from './reducers';
 import registerServiceWorker from './registerServiceWorker';
@@ -16,7 +16,7 @@ import 'tachyons';
 
 // use middleware between action and reducer:
 const logger = createLogger();
-const rootReducer = combineReducers({routeReducer, changeUserData, imageReducer});
+const rootReducer = combineReducers({routeReducer, userReducer, imageReducer});
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
 
 ReactDOM.render(

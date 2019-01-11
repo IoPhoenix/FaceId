@@ -8,7 +8,7 @@ import {
   changeErrorMessage,
   displayFaceBoxes,
   onImageReset,
-  onAvatarSubmit
+  updateUserInfo
 } from '../actions';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
@@ -21,6 +21,9 @@ import ImageSubmit from '../components/ImageSubmit/ImageSubmit';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Avatar from '../components/Avatar/Avatar';
 import Rank from '../components/Rank/Rank';
+import ChangeName from '../components/ChangeName/ChangeName';
+import ChangeEmail from '../components/ChangeEmail/ChangeEmail';
+// import DeleteProfile from '../components/DeleteProfile/DeleteProfile';
 import './App.css';
 
 
@@ -72,14 +75,14 @@ const mapStateToProps = (state) => {
     input: state.imageReducer.input,
     route: state.routeReducer.route,
     isSignedIn: state.routeReducer.isSignedIn,
-    user: state.changeUserData
+    user: state.userReducer
   }
 }
 
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAvatarSubmit: (url) => dispatch(onAvatarSubmit(url)),
+    updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     onImageReset: () => dispatch(onImageReset()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
     changeErrorMessage: (message) => dispatch(changeErrorMessage(message)),
@@ -133,7 +136,7 @@ class App extends Component {
           onSelfieSubmit={this.props.onSelfieSubmit}/>
          <FaceRecognition 
           id={id}
-          onAvatarSubmit={this.props.onAvatarSubmit}
+          updateUserInfo={this.props.updateUserInfo}
           faceBoxes={faceBoxes}
           imageDetectionError={this.props.imageDetectionError}
           imageUrl={imageUrl} />
@@ -159,6 +162,30 @@ class App extends Component {
       </Profile>
     );
 
+    const changeNameSection = (
+      <ChangeName 
+          updateUserInfo={this.props.updateUserInfo}
+          onRouteChange={onRouteChange}
+          user={this.props.user} >
+          <Avatar 
+	          onRouteChange={onRouteChange}
+	          avatar={avatar} />
+        </ChangeName>
+    );
+
+
+    const changeEmailSection = (
+      <ChangeEmail 
+          updateUserInfo={this.props.updateUserInfo}
+          onRouteChange={onRouteChange}
+          user={this.props.user} >
+          <Avatar 
+	          onRouteChange={onRouteChange}
+	          avatar={avatar} />
+      </ChangeEmail>
+    );
+
+
 
     return (
       <div className="app">
@@ -183,8 +210,10 @@ class App extends Component {
 
         { route === 'home' ? homeSection
           : route === 'profile' ?  profileSection
-            : route === 'signin' ? signinSection
-              : registerSection
+            :  route === 'changeName' ? changeNameSection
+              :  route === 'changeEmail' ? changeEmailSection
+              : route === 'signin' ? signinSection
+                : registerSection
         }
       </div>
     );

@@ -39,7 +39,7 @@ class ChangeName extends React.Component {
         .then((response) => {
             if (response === 'success') {
                 // update new user info in the whole app 
-                this.props.updateUserName(newName);     
+                this.props.updateUserInfo('name', newName);     
                 this.setState({ message: 'Your information was updated!' });
             } else {
                 this.setState({ message: 'Failed to update name' });
@@ -47,6 +47,7 @@ class ChangeName extends React.Component {
         })
         .catch(err => {
             console.log('error in updateUserName: ', err);
+            this.setState({ message: 'Something went wrong. Please try again later.' });
         });
     }
 

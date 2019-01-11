@@ -4,9 +4,11 @@ import {DATABASE_LINK} from '../../constants.js';
 
 
 const FaceRecognition = (props) => {
-  const { id, imageUrl, imageDetectionError, faceBoxes, onAvatarSubmit } = props;
+  const { id, imageUrl, imageDetectionError, faceBoxes } = props;
   
   const updateAvatar = () => {
+    console.log('Update avatar button was clicked');
+    console.log('From updateAvatar, imageUrl: ' , imageUrl);
 
     // set and save new avatar in database
     fetch(`${DATABASE_LINK}/avatar`, {
@@ -20,7 +22,7 @@ const FaceRecognition = (props) => {
     .then(response => response.json())
     .then(data => {
         console.log('Avatar link was saved in database: ', data);
-        onAvatarSubmit(imageUrl);
+        props.updateUserInfo('avatar', imageUrl);
     })
     .catch(console.log);
   }

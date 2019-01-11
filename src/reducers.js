@@ -6,7 +6,7 @@ import {
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     ON_IMAGE_RESET,
-    UPDATE_AVATAR_URL
+    UPDATE_USER_DATA
 } from './constants.js';
 
 import { storeUserData, updateUserData, removeUserData } from './helpers';
@@ -15,9 +15,7 @@ const initialState = {
     input: '',
     imageUrl: '',
     imageDetectionError: '',
-    faceBoxes: [],
-    route: 'signin',
-    isSignedIn: false,
+    faceBoxes: []
 }
 
 const userInitialState = {
@@ -29,6 +27,10 @@ const userInitialState = {
     avatar: ''
 }
 
+const routeAndAuthState = {
+    route: 'signin',
+    isSignedIn: false
+}
 
   export const imageReducer = (state=initialState, action={}) => {
     switch (action.type) {
@@ -47,7 +49,7 @@ const userInitialState = {
         }
 }
 
-  export const changeUserData = (state=userInitialState, action={}) => {
+  export const userReducer = (state=userInitialState, action={}) => {
         switch (action.type) {
             case LOAD_USER_DATA:
                 // save user data in local storage:
@@ -62,17 +64,17 @@ const userInitialState = {
                     joined: action.data.joined,
                     avatar: action.data.avatar
                 });
-            case UPDATE_AVATAR_URL:
-                // update avatar url in local storage:
-                updateUserData('user', 'avatar', action.url);
-    
-                return Object.assign({}, state, { avatar: action.url });
+            case UPDATE_USER_DATA: 
+                // update user info in local storage for further session:
+                updateUserData('user', action.propToUpdate, action.newData);
+
+                return Object.assign({}, state, { [action.propToUpdate]: action.newData });
             default: 
                 return state;
     }
 }
 
-export const routeReducer = (state=initialState, action={}) => {
+export const routeReducer = (state=routeAndAuthState, action={}) => {
     switch (action.type) {
         case ON_ROUTE_CHANGE:
             if (action.route === 'home') {

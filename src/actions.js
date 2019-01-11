@@ -6,7 +6,7 @@ import {
     ON_IMAGE_RESET,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
-    UPDATE_AVATAR_URL
+    UPDATE_USER_DATA
  } from './constants.js';
 
 
@@ -59,9 +59,11 @@ export const onImageReset = () => {
     }
 }
 
-export const onAvatarSubmit = (url) => {
+
+export const updateUserInfo = (propToUpdate, newData) => {
     return {
-        type: UPDATE_AVATAR_URL,
-        url
+        type: UPDATE_USER_DATA,
+        propToUpdate, 
+        newData
     }
 }

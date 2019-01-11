@@ -2,8 +2,6 @@ import React from 'react';
 import user from './user.png';
 
 const Avatar = (props) => {
-  console.log('From Avatar component, props.avatar: ' + props.avatar);
-  
 
   return (
       <img 
