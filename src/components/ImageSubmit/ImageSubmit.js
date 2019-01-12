@@ -4,16 +4,17 @@ import './ImageSubmit.css';
 
 const ImageSubmit = (props) => {
 
-  const onImageReset =() => {
+  const resetImageData =() => {
     // clear all previous results:
     document.querySelector('.form').reset();
-    props.onImageReset();
+    props.resetImageData();
   }
 
   const onSelfieSubmit = (e) => {
     e.preventDefault();
 
-    props.onImageReset();
+    // clear previous results:
+    props.resetImageData();
 
     let videoDevice;
 
@@ -128,6 +129,24 @@ const ImageSubmit = (props) => {
       // else try and detect faces:
       props.displayFaceBoxes(calculateFaceLocation(response));
     })
+    .then(response => {
+
+      // if image url was valid, change # of sumbitted entries in the database:
+      if (response !== 'error') {
+        fetch(`${DATABASE_LINK}/image`, {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: props.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+            props.updateUserInfo('entries', count);
+        })
+        .catch(console.log);
+      }
+    })
     .catch(err => {
       props.changeErrorMessage('Cannot process this image');
       console.log('Error from server: ', err);
@@ -140,6 +159,9 @@ const ImageSubmit = (props) => {
 
     // do not proceed if user input is empty:
     if (!props.input) return;
+
+    // clear any previous results:
+    props.resetImageData();
 
     // send image link to server to begin face recognition
     sendImageForFaceRecognition(props.input);
@@ -154,6 +176,7 @@ const ImageSubmit = (props) => {
       <div className='center'>
         <form className='form center pa4 br3 shadow-5'>
           <input
+            value={props.input}
             className='user-input f4 pa2 w-100 w-90-ns w-100-l center code mb2'
             type='text'
             placeholder='Enter image url or take a selfie...'
@@ -180,7 +203,7 @@ const ImageSubmit = (props) => {
               type="reset"
               style={{ padding: '0.57rem 1.3rem', verticalAlign: 'top'}}
               className='code w-100 w-30-ns w-auto-l grow link dib white'
-              onClick={onImageReset}>
+              onClick={resetImageData}>
                 Reset</button>
           </div>
         </form>

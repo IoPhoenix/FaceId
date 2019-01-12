@@ -5,6 +5,8 @@ import Legend from '../Legend/Legend';
 import NameInput from '../NameInput/NameInput';
 import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
+import { capitalize } from '../../helpers';
+
 
 class ChangeName extends React.Component {
     constructor(props) {
@@ -39,7 +41,7 @@ class ChangeName extends React.Component {
         .then((response) => {
             if (response === 'success') {
                 // update new user info in the whole app 
-                this.props.updateUserInfo('name', newName);     
+                this.props.updateUserInfo('name', capitalize(newName));     
                 this.setState({ message: 'Your information was updated!' });
             } else {
                 this.setState({ message: 'Failed to update name' });

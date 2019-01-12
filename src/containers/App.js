@@ -7,7 +7,7 @@ import {
   updateImageUrl,
   changeErrorMessage,
   displayFaceBoxes,
-  onImageReset,
+  resetImageData,
   updateUserInfo,
   deleteUserInfo
 } from '../actions';
@@ -85,7 +85,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteUserInfo: () => dispatch(deleteUserInfo()),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
-    onImageReset: () => dispatch(onImageReset()),
+    resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
     changeErrorMessage: (message) => dispatch(changeErrorMessage(message)),
     updateImageUrl: (url) => dispatch(updateImageUrl(url)),
@@ -126,14 +126,16 @@ class App extends Component {
          <ImageSubmit 
           input={input}
           id={id}
+          updateUserInfo={this.props.updateUserInfo}
           displayFaceBoxes={this.props.displayFaceBoxes}
           changeErrorMessage={this.props.changeErrorMessage}
           handleChange={this.props.handleChange}
           updateImageUrl={this.props.updateImageUrl}
-          onImageReset={this.props.onImageReset}
+          resetImageData={this.props.resetImageData}
           onSelfieSubmit={this.props.onSelfieSubmit}/>
          <FaceRecognition 
           id={id}
+          avatar={avatar}
           updateUserInfo={this.props.updateUserInfo}
           faceBoxes={faceBoxes}
           imageDetectionError={this.props.imageDetectionError}
@@ -143,11 +145,16 @@ class App extends Component {
 
   
     const signinSection = (
-      <Signin loadUserData={this.props.loadUserData} onRouteChange={onRouteChange}/>
+      <Signin 
+        loadUserData={this.props.loadUserData}
+        onRouteChange={onRouteChange}
+        resetImageData={this.props.resetImageData} />
     );
 
     const registerSection = (
-      <Register loadUserData={this.props.loadUserData} onRouteChange={onRouteChange}/>
+      <Register 
+        loadUserData={this.props.loadUserData} 
+        onRouteChange={onRouteChange} />
     );
 
     const profileSection = (
@@ -209,7 +216,7 @@ class App extends Component {
           <Particles className='particles' params={particlesOptionsForMobile} />
         </MobileView>
 
-        <Navigation 
+        <Navigation
           onRouteChange={onRouteChange}
           route={route}
           isSignedIn={isSignedIn} >

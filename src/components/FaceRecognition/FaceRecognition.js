@@ -4,9 +4,13 @@ import {DATABASE_LINK} from '../../constants.js';
 
 
 const FaceRecognition = (props) => {
-  const { id, imageUrl, imageDetectionError, faceBoxes } = props;
+  const { id, imageUrl, imageDetectionError, faceBoxes, avatar } = props;
   
   const updateAvatar = () => {
+
+    // if submitted image link and current avatar link are the same, do not proceed:
+    if (imageUrl === avatar) return;
+
     
     // set and save new avatar in database
     fetch(`${DATABASE_LINK}/avatar`, {

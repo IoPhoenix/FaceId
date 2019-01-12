@@ -3,7 +3,7 @@ import {
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
-    ON_IMAGE_RESET,
+    RESET_IMAGE_DATA,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     UPDATE_USER_DATA,
@@ -17,6 +17,7 @@ export const loadUserData = (data) => {
         data
     }
 }
+
 
 export const onRouteChange = (route) => {
     return {
@@ -54,9 +55,9 @@ export const displayFaceBoxes = (boxes) => {
     }
 }
 
-export const onImageReset = () => {
+export const resetImageData = () => {
     return {
-        type: ON_IMAGE_RESET,
+        type: RESET_IMAGE_DATA,
     }
 }
 

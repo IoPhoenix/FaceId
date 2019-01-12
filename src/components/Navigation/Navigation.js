@@ -5,7 +5,7 @@ const Navigation = (props) => {
   let changingLink;
 
   if (props.isSignedIn) {
-    changingLink = props.route === 'profile' ? 
+    changingLink = (props.route === 'profile') ? 
         <p onClick={() => props.onRouteChange('home')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Home</p>
         : 
         <p onClick={() => props.onRouteChange('profile')} className='f5 dib link bg-navy dim br2 pa3 pointer br--left mr2'>Profile</p>;

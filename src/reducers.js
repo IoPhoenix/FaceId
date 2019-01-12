@@ -5,7 +5,7 @@ import {
     UPDATE_IMAGE_URL,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
-    ON_IMAGE_RESET,
+    RESET_IMAGE_DATA,
     UPDATE_USER_DATA,
     DELETE_USER_DATA
 } from './constants.js';
@@ -43,12 +43,14 @@ const routeAndAuthState = {
             return Object.assign({}, state, { imageDetectionError: action.message });
         case DISPLAY_FACE_BOXES:
             return Object.assign({}, state, { faceBoxes: action.boxes });
-        case ON_IMAGE_RESET:
+        case RESET_IMAGE_DATA:
             return Object.assign({}, state, { input: '', faceBoxes: [], imageUrl: '', imageDetectionError: '' });
         default: 
             return state;
         }
 }
+
+
 
   export const userReducer = (state=userInitialState, action={}) => {
         switch (action.type) {
@@ -87,6 +89,7 @@ export const routeReducer = (state=routeAndAuthState, action={}) => {
             if (action.route === 'home') {
                 return Object.assign({}, state, {route: action.route, isSignedIn: true});
             } else if (action.route === 'signin') {
+                // remove all user data from local storage:
                 removeUserData('user');
                 return Object.assign({}, state, {route: action.route, isSignedIn: false});
             }
