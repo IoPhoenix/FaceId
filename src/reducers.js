@@ -93,7 +93,7 @@ export const routeReducer = (state=routeAndAuthState, action={}) => {
                 removeUserData('user');
                 return Object.assign({}, state, {route: action.route, isSignedIn: false});
             }
-            return Object.assign({}, state, {route: action.route, isSignedIn: true});
+            return Object.assign({}, state, {route: action.route});
                     
         default: 
             return state;

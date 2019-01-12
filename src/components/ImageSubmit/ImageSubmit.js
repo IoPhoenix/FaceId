@@ -14,7 +14,7 @@ const ImageSubmit = (props) => {
     e.preventDefault();
 
     // clear previous results:
-    props.resetImageData();
+    // props.resetImageData();
 
     let videoDevice;
 
@@ -42,9 +42,11 @@ const ImageSubmit = (props) => {
     const gotMedia = (mediaStream) => {
       // extract video track:
       videoDevice = mediaStream.getVideoTracks()[0];
+      console.log('videoDevice: ', videoDevice);
 
       // check if this device supports a picture mode:
       let captureDevice = new ImageCapture(videoDevice);
+      console.log('captureDevice: ', captureDevice);
       if (captureDevice) {
         captureDevice.takePhoto().then(processPhoto).catch(stopCamera);
       }
@@ -53,10 +55,15 @@ const ImageSubmit = (props) => {
     const convertBlobToBase64 = (blob, callback) => {
       const reader = new FileReader();
       reader.readAsDataURL(blob); 
-      reader.onloadend = () => callback(reader.result);
+      reader.onloadend = () => {
+        console.log('Reader: ', reader, 'reader.result: ', reader.result);
+
+        callback(reader.result);
+      }
     };
      
     const processPhoto = (blob) => {
+      console.log('blob is ', blob);
       convertBlobToBase64(blob, sendImageForFaceRecognition);
     }
      
@@ -68,10 +75,12 @@ const ImageSubmit = (props) => {
     navigator.mediaDevices.getUserMedia({video: true}).then(gotMedia).catch(failedToGetMedia);
  
     document.querySelector('.face-img').addEventListener('load', function () {
+
       // after the image loads, discard the image object to release the memory:
-      window.URL.revokeObjectURL(this.src);
+      // window.URL.revokeObjectURL(this.src);
       console.log('Image is discarded!');
       stopCamera();
+      console.log('Camera is stopped');
     });
   }
 
