@@ -9,7 +9,6 @@ import {
   displayFaceBoxes,
   resetImageData,
   updateUserInfo,
-  // deleteUserInfo,
   signInUser,
   resetApp
 } from '../actions';

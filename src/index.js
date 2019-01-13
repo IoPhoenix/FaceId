@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
-import {createLogger} from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import './index.css';
 import App from './containers/App';
@@ -15,7 +14,6 @@ import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
 
 // use middleware between action and reducer:
-const logger = createLogger();
 const appReducer = combineReducers({routeReducer, userReducer, imageReducer});
 
 
@@ -23,7 +21,7 @@ const appReducer = combineReducers({routeReducer, userReducer, imageReducer});
 // that will handle reset for each reducer
 const rootReducer = (state, action) => {
 
-    // change the state reference to undefined
+    // change the state reference to undefinedg
     // so that the default state applies and 
     // the state is thus reset
     if (action.type === 'RESET_APP') {
@@ -33,7 +31,7 @@ const rootReducer = (state, action) => {
     return appReducer(state, action);
   }
 
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
     <Provider store={store}>
