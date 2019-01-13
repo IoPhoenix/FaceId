@@ -87,7 +87,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     signInUser: () => dispatch(signInUser()),
-    // deleteUserInfo: () => dispatch(deleteUserInfo()),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
