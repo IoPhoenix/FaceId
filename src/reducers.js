@@ -1,16 +1,16 @@
 import { 
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
+    SIGN_IN_USER,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     RESET_IMAGE_DATA,
-    UPDATE_USER_DATA,
-    DELETE_USER_DATA
+    UPDATE_USER_DATA
 } from './constants.js';
 
-import { storeUserData, updateUserData, removeUserData } from './helpers';
+import { storeUserData, updateUserData } from './helpers';
 
 const initialState = {
     input: '',
@@ -59,7 +59,7 @@ const routeAndAuthState = {
                 storeUserData('user', action.data);
 
                 // return new state with user details:
-                return Object.assign(state, {
+                return Object.assign({}, state, {
                     id: action.data.id,
                     name: action.data.name,
                     email: action.data.email,
@@ -72,12 +72,6 @@ const routeAndAuthState = {
                 updateUserData('user', action.propToUpdate, action.newData);
 
                 return Object.assign({}, state, { [action.propToUpdate]: action.newData });
-            case DELETE_USER_DATA:
-                // remove user data from local storage:
-                removeUserData('user');
-                
-                // reset user state completely:
-                return Object.assign({}, state, { id: '', name: '', email: '', entries: 0, joined: '', avatar: '' });
             default: 
                 return state;
     }
@@ -86,15 +80,9 @@ const routeAndAuthState = {
 export const routeReducer = (state=routeAndAuthState, action={}) => {
     switch (action.type) {
         case ON_ROUTE_CHANGE:
-            if (action.route === 'home') {
-                return Object.assign({}, state, {route: action.route, isSignedIn: true});
-            } else if (action.route === 'signin') {
-                // remove all user data from local storage:
-                removeUserData('user');
-                return Object.assign({}, state, {route: action.route, isSignedIn: false});
-            }
             return Object.assign({}, state, {route: action.route});
-                    
+        case SIGN_IN_USER:
+            return Object.assign({}, state, {isSignedIn: true});
         default: 
             return state;
     }

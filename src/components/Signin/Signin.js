@@ -38,6 +38,7 @@ class Signin extends React.Component {
         // clear previously submitted images
         this.props.resetImageData();
 
+        // send user input to database:
         fetch(`${DATABASE_LINK}/signin`, {
             method: 'post',
             headers: {'Content-Type': 'application/json'},

@@ -33,7 +33,7 @@ class DeleteProfile extends React.Component {
         .then((response) => {
             if (response === 'success') {
                 // remove user data in the whole app
-                this.props.deleteUserInfo();   
+                // this.props.deleteUserInfo();   
                 this.props.onRouteChange('signin'); 
                 console.log('User data was removed from database!') ;
             } else {

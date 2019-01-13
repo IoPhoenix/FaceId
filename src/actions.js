@@ -1,13 +1,14 @@
 import { 
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
+    SIGN_IN_USER,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     RESET_IMAGE_DATA,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     UPDATE_USER_DATA,
-    DELETE_USER_DATA
+    RESET_APP
  } from './constants.js';
 
 
@@ -23,6 +24,13 @@ export const onRouteChange = (route) => {
     return {
         type: ON_ROUTE_CHANGE,
         route
+    }
+}
+
+
+export const signInUser = () => {
+    return {
+        type: SIGN_IN_USER
     }
 }
 
@@ -70,8 +78,8 @@ export const updateUserInfo = (propToUpdate, newData) => {
     }
 }
 
-export const deleteUserInfo = () => {
+export const resetApp = () => {
     return {
-        type: DELETE_USER_DATA
+        type: RESET_APP
     }
 }

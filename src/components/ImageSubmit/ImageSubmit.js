@@ -14,7 +14,7 @@ const ImageSubmit = (props) => {
     e.preventDefault();
 
     // clear previous results:
-    // props.resetImageData();
+    props.resetImageData();
 
     let videoDevice;
 
@@ -118,6 +118,10 @@ const ImageSubmit = (props) => {
     // display submitted image on the page:
      props.updateImageUrl(url);
 
+    // clear any previous error messages:  
+     props.changeErrorMessage('');
+
+
     fetch(`${DATABASE_LINK}/imageurl`, {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -166,11 +170,13 @@ const ImageSubmit = (props) => {
   const onImageSubmit = (e) => {
     e.preventDefault();
 
+
+
+    // clear any previous face boxes
+    props.displayFaceBoxes([]);
+
     // do not proceed if user input is empty:
     if (!props.input) return;
-
-    // clear any previous results:
-    props.resetImageData();
 
     // send image link to server to begin face recognition
     sendImageForFaceRecognition(props.input);

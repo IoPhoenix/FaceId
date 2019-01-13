@@ -9,8 +9,11 @@ import {
   displayFaceBoxes,
   resetImageData,
   updateUserInfo,
-  deleteUserInfo
+  // deleteUserInfo,
+  signInUser,
+  resetApp
 } from '../actions';
+import { removeUserData } from '../helpers';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
 import Navigation from '../components/Navigation/Navigation';
@@ -83,7 +86,8 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteUserInfo: () => dispatch(deleteUserInfo()),
+    signInUser: () => dispatch(signInUser()),
+    // deleteUserInfo: () => dispatch(deleteUserInfo()),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
@@ -92,6 +96,7 @@ const mapDispatchToProps = (dispatch) => {
     onRouteChange: (route) => dispatch(onRouteChange(route)),
     loadUserData: (user) => dispatch(loadUserData(user)),
     handleChange: (event) => dispatch(onInputChange(event)),
+    resetApp: () => dispatch(resetApp())
   }
 }
 
@@ -106,19 +111,36 @@ class App extends Component {
     if (cachedUser) {
       // load user data without accessing database:
       this.props.loadUserData(JSON.parse(cachedUser));
-      this.props.onRouteChange('home');
+      this.onRouteChange('home');
       return;
     }
   }
 
+  onRouteChange = (route) => {
+    if (route === 'signin') {
+      // reset app to initial state
+      this.props.resetApp();
+
+      // remove all user data from local storage
+      // so that user stays logged out after return:
+      removeUserData('user');
+
+
+    } else if (route === 'home') {
+      this.props.signInUser();
+    }
+    this.props.onRouteChange(route);
+  }
+
+
   render() {
-    const { route, input, imageUrl, onRouteChange, isSignedIn, faceBoxes } = this.props;
+    const { route, input, imageUrl, isSignedIn, faceBoxes } = this.props;
     const { name, id, entries, avatar } = this.props.user;
     
     const homeSection = (
       <div>
         <Avatar 
-          onRouteChange={onRouteChange}
+          onRouteChange={this.onRouteChange}
           avatar={avatar}/>
         <Rank 
           name={name} 
@@ -147,33 +169,33 @@ class App extends Component {
     const signinSection = (
       <Signin 
         loadUserData={this.props.loadUserData}
-        onRouteChange={onRouteChange}
+        onRouteChange={this.onRouteChange}
         resetImageData={this.props.resetImageData} />
     );
 
     const registerSection = (
       <Register 
         loadUserData={this.props.loadUserData} 
-        onRouteChange={onRouteChange} />
+        onRouteChange={this.onRouteChange} />
     );
 
     const profileSection = (
       <Profile 
-        onRouteChange={onRouteChange}
+        onRouteChange={this.onRouteChange}
         user={this.props.user} >
         <Avatar 
           avatar={avatar}
-	        onRouteChange={onRouteChange} />
+	        onRouteChange={this.onRouteChange} />
       </Profile>
     );
 
     const changeNameSection = (
       <ChangeName 
           updateUserInfo={this.props.updateUserInfo}
-          onRouteChange={onRouteChange}
+          onRouteChange={this.onRouteChange}
           user={this.props.user} >
           <Avatar 
-	          onRouteChange={onRouteChange}
+	          onRouteChange={this.onRouteChange}
 	          avatar={avatar} />
         </ChangeName>
     );
@@ -182,10 +204,10 @@ class App extends Component {
     const changeEmailSection = (
       <ChangeEmail 
           updateUserInfo={this.props.updateUserInfo}
-          onRouteChange={onRouteChange}
+          onRouteChange={this.onRouteChange}
           user={this.props.user} >
           <Avatar 
-	          onRouteChange={onRouteChange}
+	          onRouteChange={this.onRouteChange}
 	          avatar={avatar} />
       </ChangeEmail>
     );
@@ -193,11 +215,12 @@ class App extends Component {
 
     const deleteProfileSection = (
       <DeleteProfile 
-          deleteUserInfo={this.props.deleteUserInfo}
-          onRouteChange={onRouteChange}
+
+          // deleteUserInfo={this.props.deleteUserInfo}
+          onRouteChange={this.onRouteChange}
           user={this.props.user} >
           <Avatar 
-	          onRouteChange={onRouteChange}
+	          onRouteChange={this.onRouteChange}
 	          avatar={avatar} />
       </DeleteProfile>
     );
@@ -217,7 +240,7 @@ class App extends Component {
         </MobileView>
 
         <Navigation
-          onRouteChange={onRouteChange}
+          onRouteChange={this.onRouteChange}
           route={route}
           isSignedIn={isSignedIn} >
           <Logo />
