@@ -1,7 +1,7 @@
 import { 
-    LOAD_USER_DATA,
+    SIGN_IN_USER_SUCCESS,
+    SIGN_IN_USER_FAILURE,
     ON_ROUTE_CHANGE,
-    SIGN_IN_USER,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     RESET_IMAGE_DATA,
@@ -12,11 +12,38 @@ import {
  } from './constants.js';
 
 
-export const loadUserData = (data) => {
+import userApi from './api/userApi';
+
+ // since function is being returned, not an object, use redux-thunk middleware:
+export function loadUserData(dataToSend) {  
+    console.log('Sending user data to server...');
+    console.log('dataToSend is: ', dataToSend);
+
+
+  return function(dispatch) {
+    return userApi.signinUser(dataToSend).then(data => {
+        console.log('Data returned from the server: ', data);
+
+        dispatch(signinUserSuccess(data));
+    }).catch(error => {
+        dispatch(signinUserFailure(error));
+    });
+  };
+}
+
+export function signinUserSuccess(data) {  
     return {
-        type: LOAD_USER_DATA,
+        type: SIGN_IN_USER_SUCCESS,
         data
-    }
+    };
+  }
+
+
+export function signinUserFailure(error) {  
+    return {
+        type: SIGN_IN_USER_FAILURE,
+        error
+    };
 }
 
 
@@ -27,12 +54,6 @@ export const onRouteChange = (route) => {
     }
 }
 
-
-export const signInUser = () => {
-    return {
-        type: SIGN_IN_USER
-    }
-}
 
 export const onInputChange = (event) => {
     return {

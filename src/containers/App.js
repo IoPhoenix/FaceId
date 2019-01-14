@@ -9,8 +9,6 @@ import {
   displayFaceBoxes,
   resetImageData,
   updateUserInfo,
-  // deleteUserInfo,
-  signInUser,
   resetApp
 } from '../actions';
 import { removeUserData } from '../helpers';
@@ -75,10 +73,10 @@ const mapStateToProps = (state) => {
   return {
     faceBoxes: state.imageReducer.faceBoxes,
     imageUrl: state.imageReducer.imageUrl,
-    imageDetectionError: state.imageReducer.imageDetectionError,
+    message: state.errorReducer,
     input: state.imageReducer.input,
-    route: state.routeReducer.route,
-    isSignedIn: state.routeReducer.isSignedIn,
+    route: state.userReducer.route,
+    isSignedIn: state.userReducer.isSignedIn,
     user: state.userReducer
   }
 }
@@ -86,14 +84,13 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
-    signInUser: () => dispatch(signInUser()),
+    loadUserData: (data) => dispatch(loadUserData(data)),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
     changeErrorMessage: (message) => dispatch(changeErrorMessage(message)),
     updateImageUrl: (url) => dispatch(updateImageUrl(url)),
     onRouteChange: (route) => dispatch(onRouteChange(route)),
-    loadUserData: (user) => dispatch(loadUserData(user)),
     handleChange: (event) => dispatch(onInputChange(event)),
     resetApp: () => dispatch(resetApp())
   }
@@ -105,36 +102,33 @@ class App extends Component {
 
   componentDidMount = () => {
     // check local storage in case user was previously signed in
-    const cachedUser = localStorage.getItem('user');
+    // const cachedUser = localStorage.getItem('user');
 
-    if (cachedUser) {
-      // load user data without accessing database:
-      this.props.loadUserData(JSON.parse(cachedUser));
-      this.onRouteChange('home');
-      return;
-    }
+    // if (cachedUser) {
+    //   // load user data without accessing database:
+    //   this.props.loadUserData(JSON.parse(cachedUser));
+    //   this.onRouteChange('home');
+    //   return;
+    // }
   }
 
   onRouteChange = (route) => {
     if (route === 'signin') {
-      // reset app to initial state
+      // reset app to initial state when user signs out
       this.props.resetApp();
 
       // remove all user data from local storage
       // so that user stays logged out after return:
       removeUserData('user');
-
-
-    } else if (route === 'home') {
-      this.props.signInUser();
     }
+
     this.props.onRouteChange(route);
   }
 
 
   render() {
     const { route, input, imageUrl, isSignedIn, faceBoxes } = this.props;
-    const { name, id, entries, avatar } = this.props.user;
+    const { name, id, entries, avatar, message } = this.props.user;
     
     const homeSection = (
       <div>
@@ -146,7 +140,6 @@ class App extends Component {
           entries={entries}/>
          <ImageSubmit 
           input={input}
-          id={id}
           updateUserInfo={this.props.updateUserInfo}
           displayFaceBoxes={this.props.displayFaceBoxes}
           changeErrorMessage={this.props.changeErrorMessage}
@@ -159,7 +152,7 @@ class App extends Component {
           avatar={avatar}
           updateUserInfo={this.props.updateUserInfo}
           faceBoxes={faceBoxes}
-          imageDetectionError={this.props.imageDetectionError}
+          message={this.props.message}
           imageUrl={imageUrl} />
       </div>
     );
@@ -167,6 +160,8 @@ class App extends Component {
   
     const signinSection = (
       <Signin 
+        changeErrorMessage={this.props.changeErrorMessage}
+        message={message}
         loadUserData={this.props.loadUserData}
         onRouteChange={this.onRouteChange}
         resetImageData={this.props.resetImageData} />
@@ -174,7 +169,9 @@ class App extends Component {
 
     const registerSection = (
       <Register 
-        loadUserData={this.props.loadUserData} 
+        changeErrorMessage={this.props.changeErrorMessage}
+        message={message}
+        loadUserData={this.props.loadUserData}
         onRouteChange={this.onRouteChange} />
     );
 

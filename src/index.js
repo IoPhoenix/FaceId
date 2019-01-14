@@ -7,16 +7,16 @@ import thunkMiddleware from 'redux-thunk';
 import './index.css';
 import App from './containers/App';
 import {
-    routeReducer, 
     userReducer, 
     imageReducer,
+    errorReducer
 } from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
 
 // use middleware between action and reducer:
 const logger = createLogger();
-const appReducer = combineReducers({routeReducer, userReducer, imageReducer});
+const appReducer = combineReducers({userReducer, imageReducer, errorReducer});
 
 
 // create a wrapping root reducer 
