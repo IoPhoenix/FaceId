@@ -6,9 +6,8 @@ import thunkMiddleware from 'redux-thunk';
 import './index.css';
 import App from './containers/App';
 import {
-    routeReducer, 
     userReducer, 
-    imageReducer,
+    imageReducer
 } from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';

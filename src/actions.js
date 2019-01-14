@@ -1,7 +1,8 @@
 import { 
+    SEND_USER_DATA_SUCCESS,
+    SEND_USER_DATA_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
-    SIGN_IN_USER,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     RESET_IMAGE_DATA,
@@ -10,13 +11,34 @@ import {
     UPDATE_USER_DATA,
     RESET_APP
  } from './constants.js';
+import userApi from './api/userApi';
 
 
-export const loadUserData = (data) => {
+
+export const sendUserData = (dataToSend, action) => (dispatch) => {
+    return userApi.sendUserData(dataToSend, action)
+        .then(data => {
+            dispatch(sendUserDataSuccess(data));
+        })
+        .catch(error => {
+            dispatch(sendUserDataFailure(error));
+        });
+}
+
+
+export function sendUserDataSuccess(data) {  
     return {
-        type: LOAD_USER_DATA,
+        type: SEND_USER_DATA_SUCCESS,
         data
-    }
+    };
+  }
+
+
+export function sendUserDataFailure(error) {  
+    return {
+        type: SEND_USER_DATA_FAILURE,
+        error
+    };
 }
 
 
@@ -28,9 +50,10 @@ export const onRouteChange = (route) => {
 }
 
 
-export const signInUser = () => {
+export const loadUserData = (data) => {
     return {
-        type: SIGN_IN_USER
+        type: LOAD_USER_DATA,
+        data
     }
 }
 
@@ -49,12 +72,14 @@ export const updateImageUrl = (url) => {
     }
 }
 
+
 export const changeErrorMessage = (message) => {
     return {
         type: CHANGE_ERROR_MESSAGE,
         message
     }
 }
+
 
 export const displayFaceBoxes = (boxes) => {
     return {

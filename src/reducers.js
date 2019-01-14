@@ -1,7 +1,8 @@
 import { 
+    SEND_USER_DATA_SUCCESS,
+    SEND_USER_DATA_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
-    SIGN_IN_USER,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
     CHANGE_ERROR_MESSAGE,
@@ -15,7 +16,6 @@ import { storeUserData, updateUserData } from './helpers';
 const initialState = {
     input: '',
     imageUrl: '',
-    imageDetectionError: '',
     faceBoxes: []
 }
 
@@ -25,26 +25,23 @@ const userInitialState = {
     email: '',
     entries: 0,
     joined: '',
-    avatar: ''
-}
-
-const routeAndAuthState = {
+    avatar: '',
+    message: '',
     route: 'signin',
     isSignedIn: false
 }
 
-  export const imageReducer = (state=initialState, action={}) => {
+
+export const imageReducer = (state=initialState, action={}) => {
     switch (action.type) {
         case ON_INPUT_CHANGE:
             return Object.assign({}, state, { input: action.input });
         case UPDATE_IMAGE_URL:
             return Object.assign({}, state, { imageUrl: action.url });
-        case CHANGE_ERROR_MESSAGE:
-            return Object.assign({}, state, { imageDetectionError: action.message });
         case DISPLAY_FACE_BOXES:
             return Object.assign({}, state, { faceBoxes: action.boxes });
         case RESET_IMAGE_DATA:
-            return Object.assign({}, state, { input: '', faceBoxes: [], imageUrl: '', imageDetectionError: '' });
+            return Object.assign({}, state, { input: '', faceBoxes: [], imageUrl: '' });
         default: 
             return state;
         }
@@ -52,9 +49,11 @@ const routeAndAuthState = {
 
 
 
-  export const userReducer = (state=userInitialState, action={}) => {
-        switch (action.type) {
-            case LOAD_USER_DATA:
+export const userReducer = (state=userInitialState, action={}) => {
+    switch (action.type) {
+        case SEND_USER_DATA_SUCCESS:
+            // if user exists, proceed
+            if (action.data.id) {
                 // save user data in local storage:
                 storeUserData('user', action.data);
 
@@ -65,24 +64,38 @@ const routeAndAuthState = {
                     email: action.data.email,
                     entries: action.data.entries,
                     joined: action.data.joined,
-                    avatar: action.data.avatar
+                    avatar: action.data.avatar,
+                    message: '',
+                    route: 'home',
+                    isSignedIn: true
                 });
-            case UPDATE_USER_DATA: 
-                // update user info in local storage for further session:
-                updateUserData('user', action.propToUpdate, action.newData);
-
-                return Object.assign({}, state, { [action.propToUpdate]: action.newData });
-            default: 
-                return state;
-    }
-}
-
-export const routeReducer = (state=routeAndAuthState, action={}) => {
-    switch (action.type) {
+            } else {
+                return Object.assign({}, state, { message: action.data });
+            }
+        case SEND_USER_DATA_FAILURE:
+            console.log('action.error: ', action.error);
+            return Object.assign({}, state, { message: action.error});
         case ON_ROUTE_CHANGE:
             return Object.assign({}, state, {route: action.route});
-        case SIGN_IN_USER:
-            return Object.assign({}, state, {isSignedIn: true});
+        case UPDATE_USER_DATA: 
+            // update user info in local storage for further session:
+            updateUserData('user', action.propToUpdate, action.newData);
+
+            return Object.assign({}, state, { [action.propToUpdate]: action.newData });
+        case LOAD_USER_DATA: 
+            return Object.assign({}, state, {
+                id: action.data.id,
+                name: action.data.name,
+                email: action.data.email,
+                entries: action.data.entries,
+                joined: action.data.joined,
+                avatar: action.data.avatar,
+                message: '',
+                route: 'home',
+                isSignedIn: true
+            });
+        case CHANGE_ERROR_MESSAGE:
+            return Object.assign({}, state, { message: action.message }); 
         default: 
             return state;
     }

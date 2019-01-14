@@ -3,10 +3,10 @@ export const DATABASE_LINK = 'https://calm-forest-65718.herokuapp.com';
 // development: http://localhost:3000
 // production: https://calm-forest-65718.herokuapp.com
 
-
+export const SEND_USER_DATA_SUCCESS = 'SEND_USER_DATA_SUCCESS';
+export const SEND_USER_DATA_FAILURE = 'SEND_USER_DATA_FAILURE';
 export const LOAD_USER_DATA = 'LOAD_USER_DATA';
 export const ON_ROUTE_CHANGE = 'ON_ROUTE_CHANGE';
-export const SIGN_IN_USER = 'SIGN_IN_USER';
 export const ON_INPUT_CHANGE = 'ON_INPUT_CHANGE';
 export const UPDATE_IMAGE_URL = 'UPDATE_IMAGE_URL';
 export const CHANGE_ERROR_MESSAGE = 'CHANGE_ERROR_MESSAGE';

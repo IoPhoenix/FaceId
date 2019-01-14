@@ -4,7 +4,7 @@ import {DATABASE_LINK} from '../../constants.js';
 
 
 const FaceRecognition = (props) => {
-  const { id, imageUrl, imageDetectionError, faceBoxes, avatar } = props;
+  const { id, imageUrl, message, faceBoxes, avatar } = props;
   
   const updateAvatar = () => {
 
@@ -32,7 +32,7 @@ const FaceRecognition = (props) => {
 
   return (
     <div>
-      {imageDetectionError && <p className='db center f4 dark-red'>{imageDetectionError}</p>}
+      {message && <p className='db center f4 dark-red'>{message}</p>}
 
         <div className='center-column ma'>
           <div className='relative center center-column mt2'>

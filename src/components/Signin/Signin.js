@@ -1,5 +1,5 @@
 import React from 'react';
-import {DATABASE_LINK} from '../../constants.js';
+// import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import EmailInput from '../EmailInput/EmailInput';
@@ -13,8 +13,7 @@ class Signin extends React.Component {
         super(props);
         this.state = {
           signInEmail: '',
-          signInPassword: '',
-          message: ''
+          signInPassword: ''
         }
       }
 
@@ -32,36 +31,21 @@ class Signin extends React.Component {
         const loader = document.getElementById('loader');
         loader.style.visibility = 'visible';
 
-        // clear error messages:
-        this.setState({ error: '' });
 
         // clear previously submitted images
         this.props.resetImageData();
 
+
+        const dataToSend = {
+            email: this.state.signInEmail,
+            password: this.state.signInPassword
+        }
+
         // send user input to database:
-        fetch(`${DATABASE_LINK}/signin`, {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email: this.state.signInEmail,
-                password: this.state.signInPassword
-            })
-        })
-        .then(response => response.json())
-        .then(user => {
-            // if user exists, proceed
-            if (user.id) {
-                this.props.loadUserData(user);
-                this.props.onRouteChange('home');
-            } else {
-                this.setState({message: 'Sign in failed'});
-            }
-        })
-        .catch(err => {
-            console.log('Error in signinUser is: ', err);
-            this.setState({message: 'Error signing in. Please try again later.'})
-        })
-        .finally(() => loader.style.visibility = 'hidden');
+        this.props.sendUserData(dataToSend, 'signin');
+
+        // hide loading icon
+       loader.style.visibility = 'hidden';
     }
 
 
@@ -69,12 +53,12 @@ class Signin extends React.Component {
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
-            this.setState({ message: 'Invalid credentials' });
+            this.props.changeErrorMessage('Invalid credentials');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signInEmail)) {
-            this.setState({ message: 'Invalid email format' });
+            this.props.changeErrorMessage('Invalid email format');
         } else {
             // clear previous error messages
-            this.setState({ message: '' });
+            this.props.changeErrorMessage('');
             this.signinUser();  
         }
       }
@@ -87,7 +71,7 @@ class Signin extends React.Component {
                 <PasswordInput onPasswordChange={this.onPasswordChange} />
                 <SubmitInput 
                     onSubmit={this.onSubmit}
-                    message={this.state.message}
+                    message={this.props.message}
                     value='Sign in' />
                 <FormLink 
                     onRouteChange={this.props.onRouteChange}
