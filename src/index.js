@@ -13,7 +13,7 @@ import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
 
 // use middleware between action and reducer:
-const appReducer = combineReducers({routeReducer, userReducer, imageReducer});
+const appReducer = combineReducers({ userReducer, imageReducer});
 
 
 // create a wrapping root reducer 

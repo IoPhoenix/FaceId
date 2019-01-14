@@ -123,6 +123,12 @@ class App extends Component {
       removeUserData('user');
     }
 
+    if (route === 'register') {
+      // clear any previous error messages left from sgin in:
+       this.props.changeErrorMessage('');
+    }
+
+    // change route
     this.props.onRouteChange(route);
   }
 
