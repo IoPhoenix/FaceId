@@ -140,6 +140,7 @@ class App extends Component {
           name={name} 
           entries={entries}/>
          <ImageSubmit 
+          id={id}
           input={input}
           updateUserInfo={this.props.updateUserInfo}
           displayFaceBoxes={this.props.displayFaceBoxes}

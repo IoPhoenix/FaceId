@@ -16,7 +16,6 @@ import { storeUserData, updateUserData } from './helpers';
 const initialState = {
     input: '',
     imageUrl: '',
-    imageDetectionError: '',
     faceBoxes: []
 }
 
@@ -42,7 +41,7 @@ export const imageReducer = (state=initialState, action={}) => {
         case DISPLAY_FACE_BOXES:
             return Object.assign({}, state, { faceBoxes: action.boxes });
         case RESET_IMAGE_DATA:
-            return Object.assign({}, state, { input: '', faceBoxes: [], imageUrl: '', imageDetectionError: '' });
+            return Object.assign({}, state, { input: '', faceBoxes: [], imageUrl: '' });
         default: 
             return state;
         }

@@ -5,13 +5,20 @@ import './ImageSubmit.css';
 const ImageSubmit = (props) => {
 
   const resetImageData =() => {
-    // clear all previous results:
-    document.querySelector('.form').reset();
-    props.resetImageData();
+      // clear previous error messages
+      props.changeErrorMessage('');
+
+      // clear previous results:
+      props.resetImageData();
   }
 
+
+  
   const onSelfieSubmit = (e) => {
     e.preventDefault();
+
+    // clear previous error messages
+    props.changeErrorMessage('');
 
     // clear previous results:
     props.resetImageData();
@@ -134,36 +141,37 @@ const ImageSubmit = (props) => {
       // do not proceed if image link was invalid:
       if (response === 'error') {
         props.changeErrorMessage('Cannot process this image');
-
-        // pass error response to next then() method:
-        return response;
       }
 
       // else try and detect faces:
       props.displayFaceBoxes(calculateFaceLocation(response));
+
+      console.log('response 1: ', response);
+
+       // pass error response to next then() method:
+       return response;
     })
     .then(response => {
-      console.log('response is ', response);
 
-      // if image url was valid, change # of sumbitted entries in the database:
-      if (response !== 'error') {
-        fetch(`${DATABASE_LINK}/image`, {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            id: props.id
+        // if image url was valid, change # of sumbitted entries in the database:
+        if (response !== 'error') {
+          fetch(`${DATABASE_LINK}/image`, {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: props.id
+            })
           })
-        })
-        .then(response => response.json())
-        .then(count => {
-            props.updateUserInfo('entries', count);
-        })
-        .catch(console.log);
-      }
+          .then(response => response.json())
+          .then(count => {
+              props.updateUserInfo('entries', count);
+          })
+          .catch(console.log);
+        }
     })
     .catch(err => {
-      props.changeErrorMessage('Cannot process this image');
-      console.log('Error from server: ', err);
+        props.changeErrorMessage('Cannot process this image');
+        console.log('Error from server: ', err);
     });
   }
 
