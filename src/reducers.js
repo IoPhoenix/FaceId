@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
     SEND_USER_DATA_FAILURE,
+    LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
@@ -82,6 +83,18 @@ export const userReducer = (state=userInitialState, action={}) => {
             updateUserData('user', action.propToUpdate, action.newData);
 
             return Object.assign({}, state, { [action.propToUpdate]: action.newData });
+        case LOAD_USER_DATA: 
+            return Object.assign({}, state, {
+                id: action.data.id,
+                name: action.data.name,
+                email: action.data.email,
+                entries: action.data.entries,
+                joined: action.data.joined,
+                avatar: action.data.avatar,
+                message: '',
+                route: 'home',
+                isSignedIn: true
+            });
         case CHANGE_ERROR_MESSAGE:
             return Object.assign({}, state, { message: action.message }); 
         default: 

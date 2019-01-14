@@ -143,6 +143,7 @@ const ImageSubmit = (props) => {
       props.displayFaceBoxes(calculateFaceLocation(response));
     })
     .then(response => {
+      console.log('response is ', response);
 
       // if image url was valid, change # of sumbitted entries in the database:
       if (response !== 'error') {
@@ -169,8 +170,6 @@ const ImageSubmit = (props) => {
 
   const onImageSubmit = (e) => {
     e.preventDefault();
-
-
 
     // clear any previous face boxes
     props.displayFaceBoxes([]);

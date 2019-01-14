@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
     SEND_USER_DATA_FAILURE,
+    LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
@@ -14,17 +15,14 @@ import userApi from './api/userApi';
 
 
 
-export function sendUserData(dataToSend, action) {  
-    console.log('Sending user data to server...');
-    console.log('dataToSend is: ', dataToSend);
-
-    return function(dispatch) {
-        return userApi.sendUserData(dataToSend, action).then(data => {
+export const sendUserData = (dataToSend, action) => (dispatch) => {
+    return userApi.sendUserData(dataToSend, action)
+        .then(data => {
             dispatch(sendUserDataSuccess(data));
-        }).catch(error => {
+        })
+        .catch(error => {
             dispatch(sendUserDataFailure(error));
         });
-    };
 }
 
 
@@ -51,6 +49,13 @@ export const onRouteChange = (route) => {
     }
 }
 
+
+export const loadUserData = (data) => {
+    return {
+        type: LOAD_USER_DATA,
+        data
+    }
+}
 
 export const onInputChange = (event) => {
     return {

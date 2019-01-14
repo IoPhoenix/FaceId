@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {
   onRouteChange,
+  loadUserData,
   sendUserData,
   onInputChange,
   updateImageUrl,
@@ -84,6 +85,7 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
+    loadUserData: (data) => dispatch(loadUserData(data)),
     sendUserData: (data, action) => dispatch(sendUserData(data, action)),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
@@ -102,14 +104,13 @@ class App extends Component {
 
   componentDidMount = () => {
     // check local storage in case user was previously signed in
-    // const cachedUser = localStorage.getItem('user');
+    const cachedUser = localStorage.getItem('user');
 
-    // if (cachedUser) {
-    //   // load user data without accessing database:
-    //   this.props.loadUserData(JSON.parse(cachedUser));
-    //   this.onRouteChange('home');
-    //   return;
-    // }
+    if (cachedUser) {
+      // load user data without accessing database:
+      this.props.loadUserData(JSON.parse(cachedUser));
+      return;
+    }
   }
 
   onRouteChange = (route) => {
