@@ -3,8 +3,8 @@ export const DATABASE_LINK = 'http://localhost:3000';
 // development: http://localhost:3000
 // production: https://calm-forest-65718.herokuapp.com
 
-export const SIGN_IN_USER_SUCCESS = 'SIGN_IN_USER_SUCCESS';
-export const SIGN_IN_USER_FAILURE = 'SIGN_IN_USER_FAILURE';
+export const SEND_USER_DATA_SUCCESS = 'SEND_USER_DATA_SUCCESS';
+export const SEND_USER_DATA_FAILURE = 'SEND_USER_DATA_FAILURE';
 export const LOAD_USER_DATA = 'LOAD_USER_DATA';
 export const ON_ROUTE_CHANGE = 'ON_ROUTE_CHANGE';
 export const ON_INPUT_CHANGE = 'ON_INPUT_CHANGE';

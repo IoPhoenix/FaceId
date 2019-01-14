@@ -1,8 +1,8 @@
 import { DATABASE_LINK } from '../constants.js';
 
 class userApi {  
-    static signinUser(dataToSend) {
-      return fetch(`${DATABASE_LINK}/signin`, {
+    static sendUserData(dataToSend, action) {
+      return fetch(`${DATABASE_LINK}/${action}`, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(dataToSend)

@@ -8,15 +8,14 @@ import './index.css';
 import App from './containers/App';
 import {
     userReducer, 
-    imageReducer,
-    errorReducer
+    imageReducer
 } from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
 
 // use middleware between action and reducer:
 const logger = createLogger();
-const appReducer = combineReducers({userReducer, imageReducer, errorReducer});
+const appReducer = combineReducers({userReducer, imageReducer});
 
 
 // create a wrapping root reducer 

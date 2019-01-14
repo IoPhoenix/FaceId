@@ -1,6 +1,6 @@
 import { 
-    SIGN_IN_USER_SUCCESS,
-    SIGN_IN_USER_FAILURE,
+    SEND_USER_DATA_SUCCESS,
+    SEND_USER_DATA_FAILURE,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
@@ -47,19 +47,11 @@ export const imageReducer = (state=initialState, action={}) => {
         }
 }
 
-export const errorReducer = (state='', action={}) => {
-    switch (action.type) {
-        case CHANGE_ERROR_MESSAGE:
-            return state = action.message;
-        default: 
-            return state;
-    }
-}
 
 
 export const userReducer = (state=userInitialState, action={}) => {
     switch (action.type) {
-        case SIGN_IN_USER_SUCCESS:
+        case SEND_USER_DATA_SUCCESS:
             // if user exists, proceed
             if (action.data.id) {
                 // save user data in local storage:
@@ -80,7 +72,7 @@ export const userReducer = (state=userInitialState, action={}) => {
             } else {
                 return Object.assign({}, state, { message: action.data });
             }
-        case SIGN_IN_USER_FAILURE:
+        case SEND_USER_DATA_FAILURE:
             console.log('action.error: ', action.error);
             return Object.assign({}, state, { message: action.error});
         case ON_ROUTE_CHANGE:
@@ -90,6 +82,8 @@ export const userReducer = (state=userInitialState, action={}) => {
             updateUserData('user', action.propToUpdate, action.newData);
 
             return Object.assign({}, state, { [action.propToUpdate]: action.newData });
+        case CHANGE_ERROR_MESSAGE:
+            return Object.assign({}, state, { message: action.message }); 
         default: 
             return state;
     }

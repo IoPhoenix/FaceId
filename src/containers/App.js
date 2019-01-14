@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {
   onRouteChange,
-  loadUserData,
+  sendUserData,
   onInputChange,
   updateImageUrl,
   changeErrorMessage,
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => {
   return {
     faceBoxes: state.imageReducer.faceBoxes,
     imageUrl: state.imageReducer.imageUrl,
-    message: state.errorReducer,
+    message: state.userReducer.message,
     input: state.imageReducer.input,
     route: state.userReducer.route,
     isSignedIn: state.userReducer.isSignedIn,
@@ -84,7 +84,7 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadUserData: (data) => dispatch(loadUserData(data)),
+    sendUserData: (data, action) => dispatch(sendUserData(data, action)),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
@@ -162,7 +162,7 @@ class App extends Component {
       <Signin 
         changeErrorMessage={this.props.changeErrorMessage}
         message={message}
-        loadUserData={this.props.loadUserData}
+        sendUserData={this.props.sendUserData}
         onRouteChange={this.onRouteChange}
         resetImageData={this.props.resetImageData} />
     );
@@ -171,7 +171,7 @@ class App extends Component {
       <Register 
         changeErrorMessage={this.props.changeErrorMessage}
         message={message}
-        loadUserData={this.props.loadUserData}
+        sendUserData={this.props.sendUserData}
         onRouteChange={this.onRouteChange} />
     );
 

@@ -35,27 +35,27 @@ class Signin extends React.Component {
         // clear previously submitted images
         this.props.resetImageData();
 
+
         const dataToSend = {
             email: this.state.signInEmail,
             password: this.state.signInPassword
         }
 
         // send user input to database:
-        this.props.loadUserData(dataToSend);
+        this.props.sendUserData(dataToSend, 'signin');
 
+        // hide loading icon
        loader.style.visibility = 'hidden';
     }
 
 
     onSubmit = () => {
-        console.log('Submit button was clicked');
-        
         const { signInEmail, signInPassword } = this.state;
 
         if (!signInEmail || !signInPassword || signInPassword.length < 8) {
-            this.setState({ message: 'Invalid credentials' });
+            this.props.changeErrorMessage('Invalid credentials');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signInEmail)) {
-            this.setState({ message: 'Invalid email format' });
+            this.props.changeErrorMessage('Invalid email format');
         } else {
             // clear previous error messages
             this.props.changeErrorMessage('');

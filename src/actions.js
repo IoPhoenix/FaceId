@@ -1,6 +1,6 @@
 import { 
-    SIGN_IN_USER_SUCCESS,
-    SIGN_IN_USER_FAILURE,
+    SEND_USER_DATA_SUCCESS,
+    SEND_USER_DATA_FAILURE,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
     UPDATE_IMAGE_URL,
@@ -10,38 +10,35 @@ import {
     UPDATE_USER_DATA,
     RESET_APP
  } from './constants.js';
-
-
 import userApi from './api/userApi';
 
- // since function is being returned, not an object, use redux-thunk middleware:
-export function loadUserData(dataToSend) {  
+
+
+export function sendUserData(dataToSend, action) {  
     console.log('Sending user data to server...');
     console.log('dataToSend is: ', dataToSend);
 
-
-  return function(dispatch) {
-    return userApi.signinUser(dataToSend).then(data => {
-        console.log('Data returned from the server: ', data);
-
-        dispatch(signinUserSuccess(data));
-    }).catch(error => {
-        dispatch(signinUserFailure(error));
-    });
-  };
+    return function(dispatch) {
+        return userApi.sendUserData(dataToSend, action).then(data => {
+            dispatch(sendUserDataSuccess(data));
+        }).catch(error => {
+            dispatch(sendUserDataFailure(error));
+        });
+    };
 }
 
-export function signinUserSuccess(data) {  
+
+export function sendUserDataSuccess(data) {  
     return {
-        type: SIGN_IN_USER_SUCCESS,
+        type: SEND_USER_DATA_SUCCESS,
         data
     };
   }
 
 
-export function signinUserFailure(error) {  
+export function sendUserDataFailure(error) {  
     return {
-        type: SIGN_IN_USER_FAILURE,
+        type: SEND_USER_DATA_FAILURE,
         error
     };
 }
@@ -70,12 +67,14 @@ export const updateImageUrl = (url) => {
     }
 }
 
+
 export const changeErrorMessage = (message) => {
     return {
         type: CHANGE_ERROR_MESSAGE,
         message
     }
 }
+
 
 export const displayFaceBoxes = (boxes) => {
     return {
