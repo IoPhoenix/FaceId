@@ -247,7 +247,7 @@ class App extends Component {
           onRouteChange={this.onRouteChange}
           route={route}
           isSignedIn={isSignedIn} >
-          <Logo />
+          <Logo onRouteChange={this.onRouteChange}/>
         </Navigation>
 
         { route === 'home' ? homeSection

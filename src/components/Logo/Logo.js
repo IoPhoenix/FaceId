@@ -3,12 +3,14 @@ import Tilt from 'react-tilt';
 import eye from './eye.png';
 import './Logo.css';
 
-const Logo = () => {
+const Logo = (props) => {
   return (
     <div>
       <Tilt className="Tilt br2 shadow-2" options={{ max : 65 }}>
         <div className="Tilt-inner pa2">
           <img
+          // add callback to prevent 'Maximum update depth exceeded error'
+            onClick={() => props.onRouteChange('home')}
             className="logo"
             alt='App logo'
             src={eye}/>
