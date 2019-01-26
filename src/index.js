@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import {createLogger} from 'redux-logger';
 import './index.css';
 import App from './containers/App';
 import {
@@ -11,6 +12,8 @@ import {
 } from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 import 'tachyons';
+
+const logger = createLogger();
 
 // use middleware between action and reducer:
 const appReducer = combineReducers({ userReducer, imageReducer});
@@ -30,7 +33,7 @@ const rootReducer = (state, action) => {
     return appReducer(state, action);
   }
 
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
 
 ReactDOM.render(
     <Provider store={store}>

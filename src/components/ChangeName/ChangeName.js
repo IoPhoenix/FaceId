@@ -1,19 +1,17 @@
 import React from 'react';
-import {DATABASE_LINK} from '../../constants.js';
 import Form from '../Form/Form';
 import Legend from '../Legend/Legend';
 import NameInput from '../NameInput/NameInput';
 import SubmitInput from '../SubmitInput/SubmitInput';
 import FormLink from '../FormLink/FormLink';
-import { capitalize } from '../../helpers';
+
 
 
 class ChangeName extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        newName: '',
-        message: ''
+        newName: ''
       }
     }
 
@@ -24,33 +22,18 @@ class ChangeName extends React.Component {
     
     updateUserNameInDatabase = () => {
         // clear previous error messages:
-        this.setState({ message: '' });
+        this.props.changeErrorMessage('');
 
         const { newName } = this.state;
 
         // send new user name to database
-        fetch(`${DATABASE_LINK}/updateName`, {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id: this.props.user.id,
-                newName: newName
-            })
-        })
-        .then(response => response.json())
-        .then((response) => {
-            if (response === 'success') {
-                // update new user info in the whole app 
-                this.props.updateUserInfo('name', capitalize(newName));     
-                this.setState({ message: 'Your information was updated!' });
-            } else {
-                this.setState({ message: 'Failed to update name' });
-            }
-        })
-        .catch(err => {
-            console.log('error in updateUserName: ', err);
-            this.setState({ message: 'Something went wrong. Please try again later.' });
-        });
+        const dataToSend = {
+            id: this.props.user.id,
+            newName: newName
+        }
+    
+        // send new name to database:
+        this.props.updateUserData(dataToSend, 'updateName');
     }
 
 
@@ -60,7 +43,7 @@ class ChangeName extends React.Component {
 
         // if user name remains the same, do not send request to database
         if (newName.toLowerCase() === oldName.toLowerCase() || !newName) {
-            this.setState({ message: 'Please provide new name' });
+            this.props.changeErrorMessage('Please provide new name');
             return;
         } else {
             this.updateUserNameInDatabase();

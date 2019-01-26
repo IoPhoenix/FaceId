@@ -1,8 +1,8 @@
 import { DATABASE_LINK } from '../constants.js';
 
 class updateDataApi {  
-    static updateUserData(dataToSend) {
-      return fetch(`${DATABASE_LINK}/avatar`, {
+    static updateUserData(dataToSend, action) {
+      return fetch(`${DATABASE_LINK}/${action}`, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(dataToSend)

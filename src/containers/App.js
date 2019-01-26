@@ -76,8 +76,6 @@ const mapStateToProps = (state) => {
     faceBoxes: state.imageReducer.faceBoxes,
     imageUrl: state.imageReducer.imageUrl,
     input: state.imageReducer.input,
-    // route: state.userReducer.route,
-    // isSignedIn: state.userReducer.isSignedIn,
     user: state.userReducer
   }
 }
@@ -86,7 +84,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     sendUserData: (data, action) => dispatch(sendUserData(data, action)),
-    updateUserData: (data) => dispatch(updateUserData(data)),
+    updateUserData: (data, action) => dispatch(updateUserData(data, action)),
     loadUserData: (data) => dispatch(loadUserData(data)),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
@@ -114,6 +112,7 @@ class App extends Component {
     }
   }
 
+
   onRouteChange = (route) => {
     if (route === 'signin') {
       // reset app to initial state when user signs out
@@ -125,11 +124,11 @@ class App extends Component {
     }
 
     if (route === 'register') {
-      // clear any previous error messages left from sgin in:
+      // clear any previous error messages left from sign in:
        this.props.changeErrorMessage('');
     }
 
-    // change route
+    // else just change route
     this.props.onRouteChange(route);
   }
 
@@ -138,32 +137,33 @@ class App extends Component {
     const { input, imageUrl, faceBoxes } = this.props;
     const { name, id, entries, avatar, message, isSignedIn, route } = this.props.user;
     
+
     const homeSection = (
       <div>
         <Avatar 
-          onRouteChange={this.onRouteChange}
-          avatar={avatar}/>
+            onRouteChange={this.onRouteChange}
+            avatar={avatar}/>
         <Rank 
-          name={name} 
-          entries={entries}/>
+            name={name} 
+            entries={entries}/>
          <ImageSubmit 
-          id={id}
-          input={input}
-          updateUserInfo={this.props.updateUserInfo}
-          displayFaceBoxes={this.props.displayFaceBoxes}
-          changeErrorMessage={this.props.changeErrorMessage}
-          handleChange={this.props.handleChange}
-          updateImageUrl={this.props.updateImageUrl}
-          resetImageData={this.props.resetImageData}
-          onSelfieSubmit={this.props.onSelfieSubmit}/>
+            id={id}
+            input={input}
+            updateUserInfo={this.props.updateUserInfo}
+            displayFaceBoxes={this.props.displayFaceBoxes}
+            changeErrorMessage={this.props.changeErrorMessage}
+            handleChange={this.props.handleChange}
+            updateImageUrl={this.props.updateImageUrl}
+            resetImageData={this.props.resetImageData}
+            onSelfieSubmit={this.props.onSelfieSubmit}/>
          <FaceRecognition 
-          updateUserData={this.props.updateUserData}
-          id={id}
-          avatar={avatar}
-          updateUserInfo={this.props.updateUserInfo}
-          faceBoxes={faceBoxes}
-          message={message}
-          imageUrl={imageUrl} />
+            changeErrorMessage={this.props.changeErrorMessage}
+            updateUserData={this.props.updateUserData}
+            id={id}
+            avatar={avatar}
+            faceBoxes={faceBoxes}
+            message={message}
+            imageUrl={imageUrl} />
       </div>
     );
 
@@ -197,9 +197,10 @@ class App extends Component {
 
     const changeNameSection = (
       <ChangeName 
-          updateUserInfo={this.props.updateUserInfo}
+          user={this.props.user}
           onRouteChange={this.onRouteChange}
-          user={this.props.user} >
+          updateUserData={this.props.updateUserData}
+          changeErrorMessage={this.props.changeErrorMessage} >
           <Avatar 
 	          onRouteChange={this.onRouteChange}
 	          avatar={avatar} />
@@ -209,7 +210,7 @@ class App extends Component {
 
     const changeEmailSection = (
       <ChangeEmail 
-          updateUserInfo={this.props.updateUserInfo}
+          updateUserData={this.props.updateUserData}
           onRouteChange={this.onRouteChange}
           user={this.props.user} >
           <Avatar 
@@ -221,8 +222,6 @@ class App extends Component {
 
     const deleteProfileSection = (
       <DeleteProfile 
-
-          // deleteUserInfo={this.props.deleteUserInfo}
           onRouteChange={this.onRouteChange}
           user={this.props.user} >
           <Avatar 

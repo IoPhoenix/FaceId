@@ -29,8 +29,8 @@ export const sendUserData = (dataToSend, action) => (dispatch) => {
 }
 
 
-export const updateUserData = (dataToSend) => (dispatch) => {
-    return updateDataApi.updateUserData(dataToSend)
+export const updateUserData = (dataToSend, action) => (dispatch) => {
+    return updateDataApi.updateUserData(dataToSend, action)
         .then(data => {
             dispatch(updateUserDataSuccess(data));
         })

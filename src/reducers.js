@@ -12,7 +12,7 @@ import {
     UPDATE_USER_DATA
 } from './constants.js';
 
-import { storeUserData, updateUserData } from './helpers';
+import { capitalize, storeUserData, updateUserData } from './helpers';
 
 const initialState = {
     input: '',
@@ -80,11 +80,14 @@ export const userReducer = (state=userInitialState, action={}) => {
             if (action.data.message) {
 
                 // update user info in local storage:
-                updateUserData('user', 'avatar', action.data.response[0]);
-                return Object.assign({}, state, { avatar: action.data.response[0]});
+                updateUserData('user', action.data.target, action.data.response[0]);
+
+                // return new updated state:
+                return Object.assign({}, state, { 'message': action.data.message, [action.data.target]: action.data.response[0]});
             } else {
-                return Object.assign({}, state, { message: 'Error updating avatar' });
+                return Object.assign({}, state, { message: 'Unable to update data at this time' });
             }
+
 
         case FETCH_REQUEST_FAILURE:
             console.log('action.error: ', action.error);
