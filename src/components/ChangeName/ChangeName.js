@@ -21,15 +21,14 @@ class ChangeName extends React.Component {
 
     
     updateUserNameInDatabase = () => {
+
         // clear previous error messages:
         this.props.changeErrorMessage('');
-
-        const { newName } = this.state;
 
         // send new user name to database
         const dataToSend = {
             id: this.props.user.id,
-            newName: newName
+            newName: this.state.newName
         }
     
         // send new name to database:
@@ -63,7 +62,7 @@ class ChangeName extends React.Component {
                         labelValue={'Enter new name'} />
                     <SubmitInput 
                         onSubmit={this.onNameSubmit}
-                        message={this.state.message}
+                        message={this.props.user.message}
                         value='Submit' />
                     <FormLink
                         onRouteChange={this.props.onRouteChange} 

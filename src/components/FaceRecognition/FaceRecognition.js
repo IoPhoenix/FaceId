@@ -7,11 +7,11 @@ const FaceRecognition = (props) => {
   
   const updateAvatar = () => {
 
-     // clear any previous error messages:
-     this.props.changeErrorMessage('');
-
     // if submitted image link and current avatar link are the same, do not proceed:
     if (imageUrl === avatar) return;
+    
+    // clear any previous error messages:
+    props.changeErrorMessage('');
 
     const dataToSend = {
         id: id,
