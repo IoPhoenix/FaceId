@@ -1,6 +1,5 @@
 import React from 'react';
 import './FaceRecognition.css';
-import {DATABASE_LINK} from '../../constants.js';
 
 
 const FaceRecognition = (props) => {
@@ -11,22 +10,13 @@ const FaceRecognition = (props) => {
     // if submitted image link and current avatar link are the same, do not proceed:
     if (imageUrl === avatar) return;
 
-    
-    // set and save new avatar in database
-    fetch(`${DATABASE_LINK}/avatar`, {
-      method: 'put',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
+    const dataToSend = {
         id: id,
         avatar: imageUrl
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Avatar link was saved in database: ', data);
-        props.updateUserInfo('avatar', imageUrl);
-    })
-    .catch(console.log);
+    }
+
+    // send new avatar to database:
+     props.updateUserData(dataToSend);
   }
 
 

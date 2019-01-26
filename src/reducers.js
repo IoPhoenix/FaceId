@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
-    SEND_USER_DATA_FAILURE,
+    UPDATE_USER_DATA_SUCCESS,
+    FETCH_REQUEST_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
@@ -72,11 +73,26 @@ export const userReducer = (state=userInitialState, action={}) => {
             } else {
                 return Object.assign({}, state, { message: action.data });
             }
-        case SEND_USER_DATA_FAILURE:
+
+        case UPDATE_USER_DATA_SUCCESS:
+            console.log('Reponse from server: ', action.data);
+
+            if (action.data.message) {
+
+                // update user info in local storage:
+                updateUserData('user', 'avatar', action.data.response[0]);
+                return Object.assign({}, state, { avatar: action.data.response[0]});
+            } else {
+                return Object.assign({}, state, { message: 'Error updating avatar' });
+            }
+
+        case FETCH_REQUEST_FAILURE:
             console.log('action.error: ', action.error);
             return Object.assign({}, state, { message: action.error});
+
         case ON_ROUTE_CHANGE:
             return Object.assign({}, state, {route: action.route});
+
         case UPDATE_USER_DATA: 
             // update user info in local storage for further session:
             updateUserData('user', action.propToUpdate, action.newData);

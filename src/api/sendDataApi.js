@@ -1,6 +1,6 @@
 import { DATABASE_LINK } from '../constants.js';
 
-class userApi {  
+class sendDataApi {  
     static sendUserData(dataToSend, action) {
       return fetch(`${DATABASE_LINK}/${action}`, {
         method: 'post',
@@ -12,4 +12,4 @@ class userApi {
     }
 }
 
-export default userApi;  
+export default sendDataApi;  

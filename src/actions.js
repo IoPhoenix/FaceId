@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
-    SEND_USER_DATA_FAILURE,
+    UPDATE_USER_DATA_SUCCESS,
+    FETCH_REQUEST_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
     ON_INPUT_CHANGE,
@@ -11,32 +12,51 @@ import {
     UPDATE_USER_DATA,
     RESET_APP
  } from './constants.js';
-import userApi from './api/userApi';
+ 
+import sendDataApi from './api/sendDataApi';
+import updateDataApi from './api/updateDataApi';
 
 
 
 export const sendUserData = (dataToSend, action) => (dispatch) => {
-    return userApi.sendUserData(dataToSend, action)
+    return sendDataApi.sendUserData(dataToSend, action)
         .then(data => {
             dispatch(sendUserDataSuccess(data));
         })
         .catch(error => {
-            dispatch(sendUserDataFailure(error));
+            dispatch(fetchRequestFailure(error));
         });
 }
 
+
+export const updateUserData = (dataToSend) => (dispatch) => {
+    return updateDataApi.updateUserData(dataToSend)
+        .then(data => {
+            dispatch(updateUserDataSuccess(data));
+        })
+        .catch(error => {
+            dispatch(fetchRequestFailure(error));
+        });
+}
 
 export function sendUserDataSuccess(data) {  
     return {
         type: SEND_USER_DATA_SUCCESS,
         data
     };
+}
+
+export function updateUserDataSuccess(data) {  
+    return {
+        type: UPDATE_USER_DATA_SUCCESS,
+        data
+    };
   }
 
 
-export function sendUserDataFailure(error) {  
+export function fetchRequestFailure(error) {  
     return {
-        type: SEND_USER_DATA_FAILURE,
+        type: FETCH_REQUEST_FAILURE,
         error
     };
 }

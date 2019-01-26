@@ -4,6 +4,7 @@ import {
   onRouteChange,
   loadUserData,
   sendUserData,
+  updateUserData,
   onInputChange,
   updateImageUrl,
   changeErrorMessage,
@@ -74,10 +75,9 @@ const mapStateToProps = (state) => {
   return {
     faceBoxes: state.imageReducer.faceBoxes,
     imageUrl: state.imageReducer.imageUrl,
-    message: state.userReducer.message,
     input: state.imageReducer.input,
-    route: state.userReducer.route,
-    isSignedIn: state.userReducer.isSignedIn,
+    // route: state.userReducer.route,
+    // isSignedIn: state.userReducer.isSignedIn,
     user: state.userReducer
   }
 }
@@ -85,8 +85,9 @@ const mapStateToProps = (state) => {
 // declare which action creators you need to be able to dispatch:
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadUserData: (data) => dispatch(loadUserData(data)),
     sendUserData: (data, action) => dispatch(sendUserData(data, action)),
+    updateUserData: (data) => dispatch(updateUserData(data)),
+    loadUserData: (data) => dispatch(loadUserData(data)),
     updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
@@ -134,8 +135,8 @@ class App extends Component {
 
 
   render() {
-    const { route, input, imageUrl, isSignedIn, faceBoxes } = this.props;
-    const { name, id, entries, avatar, message } = this.props.user;
+    const { input, imageUrl, faceBoxes } = this.props;
+    const { name, id, entries, avatar, message, isSignedIn, route } = this.props.user;
     
     const homeSection = (
       <div>
@@ -156,11 +157,12 @@ class App extends Component {
           resetImageData={this.props.resetImageData}
           onSelfieSubmit={this.props.onSelfieSubmit}/>
          <FaceRecognition 
+          updateUserData={this.props.updateUserData}
           id={id}
           avatar={avatar}
           updateUserInfo={this.props.updateUserInfo}
           faceBoxes={faceBoxes}
-          message={this.props.message}
+          message={message}
           imageUrl={imageUrl} />
       </div>
     );
