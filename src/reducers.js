@@ -12,7 +12,7 @@ import {
     UPDATE_USER_DATA
 } from './constants.js';
 
-import { capitalize, storeUserData, updateUserData } from './helpers';
+import { storeUserData, updateUserData } from './helpers';
 
 const initialState = {
     input: '',
@@ -85,7 +85,7 @@ export const userReducer = (state=userInitialState, action={}) => {
                 // return new updated state:
                 return Object.assign({}, state, { 'message': action.data.message, [action.data.target]: action.data.response[0]});
             } else {
-                return Object.assign({}, state, { message: 'Unable to update data at this time' });
+                return Object.assign({}, state, { message: 'Something went wrong. Please try again later' });
             }
 
 

@@ -123,10 +123,8 @@ class App extends Component {
       removeUserData('user');
     }
 
-    if (route === 'register') {
-      // clear any previous error messages left from sign in:
-       this.props.changeErrorMessage('');
-    }
+    // clear any previous error messages:
+    this.props.changeErrorMessage('');
 
     // else just change route
     this.props.onRouteChange(route);
@@ -210,9 +208,10 @@ class App extends Component {
 
     const changeEmailSection = (
       <ChangeEmail 
-          updateUserData={this.props.updateUserData}
+          user={this.props.user}
           onRouteChange={this.onRouteChange}
-          user={this.props.user} >
+          updateUserData={this.props.updateUserData}
+          changeErrorMessage={this.props.changeErrorMessage} >
           <Avatar 
 	          onRouteChange={this.onRouteChange}
 	          avatar={avatar} />
