@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
     UPDATE_USER_DATA_SUCCESS,
+    DELETE_USER_DATA_SUCCESS,
     FETCH_REQUEST_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
@@ -9,10 +10,11 @@ import {
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
     RESET_IMAGE_DATA,
-    UPDATE_USER_DATA
+    UPDATE_LOCAL_USER_DATA
 } from './constants.js';
 
-import { storeUserData, updateUserData } from './helpers';
+import { storeUserDataLocally, updateUserDataLocally, removeUserDataLocally } from './helpers';
+
 
 const initialState = {
     input: '',
@@ -56,7 +58,7 @@ export const userReducer = (state=userInitialState, action={}) => {
             // if user exists, proceed
             if (action.data.id) {
                 // save user data in local storage:
-                storeUserData('user', action.data);
+                storeUserDataLocally('user', action.data);
 
                 // return new state with user details:
                 return Object.assign({}, state, {
@@ -80,7 +82,7 @@ export const userReducer = (state=userInitialState, action={}) => {
             if (action.data.message) {
 
                 // update user info in local storage:
-                updateUserData('user', action.data.target, action.data.response[0]);
+                updateUserDataLocally('user', action.data.target, action.data.response[0]);
 
                 // return new updated state:
                 return Object.assign({}, state, { 'message': action.data.message, [action.data.target]: action.data.response[0]});
@@ -88,6 +90,29 @@ export const userReducer = (state=userInitialState, action={}) => {
                 return Object.assign({}, state, { message: 'Something went wrong. Please try again later' });
             }
 
+        case DELETE_USER_DATA_SUCCESS:
+            console.log('Reponse from server: ', action.data);
+
+            if (action.data.message) {
+
+                // remove user info from local storage:
+                removeUserDataLocally('user');
+
+                // return new updated state:
+                return Object.assign({}, state, { 
+                    id: '',
+                    name: '',
+                    email: '',
+                    entries: 0,
+                    joined: '',
+                    avatar: '',
+                    message: '',
+                    route: 'signin',
+                    isSignedIn: false
+                });
+            } else {
+                return Object.assign({}, state, { message: 'Something went wrong. Please try again later' });
+            }
 
         case FETCH_REQUEST_FAILURE:
             console.log('action.error: ', action.error);
@@ -96,9 +121,9 @@ export const userReducer = (state=userInitialState, action={}) => {
         case ON_ROUTE_CHANGE:
             return Object.assign({}, state, {route: action.route});
 
-        case UPDATE_USER_DATA: 
+        case UPDATE_LOCAL_USER_DATA: 
             // update user info in local storage for further session:
-            updateUserData('user', action.propToUpdate, action.newData);
+            updateUserDataLocally('user', action.propToUpdate, action.newData);
 
             return Object.assign({}, state, { [action.propToUpdate]: action.newData });
         case LOAD_USER_DATA: 

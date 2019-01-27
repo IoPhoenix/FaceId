@@ -5,15 +5,16 @@ import {
   loadUserData,
   sendUserData,
   updateUserData,
+  deleteUserData,
   onInputChange,
   updateImageUrl,
   changeErrorMessage,
   displayFaceBoxes,
   resetImageData,
-  updateUserInfo,
+  updateLocalUserInfo,
   resetApp
 } from '../actions';
-import { removeUserData } from '../helpers';
+import { removeUserDataLocally } from '../helpers';
 import { BrowserView, TabletView, MobileView } from 'react-device-detect';
 import Particles from 'react-particles-js';
 import Navigation from '../components/Navigation/Navigation';
@@ -86,7 +87,8 @@ const mapDispatchToProps = (dispatch) => {
     sendUserData: (data, action) => dispatch(sendUserData(data, action)),
     updateUserData: (data, action) => dispatch(updateUserData(data, action)),
     loadUserData: (data) => dispatch(loadUserData(data)),
-    updateUserInfo: (propToUpdate, newData) => dispatch(updateUserInfo(propToUpdate, newData)),
+    deleteUserData: (data) => dispatch(deleteUserData(data)),
+    updateLocalUserInfo: (propToUpdate, newData) => dispatch(updateLocalUserInfo(propToUpdate, newData)),
     resetImageData: () => dispatch(resetImageData()),
     displayFaceBoxes: (boxes) => dispatch(displayFaceBoxes(boxes)),
     changeErrorMessage: (message) => dispatch(changeErrorMessage(message)),
@@ -120,7 +122,7 @@ class App extends Component {
 
       // remove all user data from local storage
       // so that user stays logged out after return:
-      removeUserData('user');
+      removeUserDataLocally('user');
     }
 
     // clear any previous error messages:
@@ -147,7 +149,7 @@ class App extends Component {
          <ImageSubmit 
             id={id}
             input={input}
-            updateUserInfo={this.props.updateUserInfo}
+            updateLocalUserInfo={this.props.updateLocalUserInfo}
             displayFaceBoxes={this.props.displayFaceBoxes}
             changeErrorMessage={this.props.changeErrorMessage}
             handleChange={this.props.handleChange}
@@ -208,24 +210,26 @@ class App extends Component {
 
     const changeEmailSection = (
       <ChangeEmail 
-          user={this.props.user}
-          onRouteChange={this.onRouteChange}
-          updateUserData={this.props.updateUserData}
-          changeErrorMessage={this.props.changeErrorMessage} >
-          <Avatar 
-	          onRouteChange={this.onRouteChange}
-	          avatar={avatar} />
+            user={this.props.user}
+            onRouteChange={this.onRouteChange}
+            updateUserData={this.props.updateUserData}
+            changeErrorMessage={this.props.changeErrorMessage} >
+            <Avatar 
+              onRouteChange={this.onRouteChange}
+              avatar={avatar} />
       </ChangeEmail>
     );
 
 
     const deleteProfileSection = (
       <DeleteProfile 
-          onRouteChange={this.onRouteChange}
-          user={this.props.user} >
-          <Avatar 
-	          onRouteChange={this.onRouteChange}
-	          avatar={avatar} />
+            user={this.props.user} 
+            onRouteChange={this.onRouteChange}
+            deleteUserData={this.props.deleteUserData}
+            changeErrorMessage={this.props.changeErrorMessage} >
+            <Avatar 
+              onRouteChange={this.onRouteChange}
+              avatar={avatar} />
       </DeleteProfile>
     );
 

@@ -23,7 +23,7 @@ const appReducer = combineReducers({ userReducer, imageReducer});
 // that will handle reset for each reducer
 const rootReducer = (state, action) => {
 
-    // change the state reference to undefinedg
+    // change the state reference to undefined
     // so that the default state applies and 
     // the state is thus reset
     if (action.type === 'RESET_APP') {

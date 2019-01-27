@@ -1,6 +1,7 @@
 import { 
     SEND_USER_DATA_SUCCESS,
     UPDATE_USER_DATA_SUCCESS,
+    DELETE_USER_DATA_SUCCESS,
     FETCH_REQUEST_FAILURE,
     LOAD_USER_DATA,
     ON_ROUTE_CHANGE,
@@ -9,12 +10,13 @@ import {
     RESET_IMAGE_DATA,
     CHANGE_ERROR_MESSAGE,
     DISPLAY_FACE_BOXES,
-    UPDATE_USER_DATA,
+    UPDATE_LOCAL_USER_DATA,
     RESET_APP
  } from './constants.js';
  
 import sendDataApi from './api/sendDataApi';
 import updateDataApi from './api/updateDataApi';
+import deleteDataApi from './api/deleteDataApi';
 
 
 
@@ -39,6 +41,16 @@ export const updateUserData = (dataToSend, action) => (dispatch) => {
         });
 }
 
+export const deleteUserData = (dataToSend, action) => (dispatch) => {
+    return deleteDataApi.deleteUserData(dataToSend, action)
+        .then(data => {
+            dispatch(deleteUserDataSuccess(data));
+        })
+        .catch(error => {
+            dispatch(fetchRequestFailure(error));
+        });
+}
+
 export function sendUserDataSuccess(data) {  
     return {
         type: SEND_USER_DATA_SUCCESS,
@@ -49,6 +61,13 @@ export function sendUserDataSuccess(data) {
 export function updateUserDataSuccess(data) {  
     return {
         type: UPDATE_USER_DATA_SUCCESS,
+        data
+    };
+}
+
+export function deleteUserDataSuccess(data) {  
+    return {
+        type: DELETE_USER_DATA_SUCCESS,
         data
     };
   }
@@ -115,14 +134,15 @@ export const resetImageData = () => {
 }
 
 
-export const updateUserInfo = (propToUpdate, newData) => {
+export const updateLocalUserInfo = (propToUpdate, newData) => {
     return {
-        type: UPDATE_USER_DATA,
+        type: UPDATE_LOCAL_USER_DATA,
         propToUpdate, 
         newData
     }
 }
 
+// use this action in index.js:
 export const resetApp = () => {
     return {
         type: RESET_APP
