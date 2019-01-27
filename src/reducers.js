@@ -91,7 +91,7 @@ export const userReducer = (state=userInitialState, action={}) => {
 
         case FETCH_REQUEST_FAILURE:
             console.log('action.error: ', action.error);
-            return Object.assign({}, state, { message: action.error});
+            return Object.assign({}, state, { message: 'Something went wrong. Please try again later' });
 
         case ON_ROUTE_CHANGE:
             return Object.assign({}, state, {route: action.route});

@@ -10,7 +10,7 @@ const Logo = (props) => {
         <div className="Tilt-inner pa2">
           <img
           // add callback to prevent 'Maximum update depth exceeded error'
-            onClick={() => props.onRouteChange('home')}
+            onClick={() => props.isSignedIn ? props.onRouteChange('home') : props.onRouteChange('signin')}
             className="logo"
             alt='App logo'
             src={eye}/>
