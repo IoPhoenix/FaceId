@@ -79,7 +79,7 @@ export const userReducer = (state=userInitialState, action={}) => {
         case UPDATE_USER_DATA_SUCCESS:
             console.log('Reponse from server: ', action.data);
 
-            if (action.data.message) {
+            if (action.data.text) {
 
                 // update user info in local storage:
                 updateUserDataLocally('user', action.data.target, action.data.response[0]);
@@ -92,8 +92,9 @@ export const userReducer = (state=userInitialState, action={}) => {
 
         case DELETE_USER_DATA_SUCCESS:
             console.log('Reponse from server: ', action.data);
+            console.log('action.data.message: ', action.data.text);
 
-            if (action.data.message) {
+            if (action.data.text) {
 
                 // remove user info from local storage:
                 removeUserDataLocally('user');
@@ -103,8 +104,7 @@ export const userReducer = (state=userInitialState, action={}) => {
                     id: '',
                     name: '',
                     email: '',
-                    entries: 0,
-                    joined: '',
+                    entries: 0, joined: '',
                     avatar: '',
                     message: '',
                     route: 'signin',

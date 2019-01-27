@@ -8,8 +8,6 @@ import FormLink from '../FormLink/FormLink';
 const DeleteProfile = (props) => {
 
     const deleteProfile = () => {
-         // clear previous error messages:
-         props.changeErrorMessage('');
 
         const dataToSend = {
             id: props.user.id,
@@ -17,12 +15,12 @@ const DeleteProfile = (props) => {
         }
 
          // send user details to database:
-         this.props.deleteUserData(dataToSend);
+         props.deleteUserData(dataToSend);
     }
 
     return (
         <div>
-            { this.props.children }
+            { props.children }
 
             <Form>
                 <Legend value={'Delete Profile'} />
@@ -30,6 +28,7 @@ const DeleteProfile = (props) => {
                 <SubmitInput 
                     onSubmit={deleteProfile}
                     value='YES'
+                    message={props.user.message}
                     customClass='bg-dark-red white' />
                 <FormLink
                     onRouteChange={props.onRouteChange} 
