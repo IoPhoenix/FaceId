@@ -32,32 +32,6 @@ class ChangeEmail extends React.Component {
 
         // send new email to database:
         this.props.updateUserData(dataToSend, 'updateEmail');
-
-        // send new user email to database
-        // fetch(`${DATABASE_LINK}/updateEmail`, {
-        //     method: 'PUT',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({
-        //         id: this.props.user.id,
-        //         oldEmail: this.props.user.email,
-        //         newEmail: newEmail
-        //     })
-        // })
-        // .then(response => response.json())
-        // .then((response) => {
-        //     if (response === 'success') {
-        //         // update new user info in the whole app 
-        //         this.props.updateUserInfo('email', newEmail);  
-                   
-        //         this.setState({ message: 'Your information was updated!' });
-        //     } else {
-        //         this.setState({ message: 'Unable to update email' });
-        //     }
-        // })
-        // .catch(err => {
-        //     console.log('error in updateUserEmail: ', err);
-        //     this.setState({ message: 'Something went wrong. Please try again later.' });
-        // });
     }
 
 

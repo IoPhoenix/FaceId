@@ -146,10 +146,8 @@ const ImageSubmit = (props) => {
       // else try and detect faces:
       props.displayFaceBoxes(calculateFaceLocation(response));
 
-      console.log('response 1: ', response);
-
-       // pass error response to next then() method:
-       return response;
+      // pass error response to next then() method:
+      return response;
     })
     .then(response => {
       if (response !== 'error') {

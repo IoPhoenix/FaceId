@@ -84,8 +84,13 @@ export const userReducer = (state=userInitialState, action={}) => {
                 // update user info in local storage:
                 updateUserDataLocally('user', action.data.target, action.data.response[0]);
 
-                // return new updated state:
-                return Object.assign({}, state, { 'message': action.data.message, [action.data.target]: action.data.response[0]});
+                // return new updated state
+                // (do not show message text for entries count uodate):
+                if (action.data.target === 'entries') {
+                    return Object.assign({}, state, { [action.data.target]: action.data.response[0]});
+                } else {
+                    return Object.assign({}, state, { 'message': action.data.text, [action.data.target]: action.data.response[0]});
+                }
             } else {
                 return Object.assign({}, state, { message: 'Could not update data.' });
             }
