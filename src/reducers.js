@@ -87,7 +87,7 @@ export const userReducer = (state=userInitialState, action={}) => {
                 // return new updated state:
                 return Object.assign({}, state, { 'message': action.data.message, [action.data.target]: action.data.response[0]});
             } else {
-                return Object.assign({}, state, { message: 'Something went wrong. Please try again later' });
+                return Object.assign({}, state, { message: 'Could not update data.' });
             }
 
         case DELETE_USER_DATA_SUCCESS:
@@ -126,6 +126,7 @@ export const userReducer = (state=userInitialState, action={}) => {
             updateUserDataLocally('user', action.propToUpdate, action.newData);
 
             return Object.assign({}, state, { [action.propToUpdate]: action.newData });
+            
         case LOAD_USER_DATA: 
             return Object.assign({}, state, {
                 id: action.data.id,

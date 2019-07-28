@@ -152,26 +152,18 @@ const ImageSubmit = (props) => {
        return response;
     })
     .then(response => {
-
-        // if image url was valid, change # of sumbitted entries in the database:
-        if (response !== 'error') {
-          fetch(`${DATABASE_LINK}/image`, {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: props.id
-            })
-          })
-          .then(response => response.json())
-          .then(count => {
-              props.updateUserInfo('entries', count);
-          })
-          .catch(console.log);
+      if (response !== 'error') {
+        const dataToSend = {
+          id: props.id
         }
+  
+        // increase # of entries in database:
+        props.updateUserData(dataToSend, 'image');
+      }
     })
     .catch(err => {
-        props.changeErrorMessage('Cannot process this image');
-        console.log('Error from server: ', err);
+      console.log('Error from server: ', err);
+      props.changeErrorMessage('Cannot process this image');
     });
   }
 

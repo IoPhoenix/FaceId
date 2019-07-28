@@ -150,6 +150,7 @@ class App extends Component {
             id={id}
             input={input}
             updateLocalUserInfo={this.props.updateLocalUserInfo}
+            updateUserData={this.props.updateUserData}
             displayFaceBoxes={this.props.displayFaceBoxes}
             changeErrorMessage={this.props.changeErrorMessage}
             handleChange={this.props.handleChange}
