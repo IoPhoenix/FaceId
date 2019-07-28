@@ -198,6 +198,7 @@ const ImageSubmit = (props) => {
             <button 
               type="submit"
               className='user-camera near-white code w-100 w-30-ns w-auto-l grow link'
+              style={{ padding: '0.06rem 1rem' }}
               onClick={onSelfieSubmit}>
               <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fillRule="evenodd" clipRule="evenodd" strokeLinejoin="round" strokeMiterlimit="1.414">
                 <path d="M 12 3.5 L 11.5 2.41528547 C 11.5 2.41528547 11.0826911 1.5 10.5 1.5 L 5.5 1.5 C 4.91636759 1.5 4.5 2.41528544 4.5 2.41528544 L 4 3.5 L 2.38174379 3.5 C 2.38174379 3.5 0.5 3.65837937 0.5 5.5 L 0.5 12.5 C 0.5 14.3416206 2.38174379 14.5 2.38174379 14.5 L 13.5 14.5 C 13.5 14.5 15.5 14.3416206 15.5 12.5 L 15.5 5.5 C 15.5 3.65837937 13.5 3.5 13.5 3.5 L 12 3.5 Z" fill="none" stroke="currentColor"/>
